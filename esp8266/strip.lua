@@ -12,7 +12,11 @@ function M.colorified(color)
     elseif color_code == "blue" then
         colorChar = string.char(0, 0, maxBright)
     end
-    ws2812.writergb(stripPin, colorChar:rep(10))
+    if ws2812~=nil then
+        ws2812.writergb(stripPin, colorChar:rep(10))
+    else
+        print("Color:"..color)
+    end
 end
 
 return M

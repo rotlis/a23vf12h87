@@ -1,0 +1,300 @@
+[
+  {
+    "id": "58440436.8ff4ac",
+    "type": "json-db-collection",
+    "z": "520c6c2e.d4e3a4",
+    "name": "bbl",
+    "collection": "devices",
+    "save": true
+  },
+  {
+    "id": "278db4aa.5b7a1c",
+    "type": "udp in",
+    "z": "520c6c2e.d4e3a4",
+    "name": "",
+    "iface": "",
+    "port": "9001",
+    "ipv": "udp4",
+    "multicast": "false",
+    "group": "",
+    "datatype": "utf8",
+    "x": 146,
+    "y": 80,
+    "wires": [
+      [
+        "b5bd07d7.ba9198"
+      ]
+    ]
+  },
+  {
+    "id": "b5bd07d7.ba9198",
+    "type": "function",
+    "z": "520c6c2e.d4e3a4",
+    "name": "prepare entry",
+    "func": "msg.entry={\n    'ip':msg.ip,\n    'port':msg.port,\n    'mac':msg.payload.substring(0, msg.payload.indexOf(':')),\n    'lastMessage':msg.payload.substring(msg.payload.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 313,
+    "y": 79,
+    "wires": [
+      [
+        "a636a010.16b78"
+      ]
+    ]
+  },
+  {
+    "id": "996ce5ac.bd4f48",
+    "type": "DataIn",
+    "z": "520c6c2e.d4e3a4",
+    "collection": "58440436.8ff4ac",
+    "name": "save DB",
+    "update": false,
+    "path": "/",
+    "x": 573,
+    "y": 147,
+    "wires": []
+  },
+  {
+    "id": "da9c8fef.1d232",
+    "type": "function",
+    "z": "520c6c2e.d4e3a4",
+    "name": "update entry for device",
+    "func": "msg.payload[msg.entry.mac]=msg.entry;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 354,
+    "y": 149,
+    "wires": [
+      [
+        "996ce5ac.bd4f48"
+      ]
+    ]
+  },
+  {
+    "id": "a636a010.16b78",
+    "type": "DataOut",
+    "z": "520c6c2e.d4e3a4",
+    "collection": "58440436.8ff4ac",
+    "name": "load DB",
+    "path": "/",
+    "error": false,
+    "x": 483,
+    "y": 78,
+    "wires": [
+      [
+        "da9c8fef.1d232"
+      ]
+    ]
+  },
+  {
+    "id": "75975dc5.ad7b04",
+    "type": "http in",
+    "z": "520c6c2e.d4e3a4",
+    "name": "",
+    "url": "/devices",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 168,
+    "y": 288,
+    "wires": [
+      [
+        "b44e9f6a.9b7dc"
+      ]
+    ]
+  },
+  {
+    "id": "b44e9f6a.9b7dc",
+    "type": "DataOut",
+    "z": "520c6c2e.d4e3a4",
+    "collection": "58440436.8ff4ac",
+    "name": "load DB",
+    "path": "/",
+    "error": false,
+    "x": 346,
+    "y": 288,
+    "wires": [
+      [
+        "a4f4c62f.e30aa8"
+      ]
+    ]
+  },
+  {
+    "id": "a4f4c62f.e30aa8",
+    "type": "function",
+    "z": "520c6c2e.d4e3a4",
+    "name": "HTTP headers",
+    "func": "msg.headers={'Content-type':'application/json'}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 523,
+    "y": 288,
+    "wires": [
+      [
+        "9870904a.446ba"
+      ]
+    ]
+  },
+  {
+    "id": "9870904a.446ba",
+    "type": "http response",
+    "z": "520c6c2e.d4e3a4",
+    "name": "",
+    "x": 698,
+    "y": 287,
+    "wires": []
+  },
+  {
+    "id": "3b0f7e93.623a92",
+    "type": "comment",
+    "z": "520c6c2e.d4e3a4",
+    "name": "Process UDP beakon from device",
+    "info": "",
+    "x": 157,
+    "y": 39,
+    "wires": []
+  },
+  {
+    "id": "8a316410.db9588",
+    "type": "comment",
+    "z": "520c6c2e.d4e3a4",
+    "name": "REST GET all devices",
+    "info": "",
+    "x": 117,
+    "y": 246,
+    "wires": []
+  },
+  {
+    "id": "ce445702.3401c8",
+    "type": "comment",
+    "z": "520c6c2e.d4e3a4",
+    "name": "Clear DB",
+    "info": "",
+    "x": 77,
+    "y": 367,
+    "wires": []
+  },
+  {
+    "id": "a524fec5.b24a8",
+    "type": "inject",
+    "z": "520c6c2e.d4e3a4",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 184,
+    "y": 411,
+    "wires": [
+      [
+        "5ef09ced.0cd324"
+      ]
+    ]
+  },
+  {
+    "id": "7a97e190.5f164",
+    "type": "DataIn",
+    "z": "520c6c2e.d4e3a4",
+    "collection": "58440436.8ff4ac",
+    "name": "save DB",
+    "update": false,
+    "path": "/",
+    "x": 566,
+    "y": 411,
+    "wires": []
+  },
+  {
+    "id": "5ef09ced.0cd324",
+    "type": "function",
+    "z": "520c6c2e.d4e3a4",
+    "name": "empty payload",
+    "func": "msg.payload={};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 380,
+    "y": 410,
+    "wires": [
+      [
+        "7a97e190.5f164"
+      ]
+    ]
+  },
+  {
+    "id": "82bcb73a.cdaa98",
+    "type": "comment",
+    "z": "520c6c2e.d4e3a4",
+    "name": "Send 'tickle' UDP to all devices",
+    "info": "",
+    "x": 141,
+    "y": 497,
+    "wires": []
+  },
+  {
+    "id": "bebb94b4.61c898",
+    "type": "inject",
+    "z": "520c6c2e.d4e3a4",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 177,
+    "y": 538,
+    "wires": [
+      [
+        "ddf7e8fa.e0fee8"
+      ]
+    ]
+  },
+  {
+    "id": "ddf7e8fa.e0fee8",
+    "type": "DataOut",
+    "z": "520c6c2e.d4e3a4",
+    "collection": "58440436.8ff4ac",
+    "name": "load DB",
+    "path": "/",
+    "error": false,
+    "x": 336,
+    "y": 538,
+    "wires": [
+      [
+        "14d5cd00.e43393"
+      ]
+    ]
+  },
+  {
+    "id": "702238e2.ab5c28",
+    "type": "udp out",
+    "z": "520c6c2e.d4e3a4",
+    "name": "",
+    "addr": "",
+    "iface": "",
+    "port": "",
+    "ipv": "udp4",
+    "outport": "",
+    "base64": false,
+    "multicast": "false",
+    "x": 676,
+    "y": 607,
+    "wires": []
+  },
+  {
+    "id": "14d5cd00.e43393",
+    "type": "function",
+    "z": "520c6c2e.d4e3a4",
+    "name": "iterate through all device and send them black color",
+    "func": "for(var mac in msg.payload){\n    var dev = msg.payload[mac];\n    var tickleMessage = {\n        'ip':dev.ip, \n        'port':dev.port,\n        'payload':'black'\n    };\n    node.send(tickleMessage);\n}\n// drop original message\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 366,
+    "y": 610,
+    "wires": [
+      [
+        "702238e2.ab5c28"
+      ]
+    ]
+  }
+]
