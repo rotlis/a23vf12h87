@@ -1,8 +1,8 @@
 [
   {
-    "id": "9081e4d9.cf6048",
+    "id": "e435e9c0.3563f8",
     "type": "udp out",
-    "z": "d91bc63f.83aaa8",
+    "z": "52ecbb1f.978604",
     "name": "",
     "addr": "",
     "iface": "",
@@ -11,60 +11,47 @@
     "outport": "",
     "base64": false,
     "multicast": "false",
-    "x": 616,
-    "y": 298,
+    "x": 569,
+    "y": 421,
     "wires": []
   },
   {
-    "id": "3b566f89.6b52c",
-    "type": "json",
-    "z": "d91bc63f.83aaa8",
-    "name": "",
-    "x": 411.5,
-    "y": 298,
-    "wires": [
-      [
-        "9081e4d9.cf6048"
-      ]
-    ]
-  },
-  {
-    "id": "1f88af0c.434f41",
+    "id": "e66f6983.72cef8",
     "type": "function",
-    "z": "d91bc63f.83aaa8",
+    "z": "52ecbb1f.978604",
     "name": "optimiseMessage",
-    "func": "msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n//msg.colorCode=msg.payload.colorCode;\nreturn msg;",
+    "func": "msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n//msg.colorCode=msg.payload.colorCode;\n\nvar tickleMessage = {\n    'ip':msg.payload.ip, \n    'port':msg.payload.port,\n    'payload':msg.payload.colorCode\n};\nnode.send(tickleMessage);\nreturn null;",
     "outputs": 1,
     "noerr": 0,
-    "x": 166,
-    "y": 298,
+    "x": 152,
+    "y": 421,
     "wires": [
       [
-        "3b566f89.6b52c"
+        "e435e9c0.3563f8"
       ]
     ]
   },
   {
-    "id": "314606e3.3b03ca",
+    "id": "6f0a6ea4.67878",
     "type": "http request",
-    "z": "d91bc63f.83aaa8",
+    "z": "52ecbb1f.978604",
     "name": "Request to get build status",
     "method": "GET",
     "ret": "txt",
     "url": "https://go.nbnco.net.au/go/cctray.xml",
-    "tls": "7514166d.ede098",
-    "x": 547,
-    "y": 60,
+    "tls": "dd4f2fbe.d4511",
+    "x": 499,
+    "y": 180,
     "wires": [
       [
-        "66db5e87.b60c6"
+        "b773fb00.6a71c8"
       ]
     ]
   },
   {
-    "id": "68394a54.c520d4",
+    "id": "1573accd.fb5aa3",
     "type": "inject",
-    "z": "d91bc63f.83aaa8",
+    "z": "52ecbb1f.978604",
     "name": "Trigger for build status request",
     "topic": "",
     "payload": "true",
@@ -72,154 +59,122 @@
     "repeat": "3600",
     "crontab": "",
     "once": false,
-    "x": 202,
-    "y": 60,
+    "x": 216,
+    "y": 61,
     "wires": [
       [
-        "314606e3.3b03ca"
+        "20a1a4cb.1f1ccc"
       ]
     ]
   },
   {
-    "id": "1e1b8e50.9a5f12",
-    "type": "debug",
-    "z": "d91bc63f.83aaa8",
-    "name": "",
-    "active": true,
-    "console": "false",
-    "complete": "true",
-    "x": 589,
-    "y": 403,
-    "wires": []
-  },
-  {
-    "id": "4dc6e858.7161e8",
-    "type": "json",
-    "z": "d91bc63f.83aaa8",
-    "name": "",
-    "x": 370,
-    "y": 403,
-    "wires": [
-      [
-        "1e1b8e50.9a5f12"
-      ]
-    ]
-  },
-  {
-    "id": "6560129b.59e26c",
-    "type": "udp in",
-    "z": "d91bc63f.83aaa8",
-    "name": "",
-    "iface": "",
-    "port": "49903",
-    "ipv": "udp4",
-    "multicast": "false",
-    "group": "",
-    "datatype": "utf8",
-    "x": 135,
-    "y": 403,
-    "wires": [
-      [
-        "4dc6e858.7161e8"
-      ]
-    ]
-  },
-  {
-    "id": "ab78e33a.ea568",
-    "type": "debug",
-    "z": "d91bc63f.83aaa8",
-    "name": "",
-    "active": true,
-    "console": "false",
-    "complete": "true",
-    "x": 590,
-    "y": 484,
-    "wires": []
-  },
-  {
-    "id": "de359d.a333ba6",
-    "type": "json",
-    "z": "d91bc63f.83aaa8",
-    "name": "",
-    "x": 373,
-    "y": 484,
-    "wires": [
-      [
-        "ab78e33a.ea568"
-      ]
-    ]
-  },
-  {
-    "id": "b7294f46.4aca2",
-    "type": "udp in",
-    "z": "d91bc63f.83aaa8",
-    "name": "",
-    "iface": "",
-    "port": "49904",
-    "ipv": "udp4",
-    "multicast": "false",
-    "group": "",
-    "datatype": "utf8",
-    "x": 136,
-    "y": 484,
-    "wires": [
-      [
-        "de359d.a333ba6"
-      ]
-    ]
-  },
-  {
-    "id": "2c0adf6b.a5e0b",
+    "id": "afb8cf7e.aa8cd",
     "type": "split",
-    "z": "d91bc63f.83aaa8",
+    "z": "52ecbb1f.978604",
     "name": "",
     "splt": "\\n",
-    "x": 616.5,
-    "y": 181,
+    "x": 568.5,
+    "y": 300,
     "wires": [
       [
-        "1f88af0c.434f41"
+        "e66f6983.72cef8"
       ]
     ]
   },
   {
-    "id": "66db5e87.b60c6",
+    "id": "b773fb00.6a71c8",
     "type": "xml",
-    "z": "d91bc63f.83aaa8",
+    "z": "52ecbb1f.978604",
     "name": "",
     "attr": "",
     "chr": "",
-    "x": 129,
-    "y": 181,
+    "x": 111,
+    "y": 300,
     "wires": [
       [
-        "d98bedec.985d1"
+        "38b33aa1.991496"
       ]
     ]
   },
   {
-    "id": "d98bedec.985d1",
+    "id": "38b33aa1.991496",
     "type": "function",
-    "z": "d91bc63f.83aaa8",
+    "z": "52ecbb1f.978604",
     "name": "buildServerResponseParser",
-    "func": "var isNull = function(obj) {\n    return (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg) || isNull(msg.payload) || isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n    return [];\n}\n\n// TODO get pipeline names, ipAddresses and portNumbers from DB\nvar pipelineNames = [\"OnlineCustomers\", \"Dev1-PodBAU\"];\nvar ipAddresses = [\"127.0.0.1\", \"127.0.0.1\"];\nvar portNumbers = [49903, 49904];\nvar index = 0;\n\nvar payload = [];\npipelineNames.forEach(function(pipelineToMonitor) {\n    var buildLightColor = \"green\";\n    msg.payload.Projects.Project.forEach(function(project) {\n        var pipelineName = project.$.name;\n        if (pipelineName.indexOf(pipelineToMonitor) === 0) {\n            if (buildLightColor === \"green\") { //TODO remove this green check if and add the break in the below if statements\n                if (project.$.activity === \"Building\") {\n                    buildLightColor = \"blue\";\n                } else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n                    buildLightColor = \"red\";\n                }\n            }\n        }\n    });\n    payload.push(\n        {\"ip\": ipAddresses[index], \"port\": portNumbers[index], \"colorCode\": buildLightColor}\n    );\n    index++;\n});\n\nmsg.payload = payload;\n// [\n//         {\"ip\": \"127.0.0.1\", \"port\": 49903, \"colorCode\": \"green\"},\n//         {\"ip\": \"127.0.0.1\", \"port\": 49904, \"colorCode\": \"red\"}\n//     ];\nreturn msg;",
+    "func": "var isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg) || isNull(msg.payload) || isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n\treturn [];\n}\n\nvar getBuildLightColor = function(pipelineToMonitor) {\n\tvar color=\"\";\n\tfor(var i=0; i<msg.payload.Projects.Project.length; i++) {\n\t\tvar project = msg.payload.Projects.Project[i];\n\t\tvar pipelineName = project.$.name;\n\t\tif (pipelineName.indexOf(pipelineToMonitor) === 0) {\n\t\t    if (project.$.activity === \"Building\") {\n\t\t\t\tcolor = \"blue\";\n\t\t\t\tbreak;\n\t\t\t} else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n\t\t\t\tcolor = \"red\";\n\t\t\t\tbreak;\n\t\t\t} else {\n\t\t\t\tcolor = \"green\";\n\t\t\t}\n\t\t}\n\t}\n\treturn color;\n}\n\nvar payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tvar colorCode = getBuildLightColor(device.pipeline);\n\tpayload.push(\n\t\t\t{\n\t\t\t\t\"ip\": device.ip,\n\t\t\t\t\"port\": device.port,\n\t\t\t\t\"colorCode\": colorCode\n\t\t\t}\n\t);\n}\n\nmsg.payload = payload;\n// [\n//         {\"ip\": \"127.0.0.1\", \"port\": 49903, \"colorCode\": \"green\"},\n//         {\"ip\": \"127.0.0.1\", \"port\": 49904, \"colorCode\": \"red\"}\n//     ];\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 375.5,
-    "y": 181,
+    "x": 340.5,
+    "y": 300,
     "wires": [
       [
-        "2c0adf6b.a5e0b"
+        "afb8cf7e.aa8cd"
       ]
     ]
   },
   {
-    "id": "7514166d.ede098",
-    "type": "tls-config",
-    "z": "d91bc63f.83aaa8",
+    "id": "20a1a4cb.1f1ccc",
+    "type": "http request",
+    "z": "52ecbb1f.978604",
     "name": "",
-    "cert": "/Users/muhammadfaisal/Downloads/NBN_Certificates 2/NBN Co Medium Assurance Intermediate CA.pem",
-    "key": "/Users/muhammadfaisal/Downloads/privatekey.pem",
+    "method": "GET",
+    "ret": "obj",
+    "url": "http://127.0.0.1:1880/devices",
+    "tls": "",
+    "x": 548.5,
+    "y": 61,
+    "wires": [
+      [
+        "2b15e579.51423a"
+      ]
+    ]
+  },
+  {
+    "id": "2b15e579.51423a",
+    "type": "change",
+    "z": "52ecbb1f.978604",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "devices",
+        "pt": "msg",
+        "to": "payload",
+        "tot": "msg"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "",
+        "tot": "str"
+      },
+      {
+        "t": "delete",
+        "p": "headers",
+        "pt": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 141.5,
+    "y": 180,
+    "wires": [
+      [
+        "6f0a6ea4.67878"
+      ]
+    ]
+  },
+  {
+    "id": "dd4f2fbe.d4511",
+    "type": "tls-config",
+    "z": "52ecbb1f.978604",
+    "name": "",
+    "cert": "NBN Co Medium Assurance Intermediate CA.pem",
+    "key": "privatekey.pem",
     "ca": "",
     "verifyservercert": false
   }
