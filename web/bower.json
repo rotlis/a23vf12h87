@@ -1,0 +1,27 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "homepage": "https://github.com/rotlis/a23vf12h87",
+  "dependencies": {
+    "bootstrap3-typeahead": "git://github.com/bassjobsen/Bootstrap-3-Typeahead.git#master",
+    "jquery": "^3.1.0",
+    "mustache.js": "mustache#^2.2.1",
+    "socket.io": "^1.4.8",
+    "bootstrap": "^3.3.7"
+  },
+  "authors": [
+    "Hackathon team"
+  ],
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

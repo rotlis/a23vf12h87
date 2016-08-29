@@ -1,0 +1,175 @@
+[
+  {
+    "id": "3e98a3ea.452c2c",
+    "type": "websocket-listener",
+    "z": "6ca4df18.8fa85",
+    "path": "/ws/test",
+    "wholemsg": "false"
+  },
+  {
+    "id": "75bffd55.a4fdf4",
+    "type": "http in",
+    "z": "6ca4df18.8fa85",
+    "name": "",
+    "url": "/web/*",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 97,
+    "y": 57,
+    "wires": [
+      [
+        "49e7ca3c.80f434"
+      ]
+    ]
+  },
+  {
+    "id": "911424b1.380b98",
+    "type": "http response",
+    "z": "6ca4df18.8fa85",
+    "name": "",
+    "x": 594.9999847412109,
+    "y": 54,
+    "wires": []
+  },
+  {
+    "id": "fd612f67.26bf4",
+    "type": "file in",
+    "z": "6ca4df18.8fa85",
+    "name": "",
+    "filename": "",
+    "format": "utf8",
+    "x": 460.99998474121094,
+    "y": 55,
+    "wires": [
+      [
+        "911424b1.380b98"
+      ]
+    ]
+  },
+  {
+    "id": "49e7ca3c.80f434",
+    "type": "function",
+    "z": "6ca4df18.8fa85",
+    "name": "",
+    "func": "msg.filename = msg.req.url.replace(\"/web/\", \"/Users/robertsayfullin/workspaces/hackathon/BetterBuildLights/web/\");\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 296.9999694824219,
+    "y": 62,
+    "wires": [
+      [
+        "fd612f67.26bf4"
+      ]
+    ]
+  },
+  {
+    "id": "7c52afaa.319fb",
+    "type": "catch",
+    "z": "6ca4df18.8fa85",
+    "name": "",
+    "scope": null,
+    "x": 103.83332824707031,
+    "y": 436.0000305175781,
+    "wires": [
+      [
+        "4df9587e.e8eba8"
+      ]
+    ]
+  },
+  {
+    "id": "4df9587e.e8eba8",
+    "type": "debug",
+    "z": "6ca4df18.8fa85",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "true",
+    "x": 300.8333435058594,
+    "y": 457.00003814697266,
+    "wires": []
+  },
+  {
+    "id": "7ab68a07.b6a0b4",
+    "type": "websocket out",
+    "z": "6ca4df18.8fa85",
+    "name": "/ws/test out",
+    "server": "3e98a3ea.452c2c",
+    "client": "",
+    "x": 619.6666107177734,
+    "y": 213.66668701171875,
+    "wires": []
+  },
+  {
+    "id": "288ab21b.d2157e",
+    "type": "inject",
+    "z": "6ca4df18.8fa85",
+    "name": "beackon",
+    "topic": "",
+    "payload": "{\"ip\":\"127.0.0.1\", \"project\":\"BBL\"}",
+    "payloadType": "str",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 223.6666259765625,
+    "y": 166.66668701171875,
+    "wires": [
+      [
+        "7ab68a07.b6a0b4"
+      ]
+    ]
+  },
+  {
+    "id": "c3660ff3.903f",
+    "type": "inject",
+    "z": "6ca4df18.8fa85",
+    "name": "",
+    "topic": "",
+    "payload": "{'a':123}",
+    "payloadType": "str",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 195.9479217529297,
+    "y": 256.65972900390625,
+    "wires": [
+      [
+        "7ab68a07.b6a0b4"
+      ]
+    ]
+  },
+  {
+    "id": "fbf8fb72.3defa8",
+    "type": "inject",
+    "z": "6ca4df18.8fa85",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 170.9479217529297,
+    "y": 332.7708435058594,
+    "wires": [
+      [
+        "308fd912.bec226"
+      ]
+    ]
+  },
+  {
+    "id": "308fd912.bec226",
+    "type": "function",
+    "z": "6ca4df18.8fa85",
+    "name": "delete msg session",
+    "func": "delete msg._session;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 380.9479217529297,
+    "y": 359.625,
+    "wires": [
+      [
+        "7ab68a07.b6a0b4"
+      ]
+    ]
+  }
+]
