@@ -15,6 +15,8 @@ function beaconcycle()
     udpconnection:send(msgText)
 end
 
+strip.rainbow()
+
 EspId = string.gsub(wifi.sta.getmac(),':','')
 print('EspId: ',EspId)
 
