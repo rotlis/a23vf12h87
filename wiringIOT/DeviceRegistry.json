@@ -1,16 +1,8 @@
 [
   {
-    "id": "58440436.8ff4ac",
-    "type": "json-db-collection",
-    "z": "520c6c2e.d4e3a4",
-    "name": "bbl",
-    "collection": "devices",
-    "save": true
-  },
-  {
-    "id": "278db4aa.5b7a1c",
+    "id": "292dc006.7cf3f",
     "type": "udp in",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "",
     "iface": "",
     "port": "9001",
@@ -18,165 +10,133 @@
     "multicast": "false",
     "group": "",
     "datatype": "utf8",
-    "x": 146,
+    "x": 142,
     "y": 80,
     "wires": [
       [
-        "b5bd07d7.ba9198"
+        "f94f6342.41601"
       ]
     ]
   },
   {
-    "id": "b5bd07d7.ba9198",
+    "id": "f94f6342.41601",
     "type": "function",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "prepare entry",
-    "func": "msg.entry={\n    'ip':msg.ip,\n    'port':msg.port,\n    'mac':msg.payload.substring(0, msg.payload.indexOf(':')),\n    'lastMessage':msg.payload.substring(msg.payload.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nreturn msg;",
+    "func": "mac = msg.payload.substring(0, msg.payload.indexOf(':'));\nmsg.payload = {\n    'ip':msg.ip,\n    'port':msg.port,\n    'pipeline':'',\n    'lastMessage':msg.payload.substring(msg.payload.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 313,
-    "y": 79,
+    "x": 470,
+    "y": 80,
     "wires": [
       [
-        "a636a010.16b78"
+        "4ffba2fb.b6d82c"
       ]
     ]
   },
   {
-    "id": "996ce5ac.bd4f48",
+    "id": "4ffba2fb.b6d82c",
     "type": "DataIn",
-    "z": "520c6c2e.d4e3a4",
-    "collection": "58440436.8ff4ac",
+    "z": "a9a9f52d.775198",
+    "collection": "cec35a48.377fe8",
     "name": "save DB",
     "update": false,
     "path": "/",
-    "x": 573,
-    "y": 147,
+    "x": 739,
+    "y": 80,
     "wires": []
   },
   {
-    "id": "da9c8fef.1d232",
-    "type": "function",
-    "z": "520c6c2e.d4e3a4",
-    "name": "update entry for device",
-    "func": "msg.payload[msg.entry.mac]=msg.entry;\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 354,
-    "y": 149,
-    "wires": [
-      [
-        "996ce5ac.bd4f48"
-      ]
-    ]
-  },
-  {
-    "id": "a636a010.16b78",
-    "type": "DataOut",
-    "z": "520c6c2e.d4e3a4",
-    "collection": "58440436.8ff4ac",
-    "name": "load DB",
-    "path": "/",
-    "error": false,
-    "x": 483,
-    "y": 78,
-    "wires": [
-      [
-        "da9c8fef.1d232"
-      ]
-    ]
-  },
-  {
-    "id": "75975dc5.ad7b04",
+    "id": "cefa1ae5.e53908",
     "type": "http in",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "",
     "url": "/devices",
     "method": "get",
     "swaggerDoc": "",
-    "x": 168,
-    "y": 288,
+    "x": 151,
+    "y": 280,
     "wires": [
       [
-        "b44e9f6a.9b7dc"
+        "99020f37.12ed9"
       ]
     ]
   },
   {
-    "id": "b44e9f6a.9b7dc",
+    "id": "99020f37.12ed9",
     "type": "DataOut",
-    "z": "520c6c2e.d4e3a4",
-    "collection": "58440436.8ff4ac",
+    "z": "a9a9f52d.775198",
+    "collection": "cec35a48.377fe8",
     "name": "load DB",
     "path": "/",
     "error": false,
-    "x": 346,
-    "y": 288,
+    "x": 359,
+    "y": 280,
     "wires": [
       [
-        "a4f4c62f.e30aa8"
+        "8c703083.d3902"
       ]
     ]
   },
   {
-    "id": "a4f4c62f.e30aa8",
+    "id": "8c703083.d3902",
     "type": "function",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "HTTP headers",
     "func": "msg.headers={'Content-type':'application/json'}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 523,
-    "y": 288,
+    "x": 560,
+    "y": 280,
     "wires": [
       [
-        "9870904a.446ba"
+        "494cbba6.2fa6b4"
       ]
     ]
   },
   {
-    "id": "9870904a.446ba",
+    "id": "494cbba6.2fa6b4",
     "type": "http response",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "",
-    "x": 698,
-    "y": 287,
+    "x": 749,
+    "y": 280,
     "wires": []
   },
   {
-    "id": "3b0f7e93.623a92",
+    "id": "9ab3c7cc.3e8cb8",
     "type": "comment",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "Process UDP beakon from device",
     "info": "",
-    "x": 157,
-    "y": 39,
+    "x": 153,
+    "y": 23,
     "wires": []
   },
   {
-    "id": "8a316410.db9588",
+    "id": "a3e5a9df.4f3c18",
     "type": "comment",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "REST GET all devices",
     "info": "",
-    "x": 117,
-    "y": 246,
+    "x": 113,
+    "y": 230,
     "wires": []
   },
   {
-    "id": "ce445702.3401c8",
+    "id": "5482004.726d9",
     "type": "comment",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "Clear DB",
     "info": "",
-    "x": 77,
-    "y": 367,
+    "x": 73,
+    "y": 351,
     "wires": []
   },
   {
-    "id": "a524fec5.b24a8",
+    "id": "bbd09347.36e84",
     "type": "inject",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "",
     "topic": "",
     "payload": "",
@@ -184,56 +144,56 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 184,
-    "y": 411,
+    "x": 166,
+    "y": 400,
     "wires": [
       [
-        "5ef09ced.0cd324"
+        "d6957f1c.5c017"
       ]
     ]
   },
   {
-    "id": "7a97e190.5f164",
+    "id": "e142e3ca.757a",
     "type": "DataIn",
-    "z": "520c6c2e.d4e3a4",
-    "collection": "58440436.8ff4ac",
+    "z": "a9a9f52d.775198",
+    "collection": "cec35a48.377fe8",
     "name": "save DB",
     "update": false,
     "path": "/",
-    "x": 566,
-    "y": 411,
+    "x": 739,
+    "y": 400,
     "wires": []
   },
   {
-    "id": "5ef09ced.0cd324",
+    "id": "d6957f1c.5c017",
     "type": "function",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "empty payload",
     "func": "msg.payload={};\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 380,
-    "y": 410,
+    "x": 441,
+    "y": 400,
     "wires": [
       [
-        "7a97e190.5f164"
+        "e142e3ca.757a"
       ]
     ]
   },
   {
-    "id": "82bcb73a.cdaa98",
+    "id": "28b92e68.e72a12",
     "type": "comment",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "Send 'tickle' UDP to all devices",
     "info": "",
-    "x": 141,
-    "y": 497,
+    "x": 137,
+    "y": 481,
     "wires": []
   },
   {
-    "id": "bebb94b4.61c898",
+    "id": "fb00d95d.714688",
     "type": "inject",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "",
     "topic": "",
     "payload": "",
@@ -241,34 +201,34 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 177,
-    "y": 538,
+    "x": 166,
+    "y": 522,
     "wires": [
       [
-        "ddf7e8fa.e0fee8"
+        "653ea52c.7459ac"
       ]
     ]
   },
   {
-    "id": "ddf7e8fa.e0fee8",
+    "id": "653ea52c.7459ac",
     "type": "DataOut",
-    "z": "520c6c2e.d4e3a4",
-    "collection": "58440436.8ff4ac",
+    "z": "a9a9f52d.775198",
+    "collection": "cec35a48.377fe8",
     "name": "load DB",
     "path": "/",
     "error": false,
-    "x": 336,
-    "y": 538,
+    "x": 321,
+    "y": 522,
     "wires": [
       [
-        "14d5cd00.e43393"
+        "cc9777c.cc09788"
       ]
     ]
   },
   {
-    "id": "702238e2.ab5c28",
+    "id": "2fb11d6f.4982e2",
     "type": "udp out",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "",
     "addr": "",
     "iface": "",
@@ -277,24 +237,76 @@
     "outport": "",
     "base64": false,
     "multicast": "false",
-    "x": 676,
-    "y": 607,
+    "x": 672,
+    "y": 591,
     "wires": []
   },
   {
-    "id": "14d5cd00.e43393",
+    "id": "cc9777c.cc09788",
     "type": "function",
-    "z": "520c6c2e.d4e3a4",
+    "z": "a9a9f52d.775198",
     "name": "iterate through all device and send them black color",
     "func": "for(var mac in msg.payload){\n    var dev = msg.payload[mac];\n    var tickleMessage = {\n        'ip':dev.ip, \n        'port':dev.port,\n        'payload':'black'\n    };\n    node.send(tickleMessage);\n}\n// drop original message\nreturn null;",
     "outputs": 1,
     "noerr": 0,
-    "x": 366,
-    "y": 610,
+    "x": 621,
+    "y": 522,
     "wires": [
       [
-        "702238e2.ab5c28"
+        "2fb11d6f.4982e2"
       ]
     ]
+  },
+  {
+    "id": "2ba5bdc7.880462",
+    "type": "http in",
+    "z": "a9a9f52d.775198",
+    "name": "Assign pipeline to Device",
+    "url": "/devices",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 190,
+    "y": 161,
+    "wires": [
+      [
+        "2b157096.126f5"
+      ]
+    ]
+  },
+  {
+    "id": "dd63c95b.958178",
+    "type": "DataIn",
+    "z": "a9a9f52d.775198",
+    "collection": "cec35a48.377fe8",
+    "name": "save DB",
+    "update": false,
+    "path": "/",
+    "x": 739,
+    "y": 161,
+    "wires": []
+  },
+  {
+    "id": "2b157096.126f5",
+    "type": "function",
+    "z": "a9a9f52d.775198",
+    "name": "prepare entry",
+    "func": "msg.datapath = '/devices/' + msg.payload.mac + '/pipeline';\nmsg.payload = msg.payload.pipelineName;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 469,
+    "y": 161,
+    "wires": [
+      [
+        "dd63c95b.958178"
+      ]
+    ]
+  },
+  {
+    "id": "cec35a48.377fe8",
+    "type": "json-db-collection",
+    "z": "a9a9f52d.775198",
+    "name": "bbl",
+    "collection": "devices",
+    "save": true
   }
 ]

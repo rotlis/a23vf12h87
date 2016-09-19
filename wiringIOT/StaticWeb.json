@@ -51,7 +51,7 @@
     "type": "function",
     "z": "6ca4df18.8fa85",
     "name": "",
-    "func": "msg.filename = msg.req.url.replace(\"/web/\", \"/Users/robertsayfullin/workspaces/hackathon/BetterBuildLights/web/\");\nreturn msg;",
+    "func": "msg.filename = msg.req.url.replace(\"/web/\", \"./web/\");\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 296.9999694824219,
