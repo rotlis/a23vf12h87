@@ -1,108 +1,123 @@
 [
   {
-    "id": "3e98a3ea.452c2c",
+    "id": "553b6715.4b2e28",
+    "type": "tab",
+    "label": "Flow 1"
+  },
+  {
+    "id": "8e5b59e8.a121f8",
     "type": "websocket-listener",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "path": "/ws/test",
     "wholemsg": "false"
   },
   {
-    "id": "75bffd55.a4fdf4",
+    "id": "cfde3172.2b988",
+    "type": "tls-config",
+    "z": "553b6715.4b2e28",
+    "name": "NBN certificate",
+    "cert": "NBN Co Medium Assurance Intermediate CA.pem",
+    "key": "privatekey.pem",
+    "ca": "",
+    "verifyservercert": false
+  },
+  {
+    "id": "ae01e10f.d83d4",
     "type": "http in",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "",
     "url": "/web/*",
     "method": "get",
     "swaggerDoc": "",
-    "x": 97,
-    "y": 57,
+    "x": 102,
+    "y": 44,
     "wires": [
       [
-        "49e7ca3c.80f434"
+        "dda61916.19aab8"
       ]
     ]
   },
   {
-    "id": "911424b1.380b98",
+    "id": "82c190e1.c97ca",
     "type": "http response",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "",
-    "x": 594.9999847412109,
-    "y": 54,
+    "x": 641,
+    "y": 41,
     "wires": []
   },
   {
-    "id": "fd612f67.26bf4",
+    "id": "f8a1e9b7.59c298",
     "type": "file in",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "",
     "filename": "",
     "format": "utf8",
-    "x": 460.99998474121094,
-    "y": 55,
+    "x": 476,
+    "y": 43,
     "wires": [
       [
-        "911424b1.380b98"
+        "82c190e1.c97ca"
       ]
     ]
   },
   {
-    "id": "49e7ca3c.80f434",
+    "id": "dda61916.19aab8",
     "type": "function",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "",
     "func": "msg.filename = msg.req.url.replace(\"/web/\", \"./web/\");\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 296.9999694824219,
-    "y": 62,
+    "x": 299.9999694824219,
+    "y": 46,
     "wires": [
       [
-        "fd612f67.26bf4"
+        "f8a1e9b7.59c298"
       ]
     ]
   },
   {
-    "id": "7c52afaa.319fb",
+    "id": "e3253205.b8f99",
     "type": "catch",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "",
     "scope": null,
-    "x": 103.83332824707031,
-    "y": 436.0000305175781,
+    "x": 89.83332824707031,
+    "y": 499.0000305175781,
     "wires": [
       [
-        "4df9587e.e8eba8"
+        "2af60e3c.f3ead2"
       ]
     ]
   },
   {
-    "id": "4df9587e.e8eba8",
+    "id": "2af60e3c.f3ead2",
     "type": "debug",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "",
     "active": true,
     "console": "false",
     "complete": "true",
-    "x": 300.8333435058594,
-    "y": 457.00003814697266,
+    "x": 229.83334350585938,
+    "y": 510.0000305175781,
     "wires": []
   },
   {
-    "id": "7ab68a07.b6a0b4",
+    "id": "af0da38a.91777",
     "type": "websocket out",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "/ws/test out",
-    "server": "3e98a3ea.452c2c",
+    "server": "8e5b59e8.a121f8",
     "client": "",
-    "x": 619.6666107177734,
-    "y": 213.66668701171875,
+    "x": 736.6666259765625,
+    "y": 453.66668701171875,
     "wires": []
   },
   {
-    "id": "288ab21b.d2157e",
+    "id": "2d655727.6b8c48",
     "type": "inject",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "beackon",
     "topic": "",
     "payload": "{\"ip\":\"127.0.0.1\", \"project\":\"BBL\"}",
@@ -110,18 +125,18 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 223.6666259765625,
-    "y": 166.66668701171875,
+    "x": 336.6666259765625,
+    "y": 371.66668701171875,
     "wires": [
       [
-        "7ab68a07.b6a0b4"
+        "af0da38a.91777"
       ]
     ]
   },
   {
-    "id": "c3660ff3.903f",
+    "id": "bf19d975.a892d8",
     "type": "inject",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "",
     "topic": "",
     "payload": "{'a':123}",
@@ -129,18 +144,18 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 195.9479217529297,
-    "y": 256.65972900390625,
+    "x": 338.9479217529297,
+    "y": 414.65972900390625,
     "wires": [
       [
-        "7ab68a07.b6a0b4"
+        "af0da38a.91777"
       ]
     ]
   },
   {
-    "id": "fbf8fb72.3defa8",
+    "id": "93ebe5ec.fcb9f8",
     "type": "inject",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "",
     "topic": "",
     "payload": "",
@@ -148,28 +163,99 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 170.9479217529297,
-    "y": 332.7708435058594,
+    "x": 338.9479217529297,
+    "y": 459.7708435058594,
     "wires": [
       [
-        "308fd912.bec226"
+        "c78fcf9c.c14d9"
       ]
     ]
   },
   {
-    "id": "308fd912.bec226",
+    "id": "c78fcf9c.c14d9",
     "type": "function",
-    "z": "6ca4df18.8fa85",
+    "z": "553b6715.4b2e28",
     "name": "delete msg session",
     "func": "delete msg._session;\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 380.9479217529297,
-    "y": 359.625,
+    "x": 535.9479370117188,
+    "y": 490.625,
     "wires": [
       [
-        "7ab68a07.b6a0b4"
+        "af0da38a.91777"
       ]
     ]
+  },
+  {
+    "id": "8b29c0ca.91f59",
+    "type": "http in",
+    "z": "553b6715.4b2e28",
+    "name": "",
+    "url": "/proxy*",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 99,
+    "y": 138,
+    "wires": [
+      [
+        "4c6f6848.6314e8",
+        "586c94d.299726c"
+      ]
+    ]
+  },
+  {
+    "id": "326223b5.62465c",
+    "type": "http response",
+    "z": "553b6715.4b2e28",
+    "name": "",
+    "x": 655,
+    "y": 134,
+    "wires": []
+  },
+  {
+    "id": "7b657545.42589c",
+    "type": "http request",
+    "z": "553b6715.4b2e28",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "url": "",
+    "tls": "cfde3172.2b988",
+    "x": 476,
+    "y": 135,
+    "wires": [
+      [
+        "326223b5.62465c"
+      ]
+    ]
+  },
+  {
+    "id": "4c6f6848.6314e8",
+    "type": "function",
+    "z": "553b6715.4b2e28",
+    "name": "url",
+    "func": "msg.url=msg.payload.url;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 310,
+    "y": 138,
+    "wires": [
+      [
+        "7b657545.42589c"
+      ]
+    ]
+  },
+  {
+    "id": "586c94d.299726c",
+    "type": "debug",
+    "z": "553b6715.4b2e28",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 279,
+    "y": 225,
+    "wires": []
   }
 ]

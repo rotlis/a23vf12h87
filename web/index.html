@@ -33,7 +33,6 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/mustache.js/mustache.js"></script>
     <script>
-//        var socket;
         var ws;
         $(function(){
             function connect() {
@@ -43,46 +42,21 @@
                     console.debug("onmessage", event.data);
                     onNodeBeackon($.parseJSON(event.data));
                 };
-                ws.onopen = function()
-                {
-                    // Web Socket is connected, send data using send()
-                    console.log("onopen");
-                    ws.send("on open");
+                ws.onopen = function() {
+                    console.log("Connection is onopen");
                 };
-                ws.onclose = function()
-                {
-                    // websocket is closed.
+                ws.onclose = function() {
                     console.debug("Connection is closed...");
                     setTimeout(connect, 1000);
                 };
-
             }
-
-
             connect();
         });
-//        $(function(){
-//            socket = io('http://localhost');
-////            socket = io.connect();
-//            socket.on('connect', function () {
-//                socket.on('message', function(message) {
-//                    console.debug("MESSAGE:"+message);
-//                    onNodeBeackon($.parseJSON(message));
-//                });
-//                socket.on('delete', function(message){
-//                    onNodeDelete($.parseJSON(message));
-//                });
-//                socket.on('disconnect', function() {
-//                    console.debug("disconnected");
-////                    $('#messages').append('<li>Disconnected</li>');
-//                });
-//            });
-//        });
     </script>
 
     <script>
 
-        var nodes = {};
+        var devices = {};
         var $xml;
 
         var nodeTemplate;
@@ -92,9 +66,8 @@
 
         function testCcTray(){
             $("#test_cctray").removeClass("btn-success").removeClass("btn-danger");
-//            var auth = btoa('username:password');
             $.ajax({
-                url: "proxy",
+                url: "/proxy",
                 type: "GET",
                 data: { url: $("#cctray_url").val(), username :$("#username").val(), pwd:$("#pwd").val()} ,
                 dataType: "xml",
@@ -110,75 +83,59 @@
         }
 
         function loadTemplates(){
-            $("#templates").load("templates/templates.html#template0",function(){
-                nodeTemplate = document.getElementById('template0').innerHTML;
+            $("#templates").load("templates/templates.html#template1",function(){
+                nodeTemplate = document.getElementById('template1').innerHTML;
             });
         }
 
         function addNode(nodeJson){
+            var deviceId = nodeJson.mac;
             var selections = [];
-            var ipp = nodeJson.ip.replace(/\./g, '_');
             $.each(projects, function(){selections.push({name:this.name, selected:(this.name == nodeJson.project)});});
-            var jsonData = {id:ipp, node:nodeJson, projects:selections};
+            var jsonData = {id:deviceId, node:nodeJson, projects:selections};
             var output = Mustache.render(nodeTemplate, jsonData);
-            $("#nodes-container").append(output);
-            $("#"+ipp).fadeIn();
-            $("#"+ipp+"-save").click(function(){
-                socket.send('{"ip":"'+nodeJson.ip
-                        +'","cctrayurl":"'+$("#cctray_url").val()
-                        +'","username":"","pwd":"", "project":"'+$('#'+ipp+'-project').val()
-                        +'","location":"'+$('#'+ipp+'-location').val()
-                        +'","state":3}');
-            });
-            $("#"+ipp+"-identify").click(function(){
-                socket.send('{"ip":"'+nodeJson.ip
-                        +'","cctrayurl":"'+$("#cctray_url").val()
-                        +'","username":"","pwd":"", "project":"'+$('#'+ipp+'-project').val()
-                        +'","location":"'+$('#'+ipp+'-location').val()
-                        +'","state":10}');
-            });
-            $("#"+ipp+"-xmas").click(function(){
-                socket.send('{"ip":"'+nodeJson.ip
-                        +'","cctrayurl":"'+$("#cctray_url").val()
-                        +'","username":"","pwd":"", "project":"'+$('#'+ipp+'-project').val()
-                        +'","location":"'+$('#'+ipp+'-location').val()
-                        +'","state":9}');
-            });
+            $("#devices-container").append(output);
+            attachDeviceHandlers(deviceId);
+            $("#"+deviceId).fadeIn();
         }
 
         function onNodeBeackon(json){
-            if (nodes[json.ip]){
-                console.debug("Update for "+json.ip);
+            if (devices[json.mac]){
+                console.debug("Update for "+json.mac);
             }else{
-                console.debug("Adding "+json.ip);
-                nodes[json.ip] = json;
+                console.debug("Adding "+json.mac);
+                devices[json.mac] = json;
                 addNode(json);
             }
         }
 
-
         function onNodeDelete(json){
-            delete nodes[json.ip];
-            $("#"+json.ip.replace(/\./g, "_")).fadeOut(400, function(){
-                $("#"+json.ip.replace(/\./g, "_")).remove();
+            delete devices[json.mac];
+            $("#"+json.mac).fadeOut(400, function(){
+                $("#"+json.mac).remove();
             });
         }
 
         function attachGlobalHandlers(){
-
             $("#test_cctray").click(testCcTray);
             $("#cctray_url, #username, #pwd").on('input', function(){
                 $("#test_cctray").addClass("btn-default").removeClass("btn-danger").removeClass("btn-success");
             });
         }
 
+        function attachDeviceHandlers(mac){
+            $("#"+mac+" button.device-save").click(function(){
+                console.log(mac+" device-save");
+            });
+            $("#"+mac+" button.device-identify").click(function(){
+                console.log(mac+" device-identify");
+            });
+        }
+
         $(document).ready(function(){
             loadTemplates();
-//            testCcTray();
             attachGlobalHandlers();
         });
-
-
 
     </script>
 </head>
@@ -199,8 +156,8 @@
                 <li><a href="#">Page 3</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="http://rotlis.ddns.net/">Cam</a></li>
-                <li><a href="http://miranda-farm.blogspot.com">Blog</a></li>
+                <li><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
             </ul>
         </div>
     </div>
@@ -215,10 +172,9 @@
     <div class="panel panel-primary">
         <div class="panel-heading">GO server settings</div>
         <div class="panel-body">
-            <!--<form role="form">-->
             <div class="form-group">
                 <label for="cctray_url">CCTRAY URL:</label>
-                <input type="url" class="form-control" id="cctray_url" value="http://127.0.0.1:8080/cctray.xml">
+                <input type="url" class="form-control" id="cctray_url" value="https://go.nbnco.net.au/go/cctray.xml">
             </div>
             <div class="form-group form-inline">
                 <label for="username">Username:</label>
@@ -229,18 +185,14 @@
             </div>
 
             <button id="test_cctray" class="btn btn-default">Test</button>
-            <button type="submit" class="btn btn-default">Submit</button>
-
-            <!--</form>-->
+            <button type="submit" class="btn btn-default">Save</button>
         </div>
     </div>
 
-    <div id="nodes-container" class="row">
+    <div id="devices-container" class="row">
 
 
     </div>
-
-
 
     <div class="panel panel-info">
         <div class="panel-heading">By 2018, The 'Internet Of Things' Will Be Bigger Than The Smartphone, Tablet, And PC Markets Combined</div>
@@ -257,9 +209,6 @@
 
     <div class="row">
         <div class="col-md-4">
-            <!--<p align="center">-->
-            <!--<img src="http://www.esp8266.com/wiki/lib/exe/fetch.php?w=200&tok=cc3754&media=12-01.jpg"/>-->
-            <!--</p>-->
             <h2>Thing</h2>
             <p>
                 <a href="http://www.esp8266.com/wiki/doku.php?id=esp8266-module-family">ESP8266-ESP12</a> running <a href="http://nodemcu.com/index_en.html">nodemcu</a> firmware.
@@ -267,9 +216,6 @@
             <p><a class="btn btn-default" href="#" role="button">View details</a></p>
         </div>
         <div class="col-md-4">
-            <!--<p align="center">-->
-            <!--<img src="https://node-os.com/images/nodejs.png" width="200px"/>-->
-            <!--</p>-->
             <h2>Server</h2>
             <p>
                 nodejs server with modules http, url, socket.io, xml2js, dgram.
@@ -277,9 +223,6 @@
             <p><a class="btn btn-default" href="#" role="button">View details</a></p>
         </div>
         <div class="col-md-4">
-            <!--<p align="center">-->
-            <!--<img src="http://w3widgets.com/responsive-slider/img/bootstrap.png"/>-->
-            <!--</p>-->
             <h2>Browser</h2>
             <p>
                 bootstrap, jquery, mustache, socket.io
@@ -296,7 +239,7 @@
 
 <div id="footer">
     <div class="container">
-        <p class="muted credit">Example courtesy <a href="mailto:robert.sayfullin@gmail.com">RobS</a>.</p>
+        <p class="muted credit">Example courtesy TODO</p>
     </div>
 </div>
 

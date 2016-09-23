@@ -31,18 +31,34 @@
     </div>
 </div>
 
+<div id="template1">
 
+    <div class="col-sm-4 node-panel" id="{{node.mac}}" style="display:none">
+        <div class="panel panel-primary">
+            <div class="panel-heading">DeviceID : {{node.mac}}</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label>Location:</label>
+                    <input type="text" class="form-control" name="location" value="{{node.location}}" placeholder="Level, Building, etc">
+                </div>
+                <div class="form-group">
+                    <label >Project:</label>
+                    <select class="form-control" name="project">
+                        <option>Select</option>
+                        {{#projects}}
+                        {{#selected}}
+                        <option selected>{{name}}</option>
+                        {{/selected}}
+                        {{^selected}}
+                        <option>{{name}}</option>
+                        {{/selected}}
+                        {{/projects}}
+                    </select>
+                </div>
 
-
-<div id="template1" >
-    <h1>{{name}}</h1>
+                <button type="submit" class="btn btn-success device-save" >Save</button>
+                <button type="submit" class="btn btn-default device-identify">Identify</button>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div id="template2" >
-    <div>{{name}}</div>
-</div>
-
-<div id="template3" >
-    <p><span>{{name}}</span></p>
-</div>
-
