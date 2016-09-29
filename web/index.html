@@ -126,6 +126,21 @@
         function attachDeviceHandlers(mac){
             $("#"+mac+" button.device-save").click(function(){
                 console.log(mac+" device-save");
+
+                var data = {
+                    mac: mac,
+                    pipelineName: $('#'+mac+' select').val()
+                };
+                console.log(data);
+
+                $.ajax({
+                    data: data,
+                    type: "POST",
+                    url: "/devices",
+//                    success: success,
+                    dataType: "json"
+                });
+
             });
             $("#"+mac+" button.device-identify").click(function(){
                 console.log(mac+" device-identify");

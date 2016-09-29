@@ -173,8 +173,8 @@
     "type": "tls-config",
     "z": "52ecbb1f.978604",
     "name": "",
-    "cert": "NBN Co Medium Assurance Intermediate CA.pem",
-    "key": "privatekey.pem",
+    "cert": "./certificates/certificate.pem",
+    "key": "./certificates/privatekey.pem",
     "ca": "",
     "verifyservercert": false
   }
