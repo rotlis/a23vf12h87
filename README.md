@@ -11,9 +11,14 @@ http://flows.nodered.org/node/node-red-contrib-splitter
 http://flows.nodered.org/node/json-db-node-red
 
 
+#### Generate privatekey.pem and certificate.pem on new server and use them in TLS configuration
+
 openssl genrsa -out privatekey.pem 1024
 openssl req -new -key privatekey.pem -out private-csr.pem
 openssl x509 -req -days 365 -in private-csr.pem -signkey privatekey.pem -out certificate.pem
+
+#### 
+
 
 
 build configurations:
