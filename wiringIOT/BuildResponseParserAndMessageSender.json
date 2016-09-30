@@ -1,8 +1,8 @@
 [
   {
-    "id": "e435e9c0.3563f8",
+    "id": "86cc0f64.620d4",
     "type": "udp out",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "",
     "addr": "",
     "iface": "",
@@ -12,46 +12,46 @@
     "base64": false,
     "multicast": "false",
     "x": 569,
-    "y": 421,
+    "y": 440,
     "wires": []
   },
   {
-    "id": "e66f6983.72cef8",
+    "id": "62f0d490.fb294c",
     "type": "function",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "optimiseMessage",
     "func": "msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n//msg.colorCode=msg.payload.colorCode;\n\nvar tickleMessage = {\n    'ip':msg.payload.ip, \n    'port':msg.payload.port,\n    'payload':msg.payload.colorCode\n};\nnode.send(tickleMessage);\nreturn null;",
     "outputs": 1,
     "noerr": 0,
     "x": 152,
-    "y": 421,
+    "y": 440,
     "wires": [
       [
-        "e435e9c0.3563f8"
+        "86cc0f64.620d4"
       ]
     ]
   },
   {
-    "id": "6f0a6ea4.67878",
+    "id": "6ba8835b.8a866c",
     "type": "http request",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "Request to get build status",
     "method": "GET",
     "ret": "txt",
     "url": "https://go.nbnco.net.au/go/cctray.xml",
-    "tls": "dd4f2fbe.d4511",
+    "tls": "db29c472.907f68",
     "x": 499,
-    "y": 180,
+    "y": 199,
     "wires": [
       [
-        "b773fb00.6a71c8"
+        "9ceab431.54a628"
       ]
     ]
   },
   {
-    "id": "1573accd.fb5aa3",
+    "id": "89a806fc.b44ad8",
     "type": "inject",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "Trigger for build status request",
     "topic": "",
     "payload": "true",
@@ -60,86 +60,86 @@
     "crontab": "",
     "once": false,
     "x": 216,
-    "y": 61,
+    "y": 80,
     "wires": [
       [
-        "20a1a4cb.1f1ccc"
+        "3e609201.f5126e"
       ]
     ]
   },
   {
-    "id": "afb8cf7e.aa8cd",
+    "id": "12912dd9.ba8fc2",
     "type": "split",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "",
     "splt": "\\n",
     "x": 568.5,
-    "y": 300,
+    "y": 319,
     "wires": [
       [
-        "e66f6983.72cef8"
+        "62f0d490.fb294c"
       ]
     ]
   },
   {
-    "id": "b773fb00.6a71c8",
+    "id": "9ceab431.54a628",
     "type": "xml",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "",
     "attr": "",
     "chr": "",
     "x": 111,
-    "y": 300,
+    "y": 319,
     "wires": [
       [
-        "38b33aa1.991496"
+        "df8014ce.e9b728"
       ]
     ]
   },
   {
-    "id": "38b33aa1.991496",
+    "id": "df8014ce.e9b728",
     "type": "function",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "buildServerResponseParser",
     "func": "var isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg) || isNull(msg.payload) || isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n\treturn [];\n}\n\nvar getBuildLightColor = function(pipelineToMonitor) {\n\tvar color=\"\";\n\tfor(var i=0; i<msg.payload.Projects.Project.length; i++) {\n\t\tvar project = msg.payload.Projects.Project[i];\n\t\tvar pipelineName = project.$.name;\n\t\tif (pipelineName.indexOf(pipelineToMonitor) === 0) {\n\t\t    if (project.$.activity === \"Building\") {\n\t\t\t\tcolor = \"blue\";\n\t\t\t\tbreak;\n\t\t\t} else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n\t\t\t\tcolor = \"red\";\n\t\t\t\tbreak;\n\t\t\t} else {\n\t\t\t\tcolor = \"green\";\n\t\t\t}\n\t\t}\n\t}\n\treturn color;\n}\n\nvar payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tvar colorCode = getBuildLightColor(device.pipeline);\n\tpayload.push(\n\t\t\t{\n\t\t\t\t\"ip\": device.ip,\n\t\t\t\t\"port\": device.port,\n\t\t\t\t\"colorCode\": colorCode\n\t\t\t}\n\t);\n}\n\nmsg.payload = payload;\n// [\n//         {\"ip\": \"127.0.0.1\", \"port\": 49903, \"colorCode\": \"green\"},\n//         {\"ip\": \"127.0.0.1\", \"port\": 49904, \"colorCode\": \"red\"}\n//     ];\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 340.5,
-    "y": 300,
+    "y": 319,
     "wires": [
       [
-        "afb8cf7e.aa8cd"
+        "12912dd9.ba8fc2"
       ]
     ]
   },
   {
-    "id": "20a1a4cb.1f1ccc",
+    "id": "3e609201.f5126e",
     "type": "http request",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "",
     "method": "GET",
     "ret": "obj",
     "url": "http://127.0.0.1:1880/devices",
     "tls": "",
     "x": 548.5,
-    "y": 61,
+    "y": 80,
     "wires": [
       [
-        "2b15e579.51423a"
+        "93a6488b.5b9628"
       ]
     ]
   },
   {
-    "id": "2b15e579.51423a",
+    "id": "93a6488b.5b9628",
     "type": "change",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "",
     "rules": [
       {
         "t": "set",
         "p": "devices",
         "pt": "msg",
-        "to": "payload",
+        "to": "payload.devices",
         "tot": "msg"
       },
       {
@@ -161,17 +161,17 @@
     "to": "",
     "reg": false,
     "x": 141.5,
-    "y": 180,
+    "y": 199,
     "wires": [
       [
-        "6f0a6ea4.67878"
+        "6ba8835b.8a866c"
       ]
     ]
   },
   {
-    "id": "dd4f2fbe.d4511",
+    "id": "db29c472.907f68",
     "type": "tls-config",
-    "z": "52ecbb1f.978604",
+    "z": "9452f842.635e38",
     "name": "",
     "cert": "./certificates/certificate.pem",
     "key": "./certificates/privatekey.pem",
