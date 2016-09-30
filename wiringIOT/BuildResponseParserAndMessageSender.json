@@ -56,7 +56,7 @@
     "topic": "",
     "payload": "true",
     "payloadType": "bool",
-    "repeat": "3600",
+    "repeat": "5",
     "crontab": "",
     "once": false,
     "x": 216,
