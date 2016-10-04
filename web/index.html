@@ -35,15 +35,23 @@
     <script>
         var ws;
         $(function(){
+            function getWebSocketUrl(s) {
+                var l = window.location;
+                return ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "") + s;
+            }
+
             function connect() {
                 console.log("Connecting...");
-                ws = new WebSocket("ws://localhost:1880/ws/test");
+
+                console.log(getWebSocketUrl("/ws/test"));
+                ws = new WebSocket(getWebSocketUrl("/ws/test"));
+
                 ws.onmessage = function(event){
                     console.debug("onmessage", event.data);
                     onNodeBeackon($.parseJSON(event.data));
                 };
                 ws.onopen = function() {
-                    console.log("Connection is onopen");
+                    console.log("Connection is open");
                 };
                 ws.onclose = function() {
                     console.debug("Connection is closed...");
@@ -91,7 +99,7 @@
         function addNode(nodeJson){
             var deviceId = nodeJson.mac;
             var selections = [];
-            $.each(projects, function(){selections.push({name:this.name, selected:(this.name == nodeJson.project)});});
+            $.each(projects, function(){selections.push({name:this.name, selected:(this.name == nodeJson.pipeline)});});
             var jsonData = {id:deviceId, node:nodeJson, projects:selections};
             var output = Mustache.render(nodeTemplate, jsonData);
             $("#devices-container").append(output);
