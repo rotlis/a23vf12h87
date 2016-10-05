@@ -20,6 +20,14 @@ openssl x509 -req -days 365 -in private-csr.pem -signkey privatekey.pem -out cer
 #### 
 
 
+#### How to Start/setup 
+    1- Navigate to the the project directory
+    2- execute 'pm2 start /usr/local/bin/node-red --name better-build-lights -- -u .' to register the app
+    3- Execute 'pm2 list' to see the registered apps
+    4- execute 'pm2 logs better-build-lights' to check logs
+    5- execute 'pm2 stop better-build-lights' to stop the process
+    6- execute 'pm2 start better-build-lights' to start the process
+
 
 build configurations:
 
