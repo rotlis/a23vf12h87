@@ -1,1 +1,10 @@
-{"6ba8835b.8a866c":{"user":"dev","password":"dev"}}
+{
+    "6ba8835b.8a866c": {
+        "user": "dev",
+        "password": "dev"
+    },
+    "3e609201.f5126e": {
+        "user": "admin",
+        "password": "admin"
+    }
+}

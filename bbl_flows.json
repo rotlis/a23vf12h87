@@ -1,1 +1,876 @@
-[{"id":"152d639d.7d86fc","type":"tab","label":"Device Registry"},{"id":"afcdb9fe.f99d18","type":"tab","label":"Static Web"},{"id":"9452f842.635e38","type":"tab","label":"Build Response Parser and Message Sender"},{"id":"423e0637.550f08","type":"json-db-collection","z":"152d639d.7d86fc","name":"bbl","collection":"devices","save":true},{"id":"f0504b7f.120998","type":"websocket-listener","z":"152d639d.7d86fc","path":"/ws/test","wholemsg":"false"},{"id":"4a2392dc.8b20fc","type":"websocket-listener","z":"afcdb9fe.f99d18","path":"/ws/test","wholemsg":"false"},{"id":"b96c06bc.c67428","type":"tls-config","z":"afcdb9fe.f99d18","name":"NBN certificate","cert":"./certificates/certificate.pem","key":"./certificates/privatekey.pem","ca":"","verifyservercert":false},{"id":"db29c472.907f68","type":"tls-config","z":"9452f842.635e38","name":"","cert":"./certificates/certificate.pem","key":"./certificates/privatekey.pem","ca":"","verifyservercert":false},{"id":"859778e.645e188","type":"udp in","z":"152d639d.7d86fc","name":"","iface":"","port":"9001","ipv":"udp4","multicast":"false","group":"","datatype":"utf8","x":148,"y":100,"wires":[["f1b8c233.7c40f"]]},{"id":"49ca179d.b33b78","type":"function","z":"152d639d.7d86fc","name":"prepare entry","func":"\nvar isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nvar macInfo = msg.macInfo;\nvar mac = macInfo.substring(0, macInfo.indexOf(':'));\nvar pipeline = '';\n\nvar devices = msg.devices;\nif (!isNull(devices) && !isNull(devices[mac]) && !isNull(devices[mac].pipeline)) {\n\tpipeline = devices[mac].pipeline;\n}\n\nmsg.payload = {\n    'mac':mac,\n    'ip':msg.ip,\n    'port':msg.port,\n    'pipeline':pipeline,\n    'lastMessage':msg.payload.substring(macInfo.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;","outputs":1,"noerr":0,"x":472,"y":240,"wires":[["7ab9baaa.f85994","e908606f.be491"]]},{"id":"7ab9baaa.f85994","type":"DataIn","z":"152d639d.7d86fc","collection":"423e0637.550f08","name":"save DB","update":false,"path":"/","x":747,"y":300,"wires":[]},{"id":"37a8de08.50ac62","type":"http in","z":"152d639d.7d86fc","name":"","url":"/devices","method":"get","swaggerDoc":"","x":159,"y":495,"wires":[["ec5e71f.c3a119"]]},{"id":"ec5e71f.c3a119","type":"DataOut","z":"152d639d.7d86fc","collection":"423e0637.550f08","name":"load DB","path":"/","error":false,"x":367,"y":495,"wires":[["2d624c96.e0fef4"]]},{"id":"2d624c96.e0fef4","type":"function","z":"152d639d.7d86fc","name":"HTTP headers","func":"msg.headers={'Content-type':'application/json'}\nreturn msg;","outputs":1,"noerr":0,"x":568,"y":495,"wires":[["e2bd5972.227298"]]},{"id":"e2bd5972.227298","type":"http response","z":"152d639d.7d86fc","name":"","x":757,"y":495,"wires":[]},{"id":"41402557.91666c","type":"comment","z":"152d639d.7d86fc","name":"Process UDP beakon from device","info":"","x":161,"y":44,"wires":[]},{"id":"51588c2e.51e2b4","type":"comment","z":"152d639d.7d86fc","name":"REST GET all devices","info":"","x":121,"y":445,"wires":[]},{"id":"ac29613d.4d9c5","type":"comment","z":"152d639d.7d86fc","name":"Clear DB","info":"","x":81,"y":566,"wires":[]},{"id":"84466a5b.e9d998","type":"inject","z":"152d639d.7d86fc","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":174,"y":615,"wires":[["ebb5e52b.0c1488"]]},{"id":"a9a29bb0.6ddcc8","type":"DataIn","z":"152d639d.7d86fc","collection":"423e0637.550f08","name":"save DB","update":false,"path":"/","x":747,"y":615,"wires":[]},{"id":"ebb5e52b.0c1488","type":"function","z":"152d639d.7d86fc","name":"empty payload","func":"msg.payload={};\nreturn msg;","outputs":1,"noerr":0,"x":449,"y":615,"wires":[["a9a29bb0.6ddcc8"]]},{"id":"92522118.3979b","type":"comment","z":"152d639d.7d86fc","name":"Send 'tickle' UDP to all devices","info":"","x":145,"y":696,"wires":[]},{"id":"730f0796.df2b18","type":"inject","z":"152d639d.7d86fc","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":174,"y":737,"wires":[["daf8e80b.348988"]]},{"id":"daf8e80b.348988","type":"DataOut","z":"152d639d.7d86fc","collection":"423e0637.550f08","name":"load DB","path":"/","error":false,"x":329,"y":737,"wires":[["6cf16f43.7bb03"]]},{"id":"aa60a585.b45918","type":"udp out","z":"152d639d.7d86fc","name":"","addr":"","iface":"","port":"","ipv":"udp4","outport":"","base64":false,"multicast":"false","x":680,"y":806,"wires":[]},{"id":"6cf16f43.7bb03","type":"function","z":"152d639d.7d86fc","name":"iterate through all device and send them black color","func":"for(var mac in msg.payload){\n    var dev = msg.payload[mac];\n    var tickleMessage = {\n        'ip':dev.ip, \n        'port':dev.port,\n        'payload':'black'\n    };\n    node.send(tickleMessage);\n}\n// drop original message\nreturn null;","outputs":1,"noerr":0,"x":629,"y":737,"wires":[["aa60a585.b45918"]]},{"id":"a70845be.9920e8","type":"http in","z":"152d639d.7d86fc","name":"Assign pipeline to Device","url":"/devices","method":"post","swaggerDoc":"","x":198,"y":371,"wires":[["4802e8dc.18d3b8"]]},{"id":"658e1e10.2a17b","type":"DataIn","z":"152d639d.7d86fc","collection":"423e0637.550f08","name":"save DB","update":false,"path":"/","x":747,"y":371,"wires":[]},{"id":"4802e8dc.18d3b8","type":"function","z":"152d639d.7d86fc","name":"prepare entry","func":"msg.datapath = '/devices/' + msg.payload.mac + '/pipeline';\nmsg.payload = msg.payload.pipelineName;\nreturn msg;","outputs":1,"noerr":0,"x":472,"y":371,"wires":[["658e1e10.2a17b"]]},{"id":"c0fc7445.7244c8","type":"change","z":"152d639d.7d86fc","name":"","rules":[{"t":"set","p":"devices","pt":"msg","to":"payload.devices","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"","tot":"str"}],"action":"","property":"","from":"","to":"","reg":false,"x":169.5,"y":240,"wires":[["49ca179d.b33b78"]]},{"id":"acd1a4eb.a36a28","type":"DataOut","z":"152d639d.7d86fc","collection":"423e0637.550f08","name":"Get devices","path":"/","error":false,"x":738,"y":100,"wires":[["c0fc7445.7244c8"]]},{"id":"f1b8c233.7c40f","type":"change","z":"152d639d.7d86fc","name":"","rules":[{"t":"set","p":"macInfo","pt":"msg","to":"payload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"","tot":"str"}],"action":"","property":"","from":"","to":"","reg":false,"x":427,"y":100,"wires":[["acd1a4eb.a36a28"]]},{"id":"e908606f.be491","type":"websocket out","z":"152d639d.7d86fc","name":"/ws/test out","server":"f0504b7f.120998","client":"","x":737,"y":179,"wires":[]},{"id":"36ed2188.74e47e","type":"http in","z":"afcdb9fe.f99d18","name":"","url":"/web/*","method":"get","swaggerDoc":"","x":102,"y":44,"wires":[["efa8ebbc.a85ec8"]]},{"id":"8c862817.4062a8","type":"http response","z":"afcdb9fe.f99d18","name":"","x":641,"y":41,"wires":[]},{"id":"a242a570.c97278","type":"file in","z":"afcdb9fe.f99d18","name":"","filename":"","format":"utf8","x":476,"y":43,"wires":[["8c862817.4062a8"]]},{"id":"efa8ebbc.a85ec8","type":"function","z":"afcdb9fe.f99d18","name":"","func":"msg.filename = msg.req.url.replace(\"/web/\", \"./web/\");\nreturn msg;","outputs":1,"noerr":0,"x":299.9999694824219,"y":46,"wires":[["a242a570.c97278"]]},{"id":"ffc69cda.4a352","type":"catch","z":"afcdb9fe.f99d18","name":"","scope":null,"x":89.83332824707031,"y":499.0000305175781,"wires":[["a84b42ce.f397f"]]},{"id":"a84b42ce.f397f","type":"debug","z":"afcdb9fe.f99d18","name":"","active":true,"console":"false","complete":"true","x":229.83334350585938,"y":510.0000305175781,"wires":[]},{"id":"a8ef1fff.3fbbb","type":"websocket out","z":"afcdb9fe.f99d18","name":"/ws/test out","server":"4a2392dc.8b20fc","client":"","x":736.6666259765625,"y":453.66668701171875,"wires":[]},{"id":"bb86f12c.2639e","type":"inject","z":"afcdb9fe.f99d18","name":"beackon","topic":"","payload":"{\"ip\":\"127.0.0.1\", \"project\":\"BBL\"}","payloadType":"str","repeat":"","crontab":"","once":false,"x":336.6666259765625,"y":371.66668701171875,"wires":[["a8ef1fff.3fbbb"]]},{"id":"6dddbdbb.63b8c4","type":"inject","z":"afcdb9fe.f99d18","name":"","topic":"","payload":"{'a':123}","payloadType":"str","repeat":"","crontab":"","once":false,"x":338.9479217529297,"y":414.65972900390625,"wires":[["a8ef1fff.3fbbb"]]},{"id":"e2eac90.0965638","type":"inject","z":"afcdb9fe.f99d18","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":338.9479217529297,"y":459.7708435058594,"wires":[["e5ba496b.5cd3e8"]]},{"id":"e5ba496b.5cd3e8","type":"function","z":"afcdb9fe.f99d18","name":"delete msg session","func":"delete msg._session;\nreturn msg;","outputs":1,"noerr":0,"x":535.9479370117188,"y":490.625,"wires":[["a8ef1fff.3fbbb"]]},{"id":"e090767.8c99688","type":"http in","z":"afcdb9fe.f99d18","name":"","url":"/proxy*","method":"get","swaggerDoc":"","x":99,"y":138,"wires":[["8c63905.b25fe7","99e1721.f84ec9"]]},{"id":"eb2f177a.a20d78","type":"http response","z":"afcdb9fe.f99d18","name":"","x":655,"y":134,"wires":[]},{"id":"7185eab2.0568f4","type":"http request","z":"afcdb9fe.f99d18","name":"","method":"GET","ret":"txt","url":"","tls":"b96c06bc.c67428","x":476,"y":135,"wires":[["eb2f177a.a20d78"]]},{"id":"8c63905.b25fe7","type":"function","z":"afcdb9fe.f99d18","name":"url","func":"msg.url=msg.payload.url;\nreturn msg;","outputs":1,"noerr":0,"x":310,"y":138,"wires":[["7185eab2.0568f4"]]},{"id":"99e1721.f84ec9","type":"debug","z":"afcdb9fe.f99d18","name":"","active":true,"console":"false","complete":"false","x":279,"y":225,"wires":[]},{"id":"86cc0f64.620d4","type":"udp out","z":"9452f842.635e38","name":"","addr":"","iface":"","port":"","ipv":"udp4","outport":"","base64":false,"multicast":"false","x":569,"y":440,"wires":[]},{"id":"62f0d490.fb294c","type":"function","z":"9452f842.635e38","name":"optimiseMessage","func":"msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n//msg.colorCode=msg.payload.colorCode;\n\nvar tickleMessage = {\n    'ip':msg.payload.ip, \n    'port':msg.payload.port,\n    'payload':msg.payload.colorCode\n};\nnode.send(tickleMessage);\nreturn null;","outputs":1,"noerr":0,"x":152,"y":440,"wires":[["86cc0f64.620d4"]]},{"id":"6ba8835b.8a866c","type":"http request","z":"9452f842.635e38","name":"Request to get build status","method":"GET","ret":"txt","url":"https://go.nbnco.net.au/go/cctray.xml","tls":"db29c472.907f68","x":499,"y":199,"wires":[["9ceab431.54a628"]]},{"id":"89a806fc.b44ad8","type":"inject","z":"9452f842.635e38","name":"Trigger for build status request","topic":"","payload":"true","payloadType":"bool","repeat":"5","crontab":"","once":false,"x":216,"y":80,"wires":[["3e609201.f5126e"]]},{"id":"12912dd9.ba8fc2","type":"split","z":"9452f842.635e38","name":"","splt":"\\n","x":568.5,"y":319,"wires":[["62f0d490.fb294c","9e57f66c.5f63f8"]]},{"id":"9ceab431.54a628","type":"xml","z":"9452f842.635e38","name":"","attr":"","chr":"","x":111,"y":319,"wires":[["df8014ce.e9b728"]]},{"id":"df8014ce.e9b728","type":"function","z":"9452f842.635e38","name":"buildServerResponseParser","func":"var isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg) || isNull(msg.payload) || isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n\treturn [];\n}\n\nvar getBuildLightColor = function(pipelineToMonitor) {\n\tvar color=\"\";\n\tfor(var i=0; i<msg.payload.Projects.Project.length; i++) {\n\t\tvar project = msg.payload.Projects.Project[i];\n\t\tvar pipelineName = project.$.name;\n\t\tif (pipelineName.indexOf(pipelineToMonitor) === 0) {\n\t\t    if (project.$.activity === \"Building\") {\n\t\t\t\tcolor = \"blue\";\n\t\t\t\tbreak;\n\t\t\t} else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n\t\t\t\tcolor = \"red\";\n\t\t\t\tbreak;\n\t\t\t} else {\n\t\t\t\tcolor = \"green\";\n\t\t\t}\n\t\t}\n\t}\n\treturn color;\n}\n\nvar payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tvar colorCode = getBuildLightColor(device.pipeline);\n\tpayload.push(\n\t\t\t{\n\t\t\t\t\"ip\": device.ip,\n\t\t\t\t\"port\": device.port,\n\t\t\t\t\"colorCode\": colorCode\n\t\t\t}\n\t);\n}\n\nmsg.payload = payload;\n// [\n//         {\"ip\": \"127.0.0.1\", \"port\": 49903, \"colorCode\": \"green\"},\n//         {\"ip\": \"127.0.0.1\", \"port\": 49904, \"colorCode\": \"red\"}\n//     ];\nreturn msg;","outputs":1,"noerr":0,"x":340.5,"y":319,"wires":[["12912dd9.ba8fc2"]]},{"id":"3e609201.f5126e","type":"http request","z":"9452f842.635e38","name":"","method":"GET","ret":"obj","url":"http://127.0.0.1:1880/devices","tls":"","x":548.5,"y":80,"wires":[["93a6488b.5b9628"]]},{"id":"93a6488b.5b9628","type":"change","z":"9452f842.635e38","name":"","rules":[{"t":"set","p":"devices","pt":"msg","to":"payload.devices","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"","tot":"str"},{"t":"delete","p":"headers","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":141.5,"y":199,"wires":[["6ba8835b.8a866c"]]},{"id":"9e57f66c.5f63f8","type":"debug","z":"9452f842.635e38","name":"","active":true,"console":"false","complete":"false","x":694.5,"y":266,"wires":[]}]
+[
+    {
+        "id": "152d639d.7d86fc",
+        "type": "tab",
+        "label": "Device Registry"
+    },
+    {
+        "id": "afcdb9fe.f99d18",
+        "type": "tab",
+        "label": "Static Web"
+    },
+    {
+        "id": "9452f842.635e38",
+        "type": "tab",
+        "label": "Build Response Parser and Message Sender"
+    },
+    {
+        "id": "423e0637.550f08",
+        "type": "json-db-collection",
+        "z": "152d639d.7d86fc",
+        "name": "bbl",
+        "collection": "devices",
+        "save": true
+    },
+    {
+        "id": "f0504b7f.120998",
+        "type": "websocket-listener",
+        "z": "152d639d.7d86fc",
+        "path": "/ws/test",
+        "wholemsg": "false"
+    },
+    {
+        "id": "4a2392dc.8b20fc",
+        "type": "websocket-listener",
+        "z": "afcdb9fe.f99d18",
+        "path": "/ws/test",
+        "wholemsg": "false"
+    },
+    {
+        "id": "b96c06bc.c67428",
+        "type": "tls-config",
+        "z": "afcdb9fe.f99d18",
+        "name": "NBN certificate",
+        "cert": "./certificates/certificate.pem",
+        "key": "./certificates/privatekey.pem",
+        "ca": "",
+        "verifyservercert": false
+    },
+    {
+        "id": "db29c472.907f68",
+        "type": "tls-config",
+        "z": "9452f842.635e38",
+        "name": "",
+        "cert": "./certificates/certificate.pem",
+        "key": "./certificates/privatekey.pem",
+        "ca": "",
+        "verifyservercert": false
+    },
+    {
+        "id": "859778e.645e188",
+        "type": "udp in",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "iface": "",
+        "port": "9001",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 148,
+        "y": 100,
+        "wires": [
+            [
+                "f1b8c233.7c40f"
+            ]
+        ]
+    },
+    {
+        "id": "49ca179d.b33b78",
+        "type": "function",
+        "z": "152d639d.7d86fc",
+        "name": "prepare entry",
+        "func": "\nvar isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nvar macInfo = msg.macInfo;\nvar mac = macInfo.substring(0, macInfo.indexOf(':'));\nvar pipeline = '';\n\nvar devices = msg.devices;\nif (!isNull(devices) && !isNull(devices[mac]) && !isNull(devices[mac].pipeline)) {\n\tpipeline = devices[mac].pipeline;\n}\n\nmsg.payload = {\n    'mac':mac,\n    'ip':msg.ip,\n    'port':msg.port,\n    'pipeline':pipeline,\n    'lastMessage':msg.payload.substring(macInfo.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 472,
+        "y": 240,
+        "wires": [
+            [
+                "7ab9baaa.f85994",
+                "e908606f.be491"
+            ]
+        ]
+    },
+    {
+        "id": "7ab9baaa.f85994",
+        "type": "DataIn",
+        "z": "152d639d.7d86fc",
+        "collection": "423e0637.550f08",
+        "name": "save DB",
+        "update": false,
+        "path": "/",
+        "x": 747,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "37a8de08.50ac62",
+        "type": "http in",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "url": "/devices",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 159,
+        "y": 495,
+        "wires": [
+            [
+                "ec5e71f.c3a119"
+            ]
+        ]
+    },
+    {
+        "id": "ec5e71f.c3a119",
+        "type": "DataOut",
+        "z": "152d639d.7d86fc",
+        "collection": "423e0637.550f08",
+        "name": "load DB",
+        "path": "/",
+        "error": false,
+        "x": 367,
+        "y": 495,
+        "wires": [
+            [
+                "2d624c96.e0fef4"
+            ]
+        ]
+    },
+    {
+        "id": "2d624c96.e0fef4",
+        "type": "function",
+        "z": "152d639d.7d86fc",
+        "name": "HTTP headers",
+        "func": "msg.headers={'Content-type':'application/json'}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 568,
+        "y": 495,
+        "wires": [
+            [
+                "e2bd5972.227298"
+            ]
+        ]
+    },
+    {
+        "id": "e2bd5972.227298",
+        "type": "http response",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "x": 757,
+        "y": 495,
+        "wires": []
+    },
+    {
+        "id": "41402557.91666c",
+        "type": "comment",
+        "z": "152d639d.7d86fc",
+        "name": "Process UDP beakon from device",
+        "info": "",
+        "x": 161,
+        "y": 44,
+        "wires": []
+    },
+    {
+        "id": "51588c2e.51e2b4",
+        "type": "comment",
+        "z": "152d639d.7d86fc",
+        "name": "REST GET all devices",
+        "info": "",
+        "x": 121,
+        "y": 445,
+        "wires": []
+    },
+    {
+        "id": "ac29613d.4d9c5",
+        "type": "comment",
+        "z": "152d639d.7d86fc",
+        "name": "Clear DB",
+        "info": "",
+        "x": 81,
+        "y": 566,
+        "wires": []
+    },
+    {
+        "id": "84466a5b.e9d998",
+        "type": "inject",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 174,
+        "y": 615,
+        "wires": [
+            [
+                "ebb5e52b.0c1488"
+            ]
+        ]
+    },
+    {
+        "id": "a9a29bb0.6ddcc8",
+        "type": "DataIn",
+        "z": "152d639d.7d86fc",
+        "collection": "423e0637.550f08",
+        "name": "save DB",
+        "update": false,
+        "path": "/",
+        "x": 747,
+        "y": 615,
+        "wires": []
+    },
+    {
+        "id": "ebb5e52b.0c1488",
+        "type": "function",
+        "z": "152d639d.7d86fc",
+        "name": "empty payload",
+        "func": "msg.payload={};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 449,
+        "y": 615,
+        "wires": [
+            [
+                "a9a29bb0.6ddcc8"
+            ]
+        ]
+    },
+    {
+        "id": "92522118.3979b",
+        "type": "comment",
+        "z": "152d639d.7d86fc",
+        "name": "Send 'tickle' UDP to all devices",
+        "info": "",
+        "x": 145,
+        "y": 696,
+        "wires": []
+    },
+    {
+        "id": "730f0796.df2b18",
+        "type": "inject",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 174,
+        "y": 737,
+        "wires": [
+            [
+                "daf8e80b.348988"
+            ]
+        ]
+    },
+    {
+        "id": "daf8e80b.348988",
+        "type": "DataOut",
+        "z": "152d639d.7d86fc",
+        "collection": "423e0637.550f08",
+        "name": "load DB",
+        "path": "/",
+        "error": false,
+        "x": 329,
+        "y": 737,
+        "wires": [
+            [
+                "6cf16f43.7bb03"
+            ]
+        ]
+    },
+    {
+        "id": "aa60a585.b45918",
+        "type": "udp out",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "addr": "",
+        "iface": "",
+        "port": "",
+        "ipv": "udp4",
+        "outport": "",
+        "base64": false,
+        "multicast": "false",
+        "x": 680,
+        "y": 806,
+        "wires": []
+    },
+    {
+        "id": "6cf16f43.7bb03",
+        "type": "function",
+        "z": "152d639d.7d86fc",
+        "name": "iterate through all device and send them black color",
+        "func": "for(var mac in msg.payload){\n    var dev = msg.payload[mac];\n    var tickleMessage = {\n        'ip':dev.ip, \n        'port':dev.port,\n        'payload':'black'\n    };\n    node.send(tickleMessage);\n}\n// drop original message\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 629,
+        "y": 737,
+        "wires": [
+            [
+                "aa60a585.b45918"
+            ]
+        ]
+    },
+    {
+        "id": "a70845be.9920e8",
+        "type": "http in",
+        "z": "152d639d.7d86fc",
+        "name": "Assign pipeline to Device",
+        "url": "/devices",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 198,
+        "y": 371,
+        "wires": [
+            [
+                "4802e8dc.18d3b8"
+            ]
+        ]
+    },
+    {
+        "id": "658e1e10.2a17b",
+        "type": "DataIn",
+        "z": "152d639d.7d86fc",
+        "collection": "423e0637.550f08",
+        "name": "save DB",
+        "update": false,
+        "path": "/",
+        "x": 747,
+        "y": 371,
+        "wires": []
+    },
+    {
+        "id": "4802e8dc.18d3b8",
+        "type": "function",
+        "z": "152d639d.7d86fc",
+        "name": "prepare entry",
+        "func": "msg.datapath = '/devices/' + msg.payload.mac + '/pipeline';\nmsg.payload = msg.payload.pipelineName;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 472,
+        "y": 371,
+        "wires": [
+            [
+                "658e1e10.2a17b"
+            ]
+        ]
+    },
+    {
+        "id": "c0fc7445.7244c8",
+        "type": "change",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "devices",
+                "pt": "msg",
+                "to": "payload.devices",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 169.5,
+        "y": 240,
+        "wires": [
+            [
+                "49ca179d.b33b78"
+            ]
+        ]
+    },
+    {
+        "id": "acd1a4eb.a36a28",
+        "type": "DataOut",
+        "z": "152d639d.7d86fc",
+        "collection": "423e0637.550f08",
+        "name": "Get devices",
+        "path": "/",
+        "error": false,
+        "x": 738,
+        "y": 100,
+        "wires": [
+            [
+                "c0fc7445.7244c8"
+            ]
+        ]
+    },
+    {
+        "id": "f1b8c233.7c40f",
+        "type": "change",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "macInfo",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 427,
+        "y": 100,
+        "wires": [
+            [
+                "acd1a4eb.a36a28"
+            ]
+        ]
+    },
+    {
+        "id": "e908606f.be491",
+        "type": "websocket out",
+        "z": "152d639d.7d86fc",
+        "name": "/ws/test out",
+        "server": "f0504b7f.120998",
+        "client": "",
+        "x": 737,
+        "y": 179,
+        "wires": []
+    },
+    {
+        "id": "36ed2188.74e47e",
+        "type": "http in",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "url": "/web/*",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 102,
+        "y": 44,
+        "wires": [
+            [
+                "efa8ebbc.a85ec8"
+            ]
+        ]
+    },
+    {
+        "id": "8c862817.4062a8",
+        "type": "http response",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "x": 641,
+        "y": 41,
+        "wires": []
+    },
+    {
+        "id": "a242a570.c97278",
+        "type": "file in",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "filename": "",
+        "format": "utf8",
+        "x": 476,
+        "y": 43,
+        "wires": [
+            [
+                "8c862817.4062a8"
+            ]
+        ]
+    },
+    {
+        "id": "efa8ebbc.a85ec8",
+        "type": "function",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "func": "msg.filename = msg.req.url.replace(\"/web/\", \"./web/\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 299.9999694824219,
+        "y": 46,
+        "wires": [
+            [
+                "a242a570.c97278"
+            ]
+        ]
+    },
+    {
+        "id": "ffc69cda.4a352",
+        "type": "catch",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "scope": null,
+        "x": 89.83332824707031,
+        "y": 499.0000305175781,
+        "wires": [
+            [
+                "a84b42ce.f397f"
+            ]
+        ]
+    },
+    {
+        "id": "a84b42ce.f397f",
+        "type": "debug",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 229.83334350585938,
+        "y": 510.0000305175781,
+        "wires": []
+    },
+    {
+        "id": "a8ef1fff.3fbbb",
+        "type": "websocket out",
+        "z": "afcdb9fe.f99d18",
+        "name": "/ws/test out",
+        "server": "4a2392dc.8b20fc",
+        "client": "",
+        "x": 736.6666259765625,
+        "y": 453.66668701171875,
+        "wires": []
+    },
+    {
+        "id": "bb86f12c.2639e",
+        "type": "inject",
+        "z": "afcdb9fe.f99d18",
+        "name": "beackon",
+        "topic": "",
+        "payload": "{\"ip\":\"127.0.0.1\", \"project\":\"BBL\"}",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 336.6666259765625,
+        "y": 371.66668701171875,
+        "wires": [
+            [
+                "a8ef1fff.3fbbb"
+            ]
+        ]
+    },
+    {
+        "id": "6dddbdbb.63b8c4",
+        "type": "inject",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "topic": "",
+        "payload": "{'a':123}",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 338.9479217529297,
+        "y": 414.65972900390625,
+        "wires": [
+            [
+                "a8ef1fff.3fbbb"
+            ]
+        ]
+    },
+    {
+        "id": "e2eac90.0965638",
+        "type": "inject",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 338.9479217529297,
+        "y": 459.7708435058594,
+        "wires": [
+            [
+                "e5ba496b.5cd3e8"
+            ]
+        ]
+    },
+    {
+        "id": "e5ba496b.5cd3e8",
+        "type": "function",
+        "z": "afcdb9fe.f99d18",
+        "name": "delete msg session",
+        "func": "delete msg._session;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 535.9479370117188,
+        "y": 490.625,
+        "wires": [
+            [
+                "a8ef1fff.3fbbb"
+            ]
+        ]
+    },
+    {
+        "id": "e090767.8c99688",
+        "type": "http in",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "url": "/proxy*",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 99,
+        "y": 138,
+        "wires": [
+            [
+                "8c63905.b25fe7",
+                "99e1721.f84ec9"
+            ]
+        ]
+    },
+    {
+        "id": "eb2f177a.a20d78",
+        "type": "http response",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "x": 655,
+        "y": 134,
+        "wires": []
+    },
+    {
+        "id": "7185eab2.0568f4",
+        "type": "http request",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "tls": "b96c06bc.c67428",
+        "x": 476,
+        "y": 135,
+        "wires": [
+            [
+                "eb2f177a.a20d78"
+            ]
+        ]
+    },
+    {
+        "id": "8c63905.b25fe7",
+        "type": "function",
+        "z": "afcdb9fe.f99d18",
+        "name": "url",
+        "func": "msg.url=msg.payload.url;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 310,
+        "y": 138,
+        "wires": [
+            [
+                "7185eab2.0568f4"
+            ]
+        ]
+    },
+    {
+        "id": "99e1721.f84ec9",
+        "type": "debug",
+        "z": "afcdb9fe.f99d18",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 279,
+        "y": 225,
+        "wires": []
+    },
+    {
+        "id": "86cc0f64.620d4",
+        "type": "udp out",
+        "z": "9452f842.635e38",
+        "name": "",
+        "addr": "",
+        "iface": "",
+        "port": "",
+        "ipv": "udp4",
+        "outport": "",
+        "base64": false,
+        "multicast": "false",
+        "x": 569,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "62f0d490.fb294c",
+        "type": "function",
+        "z": "9452f842.635e38",
+        "name": "optimiseMessage",
+        "func": "msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n//msg.colorCode=msg.payload.colorCode;\n\nvar tickleMessage = {\n    'ip':msg.payload.ip, \n    'port':msg.payload.port,\n    'payload':msg.payload.colorCode\n};\nnode.send(tickleMessage);\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 152,
+        "y": 440,
+        "wires": [
+            [
+                "86cc0f64.620d4"
+            ]
+        ]
+    },
+    {
+        "id": "6ba8835b.8a866c",
+        "type": "http request",
+        "z": "9452f842.635e38",
+        "name": "Request to get build status",
+        "method": "GET",
+        "ret": "txt",
+        "url": "https://go.nbnco.net.au/go/cctray.xml",
+        "tls": "db29c472.907f68",
+        "x": 499,
+        "y": 199,
+        "wires": [
+            [
+                "9ceab431.54a628"
+            ]
+        ]
+    },
+    {
+        "id": "89a806fc.b44ad8",
+        "type": "inject",
+        "z": "9452f842.635e38",
+        "name": "Trigger for build status request",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "x": 216,
+        "y": 80,
+        "wires": [
+            [
+                "3e609201.f5126e"
+            ]
+        ]
+    },
+    {
+        "id": "12912dd9.ba8fc2",
+        "type": "split",
+        "z": "9452f842.635e38",
+        "name": "",
+        "splt": "\\n",
+        "x": 568.5,
+        "y": 319,
+        "wires": [
+            [
+                "62f0d490.fb294c",
+                "9e57f66c.5f63f8"
+            ]
+        ]
+    },
+    {
+        "id": "9ceab431.54a628",
+        "type": "xml",
+        "z": "9452f842.635e38",
+        "name": "",
+        "attr": "",
+        "chr": "",
+        "x": 111,
+        "y": 319,
+        "wires": [
+            [
+                "df8014ce.e9b728"
+            ]
+        ]
+    },
+    {
+        "id": "df8014ce.e9b728",
+        "type": "function",
+        "z": "9452f842.635e38",
+        "name": "buildServerResponseParser",
+        "func": "var isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg) || isNull(msg.payload) || isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n\treturn [];\n}\n\nvar getBuildLightColor = function(pipelineToMonitor) {\n\tvar color=\"\";\n\tfor(var i=0; i<msg.payload.Projects.Project.length; i++) {\n\t\tvar project = msg.payload.Projects.Project[i];\n\t\tvar pipelineName = project.$.name;\n\t\tif (pipelineName.indexOf(pipelineToMonitor) === 0) {\n\t\t    if (project.$.activity === \"Building\") {\n\t\t\t\tcolor = \"blue\";\n\t\t\t\tbreak;\n\t\t\t} else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n\t\t\t\tcolor = \"red\";\n\t\t\t\tbreak;\n\t\t\t} else {\n\t\t\t\tcolor = \"green\";\n\t\t\t}\n\t\t}\n\t}\n\treturn color;\n}\n\nvar payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tvar colorCode = getBuildLightColor(device.pipeline);\n\tpayload.push(\n\t\t\t{\n\t\t\t\t\"ip\": device.ip,\n\t\t\t\t\"port\": device.port,\n\t\t\t\t\"colorCode\": colorCode\n\t\t\t}\n\t);\n}\n\nmsg.payload = payload;\n// [\n//         {\"ip\": \"127.0.0.1\", \"port\": 49903, \"colorCode\": \"green\"},\n//         {\"ip\": \"127.0.0.1\", \"port\": 49904, \"colorCode\": \"red\"}\n//     ];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 340.5,
+        "y": 319,
+        "wires": [
+            [
+                "12912dd9.ba8fc2"
+            ]
+        ]
+    },
+    {
+        "id": "3e609201.f5126e",
+        "type": "http request",
+        "z": "9452f842.635e38",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "url": "http://127.0.0.1:1880/devices",
+        "tls": "",
+        "x": 548.5,
+        "y": 80,
+        "wires": [
+            [
+                "93a6488b.5b9628"
+            ]
+        ]
+    },
+    {
+        "id": "93a6488b.5b9628",
+        "type": "change",
+        "z": "9452f842.635e38",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "devices",
+                "pt": "msg",
+                "to": "payload.devices",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "delete",
+                "p": "headers",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 141.5,
+        "y": 199,
+        "wires": [
+            [
+                "6ba8835b.8a866c"
+            ]
+        ]
+    },
+    {
+        "id": "9e57f66c.5f63f8",
+        "type": "debug",
+        "z": "9452f842.635e38",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 694.5,
+        "y": 266,
+        "wires": []
+    }
+]
