@@ -43,17 +43,7 @@
                 </div>
                 <div class="form-group">
                     <label >Project:</label>
-                    <select class="form-control" name="project">
-                        <option>Select</option>
-                        {{#projects}}
-                        {{#selected}}
-                        <option selected>{{name}}</option>
-                        {{/selected}}
-                        {{^selected}}
-                        <option>{{name}}</option>
-                        {{/selected}}
-                        {{/projects}}
-                    </select>
+                    <input type="text" class="form-control" name="project" value="{{node.pipeline}}" autocomplete="off"/>
                 </div>
 
                 <button type="submit" class="btn btn-success device-save" >Save</button>

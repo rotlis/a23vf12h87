@@ -1,24 +1,23 @@
-# a23vf12h87
+# BBL
 
+#### Toolset
 
+* esplorer
+* esptool
+* node-red
+* bower
 
-
-Toolset
-esplorer
 node-red modules to install
 
-http://flows.nodered.org/node/node-red-contrib-splitter
-http://flows.nodered.org/node/json-db-node-red
+    http://flows.nodered.org/node/node-red-contrib-splitter
+    http://flows.nodered.org/node/json-db-node-red
 
 
 #### Generate privatekey.pem and certificate.pem on new server and use them in TLS configuration
 
-openssl genrsa -out privatekey.pem 1024
-openssl req -new -key privatekey.pem -out private-csr.pem
-openssl x509 -req -days 365 -in private-csr.pem -signkey privatekey.pem -out certificate.pem
-
-#### 
-
+    openssl genrsa -out privatekey.pem 1024
+    openssl req -new -key privatekey.pem -out private-csr.pem
+    openssl x509 -req -days 365 -in private-csr.pem -signkey privatekey.pem -out certificate.pem
 
 #### How to Start/setup 
     1- Navigate to the the project directory
@@ -31,9 +30,14 @@ openssl x509 -req -days 365 -in private-csr.pem -signkey privatekey.pem -out cer
     8- execute 'sudo pm2 start better-build-lights' to start the process
 
 
-build configurations:
+#### NodeMcu build configuration
 
-NodeMCU build configuration:
-CJSON, end user setup, file, GPIO, HTTP, mDNS, net, node, RTC mem, timer, net, node, wifi, WS2812
+Use https://nodemcu-build.com/ ot build it yourself with Docker image
 
-python esptool.py -p /dev/tty.usbserial-A700eZt9 write_flash  --flash_mode dio -fs 32m 0x00000 _bbl_nodemcu-master-12-modules-2016-08-27-08-59-06-integer.bin 0x3fc000 esp_init_data_default.bin
+    CJSON, end user setup, file, GPIO, HTTP, mDNS, net, node, RTC mem, timer, net, node, wifi, WS2812
+
+#### Flash the image to the device
+ 
+    python esptool.py -p /dev/tty.<YOUR_SERIAL_DEVICE_ID> write_flash  --flash_mode dio -fs 32m \
+    0x00000 _bbl_nodemcu-master-12-modules-2016-08-27-08-59-06-integer.bin \
+    0x3fc000 esp_init_data_default.bin

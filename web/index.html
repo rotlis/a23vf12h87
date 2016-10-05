@@ -6,6 +6,7 @@
           type="image/png"
           href="favicon.png">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/toastr/toastr.css"/>
     <style>
         .jumbotron{
             background-color: #6f5499;
@@ -31,17 +32,19 @@
     </style>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/bootstrap3-typeahead/bootstrap3-typeahead.min.js"></script>
     <script src="bower_components/mustache.js/mustache.js"></script>
+    <script src="bower_components/toastr/toastr.min.js"></script>
     <script>
         var ws;
         $(function(){
+            toastr.options.preventDuplicates = true;
             function getWebSocketUrl(s) {
                 var l = window.location;
                 return ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "") + s;
             }
 
             function connect() {
-                console.log("Connecting...");
 
                 console.log(getWebSocketUrl("/ws/test"));
                 ws = new WebSocket(getWebSocketUrl("/ws/test"));
@@ -52,12 +55,16 @@
                 };
                 ws.onopen = function() {
                     console.log("Connection is open");
+                    toastr.remove();
+                    toastr.success('Connected');
                 };
                 ws.onclose = function() {
                     console.debug("Connection is closed...");
+                    toastr.error('Connection closed. Reconnecting ....');
                     setTimeout(connect, 1000);
                 };
             }
+            toastr.info('Connecting...');
             connect();
         });
     </script>
@@ -132,6 +139,7 @@
         }
 
         function attachDeviceHandlers(mac){
+            $("#"+mac+ " input[name=project]").typeahead({source:projects});
             $("#"+mac+" button.device-save").click(function(){
                 console.log(mac+" device-save");
 
