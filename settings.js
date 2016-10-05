@@ -52,7 +52,7 @@ module.exports = {
 
     // To enabled pretty-printing of the flow within the flow file, set the following
     //  property to true:
-    //flowFilePretty: true,
+    flowFilePretty: true,
 
     // By default, all user data is stored in the Node-RED install directory. To
     // use a different location, the following property can be used
@@ -86,21 +86,21 @@ module.exports = {
     // -----------------
     // To password protect the Node-RED editor and admin API, the following
     // property can be used. See http://nodered.org/docs/security.html for details.
-    //adminAuth: {
-    //    type: "credentials",
-    //    users: [{
-    //        username: "admin",
-    //        password: "$2a$08$zZWtXTja0fB1pzD4sHCMyOCMYz2Z6dNbM6tl8sJogENOMcxWV9DN.",
-    //        permissions: "*"
-    //    }]
-    //},
+    adminAuth: {
+       type: "credentials",
+       users: [{
+           username: "admin",
+           password: "$2a$08$amPgBrX/ewRGcR3fY9NENe0zXfT1Fvb9aUbjXnBL3N8UefEhbjV9q",
+           permissions: "*"
+       }]
+    },
 
     // To password protect the node-defined HTTP endpoints (httpNodeRoot), or
     // the static content (httpStatic), the following properties can be used.
     // The pass field is a bcrypt hash of the password.
     // See http://nodered.org/docs/security.html#generating-the-password-hash
-    //httpNodeAuth: {user:"user",pass:"$2a$08$zZWtXTja0fB1pzD4sHCMyOCMYz2Z6dNbM6tl8sJogENOMcxWV9DN."},
-    //httpStaticAuth: {user:"user",pass:"$2a$08$zZWtXTja0fB1pzD4sHCMyOCMYz2Z6dNbM6tl8sJogENOMcxWV9DN."},
+    httpNodeAuth: {user:"admin",pass:"$2a$08$amPgBrX/ewRGcR3fY9NENe0zXfT1Fvb9aUbjXnBL3N8UefEhbjV9q"},
+    // httpStaticAuth: {user:"admin",pass:"$2a$08$amPgBrX/ewRGcR3fY9NENe0zXfT1Fvb9aUbjXnBL3N8UefEhbjV9q"},
 
     // The following property can be used to enable HTTPS
     // See http://nodejs.org/api/https.html#https_https_createserver_options_requestlistener
