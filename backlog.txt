@@ -1,0 +1,30 @@
+
+ 1- Package the devices/lights
+ 2- Put some proper logging in bbl_flows.json
+ 3- Make 'Identify' button functional on the web page
+ 4- First time setup
+     *- pull the bbl code from git
+     *- install npm
+     *- install node-red
+     *- install bower
+     *- install dependencies defined in bower
+     *- install and setup pm2
+     *- Need WiFi network (could be router, or wifi dongle etc.)
+     *- Configure the WiFi network from the web page and write down the credentials in a file, which will be read by the ESP8266 device every time it boots up.
+         -- If credentials are founds, the device should start functioning
+         -- Any new devices introduced in the network, should get credentials from the already functioning device
+     *- The above setup instruction will work on both Mac and Linux (do we care about Windows?)
+ 5- Think about the security concerns related to the provided WiFi solution
+ 6- On the air updated to the devices
+ 7- Consider having one device as a master device, which should be setup to have other devices to work properly.
+ 8- Consider using some server (may be Raspberry Pi) which can run the software...avoid using any existing machines
+ 9- Mechanism to register users
+10- Commercial website to sell this solution
+11- Mechanism to secure the codebase-as it is not going to be an open source solution
+12- Encryption/Decryption of passwords as well as messages incoming and outgoing
+13- Consider using 16*32 led matrix to have the pipeline name scrolling on the display
+14- Reset button on the devices
+15- Mechanism to reset all devices
+16- Look for the hard-coded stuff in the code and try to move them in some sort of properties file
+17- Add some lighting patterns (for success/in progress/fail build statuses) on the devices rather than just red/blue/green colors
+18- Mechanism to find out which build server is in use (Bamboo, GO, etc.) and writing there corresponding parsers
