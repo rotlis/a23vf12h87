@@ -4,9 +4,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon"
           type="image/png"
-          href="favicon.png">
+          href="/web/favicon.png">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bower_components/toastr/toastr.css"/>
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css">
+
     <style>
         .jumbotron{
             background-color: #6f5499;
@@ -31,6 +34,7 @@
         }
     </style>
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/bootstrap3-typeahead/bootstrap3-typeahead.min.js"></script>
     <script src="bower_components/mustache.js/mustache.js"></script>
@@ -141,31 +145,68 @@
         function attachDeviceHandlers(mac){
             $("#"+mac+ " input[name=project]").typeahead({source:projects});
             $("#"+mac+" button.device-save").click(function(){
-                console.log(mac+" device-save");
-
-                var data = {
-                    mac: mac,
-                    pipelineName: $('#'+mac+' select').val()
-                };
-                console.log(data);
-
                 $.ajax({
-                    data: data,
+                    data: {
+                        mac: mac,
+                        pipelineName: $('#'+mac+' select').val()
+                    },
                     type: "POST",
                     url: "/devices",
 //                    success: success,
                     dataType: "json"
                 });
-
             });
             $("#"+mac+" button.device-identify").click(function(){
-                console.log(mac+" device-identify");
+                $.ajax({
+                    data: {
+                        mac: mac,
+                        command:'identify'
+                    },
+                    type: "POST",
+                    url: "/command",
+                    dataType: "json"
+                });
+            });
+            $("#"+mac+" .cfg").click(function(){
+                //TODO:prepopulate and wire to device mac
+                cfgDialog.dialog( "open" );
+            });
+
+        }
+
+        function sendConfigToDevice(){
+            console.log("sendConfigToDevice");
+        }
+
+        var cfgDialog;
+        function initConfigDialog(){
+            cfgDialog = $( "#configDialog" ).dialog({
+                autoOpen: false,
+                height: 400,
+                width: 350,
+                modal: true,
+                buttons: {
+                    "Send to device": sendConfigToDevice,
+                    Cancel: function() {
+                        cfgDialog.dialog( "close" );
+                    }
+                },
+                close: function() {
+//                    form[ 0 ].reset();
+//                    allFields.removeClass( "ui-state-error" );
+                }
+            });
+
+            form = cfgDialog.find( "form" ).on( "submit", function( event ) {
+                event.preventDefault();
+                sendConfigToDevice();
             });
         }
 
         $(document).ready(function(){
             loadTemplates();
             attachGlobalHandlers();
+            initConfigDialog();
         });
 
     </script>
@@ -181,10 +222,10 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
-                <li><a href="#">Page 1</a></li>
-                <li><a href="#">Page 2</a></li>
-                <li><a href="#">Page 3</a></li>
+                <li class="active"><a href="/web/index.html">Home</a></li>
+                <li><a href="/web/firmware.html">Firmware</a></li>
+                <li><a href="/web/deployment.html">Deployment</a></li>
+                <li><a href="/web/products.html">Products</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">Link 1</a></li>
@@ -266,7 +307,14 @@
     <div id="push"></div>
 </div>
 
+<div id="configDialog" title="Basic config" style="display: none">
+    <form>
+    <p>JSON config will be sent to device</p>
+        <textarea id="jsonCfg" style="width: 300px;height: 200px;;"></textarea>
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </form>
 
+</div>
 
 <div id="footer">
     <div class="container">
