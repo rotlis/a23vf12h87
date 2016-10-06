@@ -462,8 +462,8 @@
         "url": "/web/*",
         "method": "get",
         "swaggerDoc": "",
-        "x": 102,
-        "y": 44,
+        "x": 87,
+        "y": 38,
         "wires": [
             [
                 "efa8ebbc.a85ec8"
@@ -475,22 +475,22 @@
         "type": "http response",
         "z": "afcdb9fe.f99d18",
         "name": "",
-        "x": 641,
-        "y": 41,
+        "x": 806,
+        "y": 93,
         "wires": []
     },
     {
         "id": "a242a570.c97278",
         "type": "file in",
         "z": "afcdb9fe.f99d18",
-        "name": "",
+        "name": "binary file",
         "filename": "",
-        "format": "utf8",
-        "x": 476,
-        "y": 43,
+        "format": "",
+        "x": 553,
+        "y": 41,
         "wires": [
             [
-                "8c862817.4062a8"
+                "784ff6c9.654c88"
             ]
         ]
     },
@@ -498,15 +498,15 @@
         "id": "efa8ebbc.a85ec8",
         "type": "function",
         "z": "afcdb9fe.f99d18",
-        "name": "",
-        "func": "msg.filename = msg.req.url.replace(\"/web/\", \"./web/\");\nreturn msg;",
+        "name": "url rewrite",
+        "func": "msg.filename = msg.req.url\n    .replace(\"/web/\", \"./web/\")\n    .replace(/\\?.*/,\"\");\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 299.9999694824219,
-        "y": 46,
+        "x": 259.9999694824219,
+        "y": 40,
         "wires": [
             [
-                "a242a570.c97278"
+                "a1aae15e.63d66"
             ]
         ]
     },
@@ -628,8 +628,8 @@
         "url": "/proxy*",
         "method": "get",
         "swaggerDoc": "",
-        "x": 99,
-        "y": 138,
+        "x": 105,
+        "y": 260,
         "wires": [
             [
                 "8c63905.b25fe7",
@@ -642,8 +642,8 @@
         "type": "http response",
         "z": "afcdb9fe.f99d18",
         "name": "",
-        "x": 655,
-        "y": 134,
+        "x": 661,
+        "y": 256,
         "wires": []
     },
     {
@@ -655,8 +655,8 @@
         "ret": "txt",
         "url": "",
         "tls": "b96c06bc.c67428",
-        "x": 476,
-        "y": 135,
+        "x": 482,
+        "y": 257,
         "wires": [
             [
                 "eb2f177a.a20d78"
@@ -671,8 +671,8 @@
         "func": "msg.url=msg.payload.url;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 310,
-        "y": 138,
+        "x": 316,
+        "y": 260,
         "wires": [
             [
                 "7185eab2.0568f4"
@@ -687,8 +687,8 @@
         "active": true,
         "console": "false",
         "complete": "false",
-        "x": 279,
-        "y": 225,
+        "x": 310,
+        "y": 308,
         "wires": []
     },
     {
@@ -872,5 +872,80 @@
         "x": 694.5,
         "y": 266,
         "wires": []
+    },
+    {
+        "id": "784ff6c9.654c88",
+        "type": "function",
+        "z": "afcdb9fe.f99d18",
+        "name": "mime types",
+        "func": "if (msg.filename.indexOf(\".ttf\")>0){\n     msg.headers = { \"Content-type\" : \"application/font-sfnt\"};\n}else if (msg.filename.indexOf(\".woff\")>0){\n     msg.headers = { \"Content-type\" : \"application/font-woff\"};\n}else if (msg.filename.indexOf(\".woff2\")>0){\n     msg.headers = { \"Content-type\" : \"application/font-woff2\"};\n}else if (msg.filename.indexOf(\".js\")>0){\n     msg.headers = { \"Content-type\" : \"text/javascript\"};\n}else if (msg.filename.indexOf(\".css\")>0){\n     msg.headers = { \"Content-type\" : \"text/css\"};\n}else if (msg.filename.indexOf(\".png\")>0){\n     msg.headers = { \"Content-type\" : \"image/png\"};\n}else if (msg.filename.indexOf(\".json\")>0){\n     msg.headers = { \"Content-type\" : \"application/json\"};\n}else if (msg.filename.indexOf(\".svg\")>0){\n     msg.headers = { \"Content-type\" : \"image/svg+xml\"};\n}else if (msg.filename.indexOf(\".eot\")>0){\n     msg.headers = { \"Content-type\" : \"application/vnd.ms-fontobject\"};\n}else {\n    \n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 734,
+        "y": 39,
+        "wires": [
+            [
+                "8c862817.4062a8"
+            ]
+        ]
+    },
+    {
+        "id": "a1aae15e.63d66",
+        "type": "function",
+        "z": "afcdb9fe.f99d18",
+        "name": "decide binary or text",
+        "func": "var binaryExts=[\".png\", \".gif\", \".ttf\", \"woff\", \"woff2\", \".svg\", \".eot\"];\nmsg.isBinary=false;\nfor(var binaryExtNdx in binaryExts){\n    if (msg.filename.indexOf(binaryExts[binaryExtNdx])>0){\n        msg.isBinary=true;\n    }\n}\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 157,
+        "y": 99,
+        "wires": [
+            [
+                "9d589c9.78c3d6"
+            ]
+        ]
+    },
+    {
+        "id": "9d589c9.78c3d6",
+        "type": "switch",
+        "z": "afcdb9fe.f99d18",
+        "name": "isBinary",
+        "property": "isBinary",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 362,
+        "y": 95,
+        "wires": [
+            [
+                "a242a570.c97278"
+            ],
+            [
+                "26834d88.a30782"
+            ]
+        ]
+    },
+    {
+        "id": "26834d88.a30782",
+        "type": "file in",
+        "z": "afcdb9fe.f99d18",
+        "name": "text file",
+        "filename": "",
+        "format": "utf8",
+        "x": 569,
+        "y": 104,
+        "wires": [
+            [
+                "784ff6c9.654c88"
+            ]
+        ]
     }
 ]
