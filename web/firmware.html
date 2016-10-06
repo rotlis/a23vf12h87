@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>Better Build Lights</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon"
+          type="image/png"
+          href="/web/favicon.png">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/toastr/toastr.css"/>
+    <style>
+        .jumbotron{
+            background-color: #6f5499;
+            color:white;
+        }
+        #push,
+        #footer {
+            height: 60px;
+        }
+        #footer {
+            padding-top: 20px;
+            background-color: #f5f5f5;
+        }
+        /* Lastly, apply responsive CSS fixes as necessary */
+        @media (max-width: 767px) {
+            #footer {
+                margin-left: -20px;
+                margin-right: -20px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+        }
+    </style>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/bootstrap3-typeahead/bootstrap3-typeahead.min.js"></script>
+    <script src="bower_components/mustache.js/mustache.js"></script>
+    <script src="bower_components/toastr/toastr.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default">   <!--navbar-fixed-top-->
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">BetterBuildLights</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="/web/index.html">Home</a></li>
+                <li class="active"><a href="/web/firmware.html">Firmware</a></li>
+                <li><a href="/web/deployment.html">Deployment</a></li>
+                <li><a href="/web/products.html">Products</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+
+    <div class="panel panel-info">
+        <div class="panel-heading">Firmware</div>
+        <div class="panel-body">
+            The numbers being forecast for the Internet of Things (IoT) are truly mind-boggling.
+
+            BI Intelligence finds that the number of everyday and enterprise devices that will soon be connected to the Internet — from parking meters to home thermostats — will be huge.
+            1.9 billion devices today, and 9 billion by 2018, according to BII estimates, roughly equal to the number of smartphones, smart TVs, tablets, wearable computers, and PCs combined.
+
+            It will drive trillions in economic value as it permeates consumer and business life.
+            In the consumer space, many products and services have already crossed over into the IoT, including kitchen and home appliances, lighting and heating products.
+        </div>
+    </div>
+
+
+
+    <div id="push"></div>
+</div>
+
+
+
+<div id="footer">
+    <div class="container">
+        <p class="muted credit">Example courtesy TODO</p>
+    </div>
+</div>
+
+
+</body>
+</html>
