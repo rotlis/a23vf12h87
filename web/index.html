@@ -11,18 +11,21 @@
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css">
 
     <style>
-        .jumbotron{
+        .jumbotron {
             background-color: #6f5499;
-            color:white;
+            color: white;
         }
+
         #push,
         #footer {
             height: 60px;
         }
+
         #footer {
             padding-top: 20px;
             background-color: #f5f5f5;
         }
+
         /* Lastly, apply responsive CSS fixes as necessary */
         @media (max-width: 767px) {
             #footer {
@@ -41,7 +44,7 @@
     <script src="bower_components/toastr/toastr.min.js"></script>
     <script>
         var ws;
-        $(function(){
+        $(function () {
             toastr.options.preventDuplicates = true;
             function getWebSocketUrl(s) {
                 var l = window.location;
@@ -53,21 +56,22 @@
                 console.log(getWebSocketUrl("/ws/test"));
                 ws = new WebSocket(getWebSocketUrl("/ws/test"));
 
-                ws.onmessage = function(event){
+                ws.onmessage = function (event) {
                     console.debug("onmessage", event.data);
                     onNodeBeackon($.parseJSON(event.data));
                 };
-                ws.onopen = function() {
+                ws.onopen = function () {
                     console.log("Connection is open");
                     toastr.remove();
                     toastr.success('Connected');
                 };
-                ws.onclose = function() {
+                ws.onclose = function () {
                     console.debug("Connection is closed...");
                     toastr.error('Connection closed. Reconnecting ....');
                     setTimeout(connect, 1000);
                 };
             }
+
             toastr.info('Connecting...');
             connect();
         });
@@ -80,140 +84,149 @@
 
         var nodeTemplate, deviceInfoTemplate;
 
+        var projects = [{name: "RNTD"}, {name: "Atlas"}, {name: "GoServerConfigurationPackage"}, {name: "MARCI"},
+            {name: "MobAct-Prod"}, {name: "PhotoUpload"}, {name: "OnlineCustomers"}, {name: "Dev5-Showcase"}];
 
-        var projects = [{name:"RNTD"}, {name:"Atlas"}, {name:"GoServerConfigurationPackage"}, {name:"MARCI"},
-            {name:"MobAct-Prod"}, {name:"PhotoUpload"}, {name:"OnlineCustomers"}, {name:"Dev5-Showcase"}];
-
-        function testCcTray(){
+        function testCcTray() {
             $("#test_cctray").removeClass("btn-success").removeClass("btn-danger");
             $.ajax({
                 url: "/proxy",
                 type: "GET",
-                data: { url: $("#cctray_url").val(), username :$("#username").val(), pwd:$("#pwd").val()} ,
+                data: {url: $("#cctray_url").val(), username: $("#username").val(), pwd: $("#pwd").val()},
                 dataType: "xml",
-                success: function(data) {
-                    $xml = $( data );
+                success: function (data) {
+                    $xml = $(data);
                     $("#test_cctray").removeClass("btn-default").addClass("btn-success");
                 },
-                error: function(e) {
-                    console.debug("Error",e);
+                error: function (e) {
+                    console.debug("Error", e);
                     $("#test_cctray").removeClass("btn-default").addClass("btn-danger");
                 }
             });
         }
 
-        function loadTemplates(){
-            $("#templates").load("templates/templates.html#template1",function(){
+        function loadTemplates() {
+            $("#templates").load("templates/templates.html#template1", function () {
                 nodeTemplate = document.getElementById('template1').innerHTML;
                 deviceInfoTemplate = document.getElementById('deviceInfoTemplate').innerHTML;
             });
         }
 
-        function addNode(nodeJson){
-            var deviceId = nodeJson.mac;
+        function addNode(deviceInfo) {
+            var deviceId = deviceInfo.mac;
             var selections = [];
-            $.each(projects, function(){selections.push({name:this.name, selected:(this.name == nodeJson.pipeline)});});
-            var jsonData = {id:deviceId, node:nodeJson, projects:selections};
+            $.each(projects, function () {
+                selections.push({name: this.name, selected: (this.name == deviceInfo.pipeline)});
+            });
+            var jsonData = {id: deviceId, node: deviceInfo, projects: selections};
             var output = Mustache.render(nodeTemplate, jsonData);
             $("#devices-container").append(output);
-            attachDeviceHandlers(deviceId, nodeJson);
-            $("#"+deviceId).fadeIn();
+            attachDeviceHandlers(deviceId, deviceInfo);
+            $("#" + deviceId).fadeIn();
         }
 
-        function onNodeBeackon(json){
-            if (devices[json.mac]){
-                console.debug("Update for "+json.mac);
-            }else{
-                console.debug("Adding "+json.mac);
+        function onNodeBeackon(json) {
+            if (devices[json.mac]) {
+                console.debug("Update for " + json.mac);
+            } else {
+                console.debug("Adding " + json.mac);
                 devices[json.mac] = json;
                 addNode(json);
             }
         }
 
-        function onNodeDelete(json){
+        function onNodeDelete(json) {
             delete devices[json.mac];
-            $("#"+json.mac).fadeOut(400, function(){
-                $("#"+json.mac).remove();
+            $("#" + json.mac).fadeOut(400, function () {
+                $("#" + json.mac).remove();
             });
         }
 
-        function attachGlobalHandlers(){
+        function attachGlobalHandlers() {
             $("#test_cctray").click(testCcTray);
-            $("#cctray_url, #username, #pwd").on('input', function(){
+            $("#cctray_url, #username, #pwd").on('input', function () {
                 $("#test_cctray").addClass("btn-default").removeClass("btn-danger").removeClass("btn-success");
             });
         }
 
-        function attachDeviceHandlers(mac, nodeJson){
-            $("#"+mac+ " input[name=project]").typeahead({source:projects});
-            $("#"+mac+" button.device-save").click(function(){
+        function attachDeviceHandlers(mac, deviceInfo) {
+            $("#" + mac + " input[name=project]").typeahead({source: projects});
+            $("#" + mac + " button.device-save").click(function () {
                 $.ajax({
                     data: {
                         mac: mac,
-                        pipelineName: $('#'+mac+' select').val()
+                        pipelineName: $('#' + mac + ' select').val()
                     },
                     type: "POST",
                     url: "/devices",
-//                    success: success,
+                    success: function () {
+                        toastr.info("Pipeline has been assigned successfully")
+                    },
                     dataType: "json"
                 });
             });
-            $("#"+mac+" button.device-identify").click(function(){
+            $("#" + mac + " button.device-identify").click(function () {
                 $.ajax({
                     data: {
                         mac: mac,
-                        command:'identify'
+                        command: 'identify'
                     },
                     type: "POST",
                     url: "/command",
                     dataType: "json"
                 });
             });
-            $("#"+mac+" .cfg").click(function(){
-                //TODO:prepopulate and wire to device mac
-                var output = Mustache.render(deviceInfoTemplate, {node:nodeJson});
-                console.debug(nodeJson, output);
-
+            $("#" + mac + " .cfg").click(function () {
+                var output = Mustache.render(deviceInfoTemplate, {node: deviceInfo});
                 $("#deviceInfo").html(output);
-                cfgDialog.dialog( "open" );
+                initConfigDialog(deviceInfo);
+                cfgDialog.dialog("open");
             });
 
         }
 
-        function sendConfigToDevice(){
-            console.log("sendConfigToDevice");
+        function sendConfigToDevice(deviceInfo) {
+            return function () {
+                var dataToPost = {
+                    deviceIp: deviceInfo.ip,
+                    devicePort: deviceInfo.port,
+                    serverPort: window.location.port,
+                    serverHostname: window.location.hostname
+                };
+
+                $.ajax({
+                    data: dataToPost,
+                    type: "POST",
+                    url: "/triggerUpgrade",
+                    success: function () {
+                        toastr.info("Upgrade has been triggered")
+                    },
+                    dataType: "json"
+                });
+            }
         }
 
         var cfgDialog;
-        function initConfigDialog(){
-            cfgDialog = $( "#deviceSettingsDialog" ).dialog({
+
+        function initConfigDialog(deviceInfo) {
+            cfgDialog = $("#deviceSettingsDialog").dialog({
                 autoOpen: false,
                 height: 400,
                 width: 350,
                 modal: true,
                 buttons: {
-                    "Send to device": sendConfigToDevice,
-                    Cancel: function() {
-                        cfgDialog.dialog( "close" );
+                    "Send to device": sendConfigToDevice(deviceInfo),
+                    Cancel: function () {
+                        cfgDialog.dialog("close");
                     }
-                },
-                close: function() {
-//                    form[ 0 ].reset();
-//                    allFields.removeClass( "ui-state-error" );
                 }
             });
-
-            form = cfgDialog.find( "form" ).on( "submit", function( event ) {
-                event.preventDefault();
-                sendConfigToDevice();
-            });
-            $( "#deviceSettingsDialog" ).tabs();
+            $("#deviceSettingsDialog").tabs();
         }
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             loadTemplates();
             attachGlobalHandlers();
-            initConfigDialog();
         });
 
     </script>
@@ -268,21 +281,23 @@
         </div>
     </div>
 
-    <div id="devices-container" class="row">
-
-
-    </div>
+    <div id="devices-container" class="row"></div>
 
     <div class="panel panel-info">
-        <div class="panel-heading">By 2018, The 'Internet Of Things' Will Be Bigger Than The Smartphone, Tablet, And PC Markets Combined</div>
+        <div class="panel-heading">By 2018, The 'Internet Of Things' Will Be Bigger Than The Smartphone, Tablet, And PC
+            Markets Combined
+        </div>
         <div class="panel-body">
             The numbers being forecast for the Internet of Things (IoT) are truly mind-boggling.
 
-            BI Intelligence finds that the number of everyday and enterprise devices that will soon be connected to the Internet — from parking meters to home thermostats — will be huge.
-            1.9 billion devices today, and 9 billion by 2018, according to BII estimates, roughly equal to the number of smartphones, smart TVs, tablets, wearable computers, and PCs combined.
+            BI Intelligence finds that the number of everyday and enterprise devices that will soon be connected to the
+            Internet — from parking meters to home thermostats — will be huge.
+            1.9 billion devices today, and 9 billion by 2018, according to BII estimates, roughly equal to the number of
+            smartphones, smart TVs, tablets, wearable computers, and PCs combined.
 
             It will drive trillions in economic value as it permeates consumer and business life.
-            In the consumer space, many products and services have already crossed over into the IoT, including kitchen and home appliances, lighting and heating products.
+            In the consumer space, many products and services have already crossed over into the IoT, including kitchen
+            and home appliances, lighting and heating products.
         </div>
     </div>
 
@@ -290,7 +305,8 @@
         <div class="col-md-4">
             <h2>Thing</h2>
             <p>
-                <a href="http://www.esp8266.com/wiki/doku.php?id=esp8266-module-family">ESP8266-ESP12</a> running <a href="http://nodemcu.com/index_en.html">nodemcu</a> firmware.
+                <a href="http://www.esp8266.com/wiki/doku.php?id=esp8266-module-family">ESP8266-ESP12</a> running <a
+                    href="http://nodemcu.com/index_en.html">nodemcu</a> firmware.
             </p>
             <p><a class="btn btn-default" href="#" role="button">View details</a></p>
         </div>
@@ -310,7 +326,6 @@
         </div>
     </div>
 
-
     <div id="push"></div>
 </div>
 
@@ -327,7 +342,7 @@
         <li><a href="#firmwareUpgrade">Upgrade</a></li>
         <li><a href="#deviceInfo">Info</a></li>
     </ul>
-    <div id="deviceSettings" title="Basic config" >
+    <div id="deviceSettings" title="Basic config">
         <form>
             <p>JSON config will be sent to device</p>
             <textarea id="jsonCfg" style="width: 260px;height: 160px;"></textarea>
@@ -335,15 +350,10 @@
         </form>
 
     </div>
-    <div id="firmwareUpgrade" title="Firmware upgrade" >
-        <form>
-            <p>TODO</p>
-        </form>
+    <div id="firmwareUpgrade" title="Firmware upgrade">
+        <p>TODO some explanation. Click on the button for now.</p>
     </div>
-    <div id="deviceInfo">
-    </div>
+    <div id="deviceInfo"></div>
 </div>
-
-
 </body>
 </html>
