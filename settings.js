@@ -152,7 +152,9 @@ module.exports = {
 
     functionGlobalContext: {
         fs: require("fs"),
-        path: require("path")
+        path: require("path"),
+        firmwareFileType: '.lua',
+        firmwareDirPath: "esp8266"
         //recursiveReaddir: require('recursive-readdir')
         // os:require('os'),
         // octalbonescript:require('octalbonescript'),
