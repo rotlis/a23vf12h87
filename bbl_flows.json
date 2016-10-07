@@ -467,8 +467,8 @@
         "url": "/web/*",
         "method": "get",
         "swaggerDoc": "",
-        "x": 87,
-        "y": 38,
+        "x": 92,
+        "y": 60,
         "wires": [
             [
                 "efa8ebbc.a85ec8"
@@ -480,8 +480,8 @@
         "type": "http response",
         "z": "afcdb9fe.f99d18",
         "name": "",
-        "x": 806,
-        "y": 93,
+        "x": 669,
+        "y": 199,
         "wires": []
     },
     {
@@ -491,8 +491,8 @@
         "name": "binary file",
         "filename": "",
         "format": "",
-        "x": 553,
-        "y": 41,
+        "x": 281,
+        "y": 160,
         "wires": [
             [
                 "784ff6c9.654c88"
@@ -507,8 +507,8 @@
         "func": "msg.filename = msg.req.url\n    .replace(\"/web/\", \"./web/\")\n    .replace(/\\?.*/,\"\");\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 259.9999694824219,
-        "y": 40,
+        "x": 320.9999694824219,
+        "y": 60,
         "wires": [
             [
                 "a1aae15e.63d66"
@@ -521,8 +521,8 @@
         "z": "afcdb9fe.f99d18",
         "name": "",
         "scope": null,
-        "x": 89.83332824707031,
-        "y": 499.0000305175781,
+        "x": 80.83332824707031,
+        "y": 600.0000610351562,
         "wires": [
             [
                 "a84b42ce.f397f"
@@ -537,8 +537,8 @@
         "active": true,
         "console": "false",
         "complete": "true",
-        "x": 229.83334350585938,
-        "y": 510.0000305175781,
+        "x": 374.8333435058594,
+        "y": 600.0000610351562,
         "wires": []
     },
     {
@@ -548,8 +548,8 @@
         "name": "/ws/test out",
         "server": "4a2392dc.8b20fc",
         "client": "",
-        "x": 736.6666259765625,
-        "y": 453.66668701171875,
+        "x": 649.6666259765625,
+        "y": 480.66668701171875,
         "wires": []
     },
     {
@@ -563,8 +563,8 @@
         "repeat": "",
         "crontab": "",
         "once": false,
-        "x": 336.6666259765625,
-        "y": 371.66668701171875,
+        "x": 106.6666259765625,
+        "y": 419.66668701171875,
         "wires": [
             [
                 "a8ef1fff.3fbbb"
@@ -582,8 +582,8 @@
         "repeat": "",
         "crontab": "",
         "once": false,
-        "x": 338.9479217529297,
-        "y": 414.65972900390625,
+        "x": 108.94792175292969,
+        "y": 479.65972900390625,
         "wires": [
             [
                 "a8ef1fff.3fbbb"
@@ -601,8 +601,8 @@
         "repeat": "",
         "crontab": "",
         "once": false,
-        "x": 338.9479217529297,
-        "y": 459.7708435058594,
+        "x": 106.94792175292969,
+        "y": 539.7708435058594,
         "wires": [
             [
                 "e5ba496b.5cd3e8"
@@ -617,8 +617,8 @@
         "func": "delete msg._session;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 535.9479370117188,
-        "y": 490.625,
+        "x": 360.94793701171875,
+        "y": 540.625,
         "wires": [
             [
                 "a8ef1fff.3fbbb"
@@ -633,12 +633,11 @@
         "url": "/proxy*",
         "method": "get",
         "swaggerDoc": "",
-        "x": 105,
-        "y": 260,
+        "x": 91,
+        "y": 340,
         "wires": [
             [
-                "8c63905.b25fe7",
-                "99e1721.f84ec9"
+                "8c63905.b25fe7"
             ]
         ]
     },
@@ -647,8 +646,8 @@
         "type": "http response",
         "z": "afcdb9fe.f99d18",
         "name": "",
-        "x": 661,
-        "y": 256,
+        "x": 669,
+        "y": 340,
         "wires": []
     },
     {
@@ -660,8 +659,8 @@
         "ret": "txt",
         "url": "",
         "tls": "b96c06bc.c67428",
-        "x": 482,
-        "y": 257,
+        "x": 489,
+        "y": 340,
         "wires": [
             [
                 "eb2f177a.a20d78"
@@ -676,8 +675,8 @@
         "func": "msg.url=msg.payload.url;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 316,
-        "y": 260,
+        "x": 291,
+        "y": 340,
         "wires": [
             [
                 "7185eab2.0568f4"
@@ -685,22 +684,10 @@
         ]
     },
     {
-        "id": "99e1721.f84ec9",
-        "type": "debug",
-        "z": "afcdb9fe.f99d18",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 310,
-        "y": 308,
-        "wires": []
-    },
-    {
         "id": "86cc0f64.620d4",
         "type": "udp out",
         "z": "9452f842.635e38",
-        "name": "",
+        "name": "Send build status message",
         "addr": "",
         "iface": "",
         "port": "",
@@ -708,7 +695,7 @@
         "outport": "",
         "base64": false,
         "multicast": "false",
-        "x": 569,
+        "x": 539,
         "y": 440,
         "wires": []
     },
@@ -716,11 +703,11 @@
         "id": "62f0d490.fb294c",
         "type": "function",
         "z": "9452f842.635e38",
-        "name": "optimiseMessage",
+        "name": "Prepare build status message",
         "func": "msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n//msg.colorCode=msg.payload.colorCode;\n\nvar tickleMessage = {\n    'ip':msg.payload.ip, \n    'port':msg.payload.port,\n    'payload':msg.payload.colorCode\n};\nnode.send(tickleMessage);\nreturn null;",
         "outputs": 1,
         "noerr": 0,
-        "x": 152,
+        "x": 192,
         "y": 440,
         "wires": [
             [
@@ -737,7 +724,7 @@
         "ret": "txt",
         "url": "https://go.nbnco.net.au/go/cctray.xml",
         "tls": "db29c472.907f68",
-        "x": 499,
+        "x": 539,
         "y": 199,
         "wires": [
             [
@@ -753,7 +740,7 @@
         "topic": "",
         "payload": "true",
         "payloadType": "bool",
-        "repeat": "5",
+        "repeat": "18000",
         "crontab": "",
         "once": false,
         "x": 216,
@@ -770,12 +757,11 @@
         "z": "9452f842.635e38",
         "name": "",
         "splt": "\\n",
-        "x": 568.5,
+        "x": 609.5,
         "y": 319,
         "wires": [
             [
-                "62f0d490.fb294c",
-                "9e57f66c.5f63f8"
+                "62f0d490.fb294c"
             ]
         ]
     },
@@ -798,11 +784,11 @@
         "id": "df8014ce.e9b728",
         "type": "function",
         "z": "9452f842.635e38",
-        "name": "buildServerResponseParser",
+        "name": "Parse build status",
         "func": "var isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg) || isNull(msg.payload) || isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n\treturn [];\n}\n\nvar getBuildLightColor = function(pipelineToMonitor) {\n\tvar color=\"\";\n\tfor(var i=0; i<msg.payload.Projects.Project.length; i++) {\n\t\tvar project = msg.payload.Projects.Project[i];\n\t\tvar pipelineName = project.$.name;\n\t\tif (pipelineName.indexOf(pipelineToMonitor) === 0) {\n\t\t    if (project.$.activity === \"Building\") {\n\t\t\t\tcolor = \"blue\";\n\t\t\t\tbreak;\n\t\t\t} else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n\t\t\t\tcolor = \"red\";\n\t\t\t\tbreak;\n\t\t\t} else {\n\t\t\t\tcolor = \"green\";\n\t\t\t}\n\t\t}\n\t}\n\treturn color;\n}\n\nvar payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tvar colorCode = getBuildLightColor(device.pipeline);\n\tpayload.push(\n\t\t\t{\n\t\t\t\t\"ip\": device.ip,\n\t\t\t\t\"port\": device.port,\n\t\t\t\t\"colorCode\": colorCode\n\t\t\t}\n\t);\n}\n\nmsg.payload = payload;\n// [\n//         {\"ip\": \"127.0.0.1\", \"port\": 49903, \"colorCode\": \"green\"},\n//         {\"ip\": \"127.0.0.1\", \"port\": 49904, \"colorCode\": \"red\"}\n//     ];\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 340.5,
+        "x": 351.5,
         "y": 319,
         "wires": [
             [
@@ -814,12 +800,12 @@
         "id": "3e609201.f5126e",
         "type": "http request",
         "z": "9452f842.635e38",
-        "name": "",
+        "name": "Get list of devices",
         "method": "GET",
         "ret": "obj",
         "url": "http://127.0.0.1:1880/devices",
         "tls": "",
-        "x": 548.5,
+        "x": 568.5,
         "y": 80,
         "wires": [
             [
@@ -867,18 +853,6 @@
         ]
     },
     {
-        "id": "9e57f66c.5f63f8",
-        "type": "debug",
-        "z": "9452f842.635e38",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 694.5,
-        "y": 266,
-        "wires": []
-    },
-    {
         "id": "784ff6c9.654c88",
         "type": "function",
         "z": "afcdb9fe.f99d18",
@@ -886,8 +860,8 @@
         "func": "if (msg.filename.indexOf(\".ttf\")>0){\n     msg.headers = { \"Content-type\" : \"application/font-sfnt\"};\n}else if (msg.filename.indexOf(\".woff\")>0){\n     msg.headers = { \"Content-type\" : \"application/font-woff\"};\n}else if (msg.filename.indexOf(\".woff2\")>0){\n     msg.headers = { \"Content-type\" : \"application/font-woff2\"};\n}else if (msg.filename.indexOf(\".js\")>0){\n     msg.headers = { \"Content-type\" : \"text/javascript\"};\n}else if (msg.filename.indexOf(\".css\")>0){\n     msg.headers = { \"Content-type\" : \"text/css\"};\n}else if (msg.filename.indexOf(\".png\")>0){\n     msg.headers = { \"Content-type\" : \"image/png\"};\n}else if (msg.filename.indexOf(\".json\")>0){\n     msg.headers = { \"Content-type\" : \"application/json\"};\n}else if (msg.filename.indexOf(\".svg\")>0){\n     msg.headers = { \"Content-type\" : \"image/svg+xml\"};\n}else if (msg.filename.indexOf(\".eot\")>0){\n     msg.headers = { \"Content-type\" : \"application/vnd.ms-fontobject\"};\n}else {\n    \n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 734,
-        "y": 39,
+        "x": 493,
+        "y": 199,
         "wires": [
             [
                 "8c862817.4062a8"
@@ -902,8 +876,8 @@
         "func": "var binaryExts=[\".png\", \".gif\", \".ttf\", \"woff\", \"woff2\", \".svg\", \".eot\"];\nmsg.isBinary=false;\nfor(var binaryExtNdx in binaryExts){\n    if (msg.filename.indexOf(binaryExts[binaryExtNdx])>0){\n        msg.isBinary=true;\n    }\n}\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
-        "x": 157,
-        "y": 99,
+        "x": 600,
+        "y": 59,
         "wires": [
             [
                 "9d589c9.78c3d6"
@@ -927,8 +901,8 @@
         ],
         "checkall": "true",
         "outputs": 2,
-        "x": 362,
-        "y": 95,
+        "x": 81,
+        "y": 200,
         "wires": [
             [
                 "a242a570.c97278"
@@ -945,8 +919,8 @@
         "name": "text file",
         "filename": "",
         "format": "utf8",
-        "x": 569,
-        "y": 104,
+        "x": 282,
+        "y": 239,
         "wires": [
             [
                 "784ff6c9.654c88"
@@ -975,7 +949,7 @@
         "type": "http response",
         "z": "5914c4a1.24372c",
         "name": "Success Response",
-        "x": 608,
+        "x": 609,
         "y": 80,
         "wires": []
     },
@@ -991,7 +965,7 @@
         "outport": "",
         "base64": false,
         "multicast": "false",
-        "x": 598,
+        "x": 599,
         "y": 180,
         "wires": []
     },
@@ -999,11 +973,11 @@
         "id": "3ac97f85.b9bf2",
         "type": "function",
         "z": "5914c4a1.24372c",
-        "name": "optimiseMessage",
-        "func": "msg.ip=msg.payload.deviceIp;\nmsg.port=msg.payload.devicePort;\nmsg.payload = {\n    'triggerUpload':true,\n    'upgradeUrl': 'http://' + msg.payload.serverHostname + ':' + msg.payload.serverPort + '/firmware'\n};\nreturn msg;",
+        "name": "Prepare Upgrade Trigger",
+        "func": "msg.ip=msg.payload.deviceIp;\nmsg.port=msg.payload.devicePort;\nmsg.payload = {\n    'triggerUpgrade':true,\n    'upgradeUrl': 'http://' + msg.payload.serverHostname + ':' + msg.payload.serverPort + '/firmware'\n};\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 316,
+        "x": 336,
         "y": 180,
         "wires": [
             [
@@ -1015,38 +989,41 @@
         "id": "8e62c0c.588364",
         "type": "http in",
         "z": "5914c4a1.24372c",
-        "name": "Firware",
+        "name": "Get Firware",
         "url": "/firmware",
         "method": "get",
         "swaggerDoc": "",
-        "x": 91,
+        "x": 111,
         "y": 280,
         "wires": [
             [
-                "29167eae.46e102",
-                "8851e2cf.90703"
+                "9077488c.8d7d78"
             ]
         ]
-    },
-    {
-        "id": "29167eae.46e102",
-        "type": "debug",
-        "z": "5914c4a1.24372c",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "true",
-        "x": 508,
-        "y": 361,
-        "wires": []
     },
     {
         "id": "8851e2cf.90703",
         "type": "http response",
         "z": "5914c4a1.24372c",
-        "name": "Success Response",
-        "x": 608,
+        "name": "Firware Files As Response",
+        "x": 579,
         "y": 280,
         "wires": []
+    },
+    {
+        "id": "9077488c.8d7d78",
+        "type": "function",
+        "z": "5914c4a1.24372c",
+        "name": "Firmware Files",
+        "func": "var fs = context.global.fs;\nvar path = context.global.path;\n\nvar filelist = {};\nvar firmwareFileType = '.lua';\nvar firmwareDirPath = \"esp8266\";\n\nvar getListOfFiles = function(dir) {\n  fs.readdirSync(dir).forEach(function(file) {\n    file = dir + '/' + file;\n    if (fs.statSync(file).isDirectory()) {\n      filelist = getListOfFiles(file);\n    } else if(path.extname(file) === firmwareFileType) {\n        var contents = fs.readFileSync(file, 'utf8', function (err, data) {\n          if (err) {\n            return console.log(err);\n          }\n          return data;\n        });\n        var fileToPush = {name: file, contents: contents};\n        filelist[file] = fileToPush;\n    }\n  });\n  return filelist;\n};\nmsg.payload = getListOfFiles(firmwareDirPath, []);\n\n// var files = {files: {}};\nconsole.log(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 320.5,
+        "y": 280,
+        "wires": [
+            [
+                "8851e2cf.90703"
+            ]
+        ]
     }
 ]

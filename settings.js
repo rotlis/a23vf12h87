@@ -151,6 +151,9 @@ module.exports = {
     //    context.global.os
 
     functionGlobalContext: {
+        fs: require("fs"),
+        path: require("path")
+        //recursiveReaddir: require('recursive-readdir')
         // os:require('os'),
         // octalbonescript:require('octalbonescript'),
         // jfive:require("johnny-five"),
