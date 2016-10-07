@@ -42,7 +42,7 @@
                     <input type="text" class="form-control" name="location" value="{{node.location}}" placeholder="Level, Building, etc">
                 </div>
                 <div class="form-group">
-                    <label >Project:</label>
+                    <label >Project:</label> (Case sensitive)
                     <input type="text" class="form-control" name="project" value="{{node.pipeline}}" autocomplete="off"/>
                 </div>
 
@@ -51,4 +51,15 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="deviceInfoTemplate">
+    <p>
+        MAC:{{node.mac}}<br/>
+        IP:{{node.ip}}<br/>
+        Port:{{node.port}}<br/>
+        Device:{{node.deviceType}}<br/>
+        Firmware:{{node.firmware}} v{{node.version}}<br/>
+
+    </p>
 </div>

@@ -78,7 +78,8 @@
         var devices = {};
         var $xml;
 
-        var nodeTemplate;
+        var nodeTemplate, deviceInfoTemplate;
+
 
         var projects = [{name:"RNTD"}, {name:"Atlas"}, {name:"GoServerConfigurationPackage"}, {name:"MARCI"},
             {name:"MobAct-Prod"}, {name:"PhotoUpload"}, {name:"OnlineCustomers"}, {name:"Dev5-Showcase"}];
@@ -104,6 +105,7 @@
         function loadTemplates(){
             $("#templates").load("templates/templates.html#template1",function(){
                 nodeTemplate = document.getElementById('template1').innerHTML;
+                deviceInfoTemplate = document.getElementById('deviceInfoTemplate').innerHTML;
             });
         }
 
@@ -114,7 +116,7 @@
             var jsonData = {id:deviceId, node:nodeJson, projects:selections};
             var output = Mustache.render(nodeTemplate, jsonData);
             $("#devices-container").append(output);
-            attachDeviceHandlers(deviceId);
+            attachDeviceHandlers(deviceId, nodeJson);
             $("#"+deviceId).fadeIn();
         }
 
@@ -142,7 +144,7 @@
             });
         }
 
-        function attachDeviceHandlers(mac){
+        function attachDeviceHandlers(mac, nodeJson){
             $("#"+mac+ " input[name=project]").typeahead({source:projects});
             $("#"+mac+" button.device-save").click(function(){
                 $.ajax({
@@ -169,6 +171,10 @@
             });
             $("#"+mac+" .cfg").click(function(){
                 //TODO:prepopulate and wire to device mac
+                var output = Mustache.render(deviceInfoTemplate, {node:nodeJson});
+                console.debug(nodeJson, output);
+
+                $("#deviceInfo").html(output);
                 cfgDialog.dialog( "open" );
             });
 
@@ -180,7 +186,7 @@
 
         var cfgDialog;
         function initConfigDialog(){
-            cfgDialog = $( "#configDialog" ).dialog({
+            cfgDialog = $( "#deviceSettingsDialog" ).dialog({
                 autoOpen: false,
                 height: 400,
                 width: 350,
@@ -201,6 +207,7 @@
                 event.preventDefault();
                 sendConfigToDevice();
             });
+            $( "#deviceSettingsDialog" ).tabs();
         }
 
         $(document).ready(function(){
@@ -307,18 +314,33 @@
     <div id="push"></div>
 </div>
 
-<div id="configDialog" title="Basic config" style="display: none">
-    <form>
-    <p>JSON config will be sent to device</p>
-        <textarea id="jsonCfg" style="width: 300px;height: 200px;;"></textarea>
-        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-    </form>
-
-</div>
-
 <div id="footer">
     <div class="container">
         <p class="muted credit">Example courtesy TODO</p>
+    </div>
+</div>
+
+<!--DIALOGS-->
+<div id="deviceSettingsDialog" title="Device settings" style="display: none">
+    <ul>
+        <li><a href="#deviceSettings">Settings</a></li>
+        <li><a href="#firmwareUpgrade">Upgrade</a></li>
+        <li><a href="#deviceInfo">Info</a></li>
+    </ul>
+    <div id="deviceSettings" title="Basic config" >
+        <form>
+            <p>JSON config will be sent to device</p>
+            <textarea id="jsonCfg" style="width: 260px;height: 160px;"></textarea>
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </form>
+
+    </div>
+    <div id="firmwareUpgrade" title="Firmware upgrade" >
+        <form>
+            <p>TODO</p>
+        </form>
+    </div>
+    <div id="deviceInfo">
     </div>
 </div>
 
