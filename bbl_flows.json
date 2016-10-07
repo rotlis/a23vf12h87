@@ -15,6 +15,11 @@
         "label": "Build Response Parser and Message Sender"
     },
     {
+        "id": "5914c4a1.24372c",
+        "type": "tab",
+        "label": "Firmware"
+    },
+    {
         "id": "423e0637.550f08",
         "type": "json-db-collection",
         "z": "152d639d.7d86fc",
@@ -947,5 +952,101 @@
                 "784ff6c9.654c88"
             ]
         ]
+    },
+    {
+        "id": "d2c84333.7a474",
+        "type": "http in",
+        "z": "5914c4a1.24372c",
+        "name": "Trigger Upgrade",
+        "url": "/triggerUpgrade",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 121,
+        "y": 80,
+        "wires": [
+            [
+                "225d2975.d020b6",
+                "3ac97f85.b9bf2"
+            ]
+        ]
+    },
+    {
+        "id": "225d2975.d020b6",
+        "type": "http response",
+        "z": "5914c4a1.24372c",
+        "name": "Success Response",
+        "x": 608,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "19ec3e77.a01d42",
+        "type": "udp out",
+        "z": "5914c4a1.24372c",
+        "name": "Send upgrade request",
+        "addr": "",
+        "iface": "",
+        "port": "",
+        "ipv": "udp4",
+        "outport": "",
+        "base64": false,
+        "multicast": "false",
+        "x": 598,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "3ac97f85.b9bf2",
+        "type": "function",
+        "z": "5914c4a1.24372c",
+        "name": "optimiseMessage",
+        "func": "msg.ip=msg.payload.deviceIp;\nmsg.port=msg.payload.devicePort;\nmsg.payload = {\n    'triggerUpload':true,\n    'upgradeUrl': 'http://' + msg.payload.serverHostname + ':' + msg.payload.serverPort + '/firmware'\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 316,
+        "y": 180,
+        "wires": [
+            [
+                "19ec3e77.a01d42"
+            ]
+        ]
+    },
+    {
+        "id": "8e62c0c.588364",
+        "type": "http in",
+        "z": "5914c4a1.24372c",
+        "name": "Firware",
+        "url": "/firmware",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 91,
+        "y": 280,
+        "wires": [
+            [
+                "29167eae.46e102",
+                "8851e2cf.90703"
+            ]
+        ]
+    },
+    {
+        "id": "29167eae.46e102",
+        "type": "debug",
+        "z": "5914c4a1.24372c",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 508,
+        "y": 361,
+        "wires": []
+    },
+    {
+        "id": "8851e2cf.90703",
+        "type": "http response",
+        "z": "5914c4a1.24372c",
+        "name": "Success Response",
+        "x": 608,
+        "y": 280,
+        "wires": []
     }
 ]
