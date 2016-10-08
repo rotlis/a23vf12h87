@@ -1025,5 +1025,94 @@
                 "8851e2cf.90703"
             ]
         ]
+    },
+    {
+        "id": "475fc601.724658",
+        "type": "http in",
+        "z": "5914c4a1.24372c",
+        "name": "Trigger Upgrade For All",
+        "url": "/triggerUpgradeForAll",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 141,
+        "y": 380,
+        "wires": [
+            [
+                "14280cf9.74e993"
+            ]
+        ]
+    },
+    {
+        "id": "14280cf9.74e993",
+        "type": "http request",
+        "z": "5914c4a1.24372c",
+        "name": "Get list of devices",
+        "method": "GET",
+        "ret": "obj",
+        "url": "http://127.0.0.1:1880/devices",
+        "tls": "",
+        "x": 369,
+        "y": 380,
+        "wires": [
+            [
+                "6ad7cd52.0f3b64"
+            ]
+        ]
+    },
+    {
+        "id": "60c2d56c.01668c",
+        "type": "http request",
+        "z": "5914c4a1.24372c",
+        "name": "Trigger Upgrade",
+        "method": "POST",
+        "ret": "txt",
+        "url": "http://127.0.0.1:1880/triggerUpgrade",
+        "tls": "",
+        "x": 339.5,
+        "y": 480,
+        "wires": [
+            [
+                "1a3c9392.7d019c"
+            ]
+        ]
+    },
+    {
+        "id": "1a3c9392.7d019c",
+        "type": "http response",
+        "z": "5914c4a1.24372c",
+        "name": "Success Response",
+        "x": 608.5,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "6ad7cd52.0f3b64",
+        "type": "function",
+        "z": "5914c4a1.24372c",
+        "name": "Build request payload",
+        "func": "var payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tpayload.push(\n\t\t{\n\t\t\t\"deviceIp\": device.ip,\n\t\t\t\"devicePort\": device.port,\n\t\t\t\"serverPort\": msg.payload.serverPort,\n\t\t\t\"serverHostname\": msg.payload.serverHostname\n\t\t}\n\t);\n}\nmsg.payload = payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 598.5,
+        "y": 380,
+        "wires": [
+            [
+                "9b33cb8e.3a75f8"
+            ]
+        ]
+    },
+    {
+        "id": "9b33cb8e.3a75f8",
+        "type": "split",
+        "z": "5914c4a1.24372c",
+        "name": "",
+        "splt": "\\n",
+        "x": 92,
+        "y": 480,
+        "wires": [
+            [
+                "60c2d56c.01668c"
+            ]
+        ]
     }
 ]
