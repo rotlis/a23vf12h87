@@ -85,7 +85,7 @@
         "type": "function",
         "z": "152d639d.7d86fc",
         "name": "prepare entry",
-`        "func": "\nvar isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nvar pipeline = '';\nvar macInfo = msg.macInfo;\nvar mac = macInfo.substring(0, macInfo.indexOf(':'));\n\nvar devices = msg.devices;\nif (!isNull(devices) && !isNull(devices[mac]) && !isNull(devices[mac].pipeline)) {\n\tpipeline = devices[mac].pipeline;\n}\n\nmsg.payload = {\n    'mac':mac,\n    'ip':msg.ip,\n    'port':msg.port,\n    'pipeline':pipeline,\n    'lastMessage':msg.payload.substring(macInfo.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;",
+        "func": "\nvar isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nvar pipeline = '';\nvar macInfo = msg.macInfo;\nvar mac = macInfo.substring(0, macInfo.indexOf(':'));\n\nvar devices = msg.devices;\nif (!isNull(devices) && !isNull(devices[mac]) && !isNull(devices[mac].pipeline)) {\n\tpipeline = devices[mac].pipeline;\n}\n\nmsg.payload = {\n    'mac':mac,\n    'ip':msg.ip,\n    'port':msg.port,\n    'pipeline':pipeline,\n    'lastMessage':msg.payload.substring(macInfo.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 472,
