@@ -939,8 +939,8 @@
         "y": 80,
         "wires": [
             [
-                "225d2975.d020b6",
-                "3ac97f85.b9bf2"
+                "3ac97f85.b9bf2",
+                "225d2975.d020b6"
             ]
         ]
     },
@@ -1015,7 +1015,7 @@
         "type": "function",
         "z": "5914c4a1.24372c",
         "name": "Firmware Files",
-        "func": "var fs = context.global.fs;\nvar path = context.global.path;\nvar firmwareDirPath = context.global.firmwareDirPath;\nvar firmwareFileType = context.global.firmwareFileType;\n\nvar filelist = {};\nvar fileEncoding = 'utf8';\nvar getListOfFiles = function(dir) {\n  fs.readdirSync(dir).forEach(function(file) {\n    file = dir + '/' + file;\n    if (fs.statSync(file).isDirectory()) {\n      filelist = getListOfFiles(file);\n    } else if(path.extname(file) === firmwareFileType) {\n        var contents = fs.readFileSync(file, fileEncoding, function (err, data) {\n          if (err) {\n            return console.log(err);\n          }\n          return data;\n        });\n        var fileToPush = {name: file, contents: contents};\n        filelist[file] = fileToPush;\n    }\n  });\n  return filelist;\n};\nmsg.payload = getListOfFiles(firmwareDirPath, []);\nreturn msg;",
+        "func": "var fs = context.global.fs;\nvar path = context.global.path;\nvar firmwareDirPath = context.global.firmwareDirPath;\nvar firmwareFileType = context.global.firmwareFileType;\n\nvar filelist = {};\nvar fileEncoding = 'utf8';\nvar getListOfFiles = function(dir) {\n  fs.readdirSync(dir).forEach(function(file) {\n    var fileWithPath = dir + '/' + file;\n    if (fs.statSync(fileWithPath).isDirectory()) {\n      filelist = getListOfFiles(fileWithPath);\n    } else if(path.extname(fileWithPath) === firmwareFileType) {\n        var contents = fs.readFileSync(fileWithPath, fileEncoding, function (err, data) {\n          if (err) {\n            return console.log(err);\n          }\n          return data;\n        });\n        var fileToPush = {name: file, contents: contents};\n        filelist[file] = fileToPush;\n    }\n  });\n  return filelist;\n};\nmsg.payload = getListOfFiles(firmwareDirPath, []);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 320.5,
@@ -1034,11 +1034,12 @@
         "url": "/triggerUpgradeForAll",
         "method": "post",
         "swaggerDoc": "",
-        "x": 141,
-        "y": 380,
+        "x": 126,
+        "y": 406,
         "wires": [
             [
-                "14280cf9.74e993"
+                "c8f4ca05.a6ddf8",
+                "ec841e35.80e46"
             ]
         ]
     },
@@ -1051,8 +1052,8 @@
         "ret": "obj",
         "url": "http://127.0.0.1:1880/devices",
         "tls": "",
-        "x": 369,
-        "y": 380,
+        "x": 599,
+        "y": 432,
         "wires": [
             [
                 "6ad7cd52.0f3b64"
@@ -1068,33 +1069,22 @@
         "ret": "txt",
         "url": "http://127.0.0.1:1880/triggerUpgrade",
         "tls": "",
-        "x": 339.5,
-        "y": 480,
-        "wires": [
-            [
-                "1a3c9392.7d019c"
-            ]
-        ]
-    },
-    {
-        "id": "1a3c9392.7d019c",
-        "type": "http response",
-        "z": "5914c4a1.24372c",
-        "name": "Success Response",
         "x": 608.5,
-        "y": 480,
-        "wires": []
+        "y": 546,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "6ad7cd52.0f3b64",
         "type": "function",
         "z": "5914c4a1.24372c",
         "name": "Build request payload",
-        "func": "var payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tpayload.push(\n\t\t{\n\t\t\t\"deviceIp\": device.ip,\n\t\t\t\"devicePort\": device.port,\n\t\t\t\"serverPort\": msg.payload.serverPort,\n\t\t\t\"serverHostname\": msg.payload.serverHostname\n\t\t}\n\t);\n}\nmsg.payload = payload;\nreturn msg;",
+        "func": "var payload = [];\nfor(var mac in msg.payload.devices) {\n\tvar device = msg.payload.devices[mac];\n\tpayload.push(\n\t\t{\n\t\t\t\"deviceIp\": device.ip,\n\t\t\t\"devicePort\": device.port,\n\t\t\t\"serverPort\": msg.callbackUrl.serverPort,\n\t\t\t\"serverHostname\": msg.callbackUrl.serverHostname\n\t\t}\n\t);\n}\nmsg.payload = payload;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 598.5,
-        "y": 380,
+        "x": 381.5,
+        "y": 490,
         "wires": [
             [
                 "9b33cb8e.3a75f8"
@@ -1107,11 +1097,79 @@
         "z": "5914c4a1.24372c",
         "name": "",
         "splt": "\\n",
-        "x": 92,
-        "y": 480,
+        "x": 194,
+        "y": 544,
+        "wires": [
+            [
+                "4356c7ca.982368"
+            ]
+        ]
+    },
+    {
+        "id": "c8f4ca05.a6ddf8",
+        "type": "http response",
+        "z": "5914c4a1.24372c",
+        "name": "Success Response",
+        "x": 385,
+        "y": 362,
+        "wires": []
+    },
+    {
+        "id": "4356c7ca.982368",
+        "type": "change",
+        "z": "5914c4a1.24372c",
+        "name": "delete headers",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "headers",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 382,
+        "y": 546,
         "wires": [
             [
                 "60c2d56c.01668c"
+            ]
+        ]
+    },
+    {
+        "id": "ec841e35.80e46",
+        "type": "change",
+        "z": "5914c4a1.24372c",
+        "name": "copy original payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "callbackUrl",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 376,
+        "y": 433,
+        "wires": [
+            [
+                "14280cf9.74e993"
             ]
         ]
     }
