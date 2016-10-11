@@ -122,7 +122,7 @@
                 $.ajax({
                     data: {
                         mac: mac,
-                        pipelineName: $('#' + mac + ' select').val()
+                        pipelineName: $('#' + mac + ' input[name="project"]').val()
                     },
                     type: "POST",
                     url: "/devices",
