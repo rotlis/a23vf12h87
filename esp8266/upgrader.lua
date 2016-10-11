@@ -1,4 +1,5 @@
 local Upgrader = {};
+local STARTUP_FILE = "init.lua";
 local fileUtils = require("fileUtils");
 
 function Upgrader.upgrade(url)
@@ -21,7 +22,7 @@ local function upgradeFirmware(data)
     local isJsonMessage, jsonMsg = pcall(cjson.decode, data);
     if isJsonMessage then
         fileUtils.overwriteMemoryContents(jsonMsg);
-        dofile("bbl.lua");
+        dofile(STARTUP_FILE);
         -- do I need to restart?
     else
         print("Unable to convert data to JSON: " .. data);
