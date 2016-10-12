@@ -85,7 +85,7 @@
         "type": "function",
         "z": "152d639d.7d86fc",
         "name": "prepare entry",
-        "func": "\nvar isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nvar pipeline = '';\nvar macInfo = msg.macInfo;\nvar mac = macInfo.substring(0, macInfo.indexOf(':'));\n\nvar devices = msg.devices;\nif (!isNull(devices) && !isNull(devices[mac]) && !isNull(devices[mac].pipeline)) {\n\tpipeline = devices[mac].pipeline;\n}\n\nmsg.payload = {\n    'mac':mac,\n    'ip':msg.ip,\n    'port':msg.port,\n    'pipeline':pipeline,\n    'lastMessage':msg.payload.substring(macInfo.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;",
+        "func": "\nvar isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nvar pattern = '';\nvar pipeline = '';\nvar macInfo = msg.macInfo;\nvar mac = macInfo.substring(0, macInfo.indexOf(':'));\n\nvar devices = msg.devices;\nif (!isNull(devices) && !isNull(devices[mac])) {\n    if (!isNull(devices[mac].pattern)) {\n\t    pattern = devices[mac].pattern;\n    }\n    if (!isNull(devices[mac].pipeline)) {\n\t    pipeline = devices[mac].pipeline;\n    }\n}\n\nmsg.payload = {\n    'mac':mac,\n    'ip':msg.ip,\n    'port':msg.port,\n    'pattern':pattern,\n    'pipeline':pipeline,\n    'lastMessage':msg.payload.substring(macInfo.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 472,
@@ -333,7 +333,8 @@
         "wires": [
             [
                 "4802e8dc.18d3b8",
-                "716dfc9.646d204"
+                "716dfc9.646d204",
+                "c26e0ea.b2064f"
             ]
         ]
     },
@@ -705,7 +706,7 @@
         "type": "function",
         "z": "9452f842.635e38",
         "name": "Prepare build status message",
-        "func": "msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n\nvar tickleMessage = {\n    'ip':msg.payload.ip, \n    'port':msg.payload.port,\n    'payload': JSON.stringify({\n\t\t\"command\": \"buildStatus\",\n\t\t\"buildStatus\": msg.payload.buildStatus,\n\t\t\"pattern\":\"steady\"\n    },null, 0)\n};\nnode.send(tickleMessage);\nreturn null;",
+        "func": "msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n\nvar tickleMessage = {\n    'ip':msg.payload.ip, \n    'port':msg.payload.port,\n    'payload': JSON.stringify({\n\t\t\"command\": \"buildStatus\",\n\t\t\"pattern\": msg.payload.pattern,\n\t\t\"buildStatus\": msg.payload.buildStatus\n    },null, 0)\n};\nnode.send(tickleMessage);\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "x": 192,
@@ -786,7 +787,7 @@
         "type": "function",
         "z": "9452f842.635e38",
         "name": "Parse build status",
-        "func": "var isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n\treturn [];\n}\n\nvar getBuildStatus = function(pipelineToMonitor) {\n\tvar buildStatus=\"\";\n\tfor(var i=0; i<msg.payload.Projects.Project.length; i++) {\n\t\tvar project = msg.payload.Projects.Project[i];\n\t\tvar pipelineName = project.$.name;\n\t\tif (pipelineName.indexOf(pipelineToMonitor) === 0) {\n\t\t    if (project.$.activity === \"Building\") {\n\t\t\t\tbuildStatus = \"inprogress\";\n\t\t\t\tbreak;\n\t\t\t} else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n\t\t\t\tbuildStatus = \"failed\";\n\t\t\t\tbreak;\n\t\t\t} else {\n\t\t\t\tbuildStatus = \"successful\";\n\t\t\t}\n\t\t}\n\t}\n\treturn buildStatus;\n}\n\nvar payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tvar buildStatus = getBuildStatus(device.pipeline);\n\tpayload.push(\n\t\t\t{\n\t\t\t\t\"ip\": device.ip,\n\t\t\t\t\"port\": device.port,\n\t\t\t\t\"buildStatus\": buildStatus\n\t\t\t}\n\t);\n}\n\nmsg.payload = payload;\nreturn msg;",
+        "func": "var isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n\treturn [];\n}\n\nvar getBuildStatus = function(pipelineToMonitor) {\n\tvar buildStatus=\"\";\n\tfor(var i=0; i<msg.payload.Projects.Project.length; i++) {\n\t\tvar project = msg.payload.Projects.Project[i];\n\t\tvar pipelineName = project.$.name;\n\t\tif (pipelineName.indexOf(pipelineToMonitor) === 0) {\n\t\t    if (project.$.activity === \"Building\") {\n\t\t\t\tbuildStatus = \"inprogress\";\n\t\t\t\tbreak;\n\t\t\t} else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n\t\t\t\tbuildStatus = \"failed\";\n\t\t\t\tbreak;\n\t\t\t} else {\n\t\t\t\tbuildStatus = \"successful\";\n\t\t\t}\n\t\t}\n\t}\n\treturn buildStatus;\n}\n\nvar payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tvar buildStatus = getBuildStatus(device.pipeline);\n\tpayload.push(\n\t\t\t{\n\t\t\t\t\"ip\": device.ip,\n\t\t\t\t\"port\": device.port,\n\t\t\t\t\"port\": device.pattern,\n\t\t\t\t\"buildStatus\": buildStatus\n\t\t\t}\n\t);\n}\n\nmsg.payload = payload;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 351.5,
@@ -1181,6 +1182,34 @@
         "name": "Success Response",
         "x": 491,
         "y": 299,
+        "wires": []
+    },
+    {
+        "id": "c26e0ea.b2064f",
+        "type": "function",
+        "z": "152d639d.7d86fc",
+        "name": "prepare entry",
+        "func": "msg.datapath = '/devices/' + msg.payload.mac + '/pattern';\nmsg.payload = msg.payload.pattern;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 472,
+        "y": 440,
+        "wires": [
+            [
+                "ad170a96.d4a7d8"
+            ]
+        ]
+    },
+    {
+        "id": "ad170a96.d4a7d8",
+        "type": "DataIn",
+        "z": "152d639d.7d86fc",
+        "collection": "423e0637.550f08",
+        "name": "save DB",
+        "update": false,
+        "path": "/",
+        "x": 747,
+        "y": 440,
         "wires": []
     }
 ]
