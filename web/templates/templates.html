@@ -45,6 +45,14 @@
                     <label >Project:</label> (Case sensitive)
                     <input type="text" class="form-control" name="project" value="{{node.pipeline}}" autocomplete="off"/>
                 </div>
+                <div class="form-group">
+                    <label >Pattern:</label>
+                    <select class="form-control" name="pattern">
+                        <option value="" selected>Select</option>
+                        <option value="steady">steady</option>
+                        <option value="scroll">scroll</option>
+                    </select>
+                </div>
 
                 <button type="submit" class="btn btn-success device-save" >Save</button>
                 <button type="submit" class="btn btn-default device-identify">Identify</button>
