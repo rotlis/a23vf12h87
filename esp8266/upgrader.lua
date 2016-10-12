@@ -18,8 +18,10 @@ end
 function upgradeFirmware(data)
     local isJsonMessage, jsonMsg = pcall(cjson.decode, data);
     if isJsonMessage then
-        fileUtils.overwriteMemoryContents(jsonMsg);
-        node.restart();
+        local isFirmwareUpgraded = fileUtils.overwriteMemoryContents(jsonMsg);
+        if (isFirmwareUpgraded) then
+            node.restart();
+        end
     else
         print("Unable to convert data to JSON: " .. data);
     end
