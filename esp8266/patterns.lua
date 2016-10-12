@@ -5,16 +5,16 @@ function M.getAll()
 end
 
 function M.steady(colorChar, pixels)
+    tmr.stop(0)
     ws2812.write(colorChar:rep(pixels))
 end
 
 function M.scroll(colorChar, pixels)
     local i, bu = 0, ws2812.newBuffer(pixels, 3);
 
-    tmr.alarm(0, 50, 1, function()
+    tmr.alarm(0, 100, 1, function()
         i = i + 1
         bu:fade(2, ws2812.FADE_OUT)
-        -- g r b / r g b
         bu:set((i % pixels) + 1, colorChar)
         ws2812.write(bu)
     end);
