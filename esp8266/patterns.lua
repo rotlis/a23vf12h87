@@ -5,9 +5,7 @@ function M.getAll()
 end
 
 function M.steady(colorChar, pixels)
-    local bu = 0, ws2812.newBuffer(pixels, 3);
-    bu:fill(colorChar);
-    ws2812.write(bu)
+    ws2812.write(colorChar:rep(pixels))
 end
 
 function M.scroll(colorChar, pixels)

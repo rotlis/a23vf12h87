@@ -2,6 +2,7 @@ local M = {};
 local patterns = require("patterns");
 
 function M.colorified(buildStatus, pattern, pixels)
+    local maxBright = 255;
     local colorChar = string.char(0, 0, 0);
     local lowerCasedBuildStatus = string.lower(buildStatus);
     if lowerCasedBuildStatus == "successful" then
