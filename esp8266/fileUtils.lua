@@ -39,6 +39,9 @@ function FileUtils.overwriteMemoryContents(files)
     local oldFiles = file.list();
     for index, fileContentsWithName in pairs(files) do
         isSuccess = isSuccess and FileUtils.createFileWithContents(fileContentsWithName.name, fileContentsWithName.contents);
+        if (isSuccess ~= true) then
+            break;
+        end
     end
     if (isSuccess) then
         FileUtils.removeFiles(oldFiles);
