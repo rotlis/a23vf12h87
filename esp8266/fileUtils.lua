@@ -10,7 +10,6 @@ function FileUtils.createFileWithContents(fileName, fileContents)
 end
 
 function FileUtils.removeAllFiles()
-    --    file.format() vs below removal?
     for fileName, fileSize in pairs(file.list()) do
         print(fileName .. " (" .. fileSize .. " bytes)");
         file.remove(fileName);
@@ -18,11 +17,10 @@ function FileUtils.removeAllFiles()
 end
 
 function FileUtils.overwriteMemoryContents(files)
-    self.removeAllFiles();
+    FileUtils.removeAllFiles();
     for index, fileContentsWithName in pairs(files) do
-        self.createFileWithContents(fileContentsWithName.name, fileContentsWithName.contents);
+        FileUtils.createFileWithContents(fileContentsWithName.name, fileContentsWithName.contents);
     end
-    file.flush();
 end
 
 return FileUtils

@@ -4,8 +4,10 @@
 
 * esplorer
 * esptool
+* https://www.npmjs.com/package/nodemcu-tool
 * node-red
 * bower
+
 
 node-red modules to install
 

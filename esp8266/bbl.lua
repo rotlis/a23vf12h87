@@ -8,13 +8,13 @@ local function init_udp()
     udpconnection:connect(9001, "255.255.255.255");
 end
 
-local function processUdpMessage(udpconnection, message)
+function processUdpMessage(udpconnection, message)
     print("UDP in: " .. message)
 
     local isJsonMessage, jsonMsg = pcall(cjson.decode, message)
     if isJsonMessage then
         local command = jsonMsg.command;
-        if command == 'triggerUpload' then
+        if command == 'triggerUpgrade' then
             upgrader.upgrade(jsonMsg.upgradeUrl);
         elseif command == 'buildStatus' then
             strip.colorified(jsonMsg.buildStatus);
@@ -26,7 +26,7 @@ local function processUdpMessage(udpconnection, message)
     end
 end
 
-local function beaconcycle()
+function beaconcycle()
     local msgText = EspId .. ":{'v':'0.1alpha'}"
     print(msgText)
     udpconnection:send(msgText)
