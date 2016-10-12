@@ -1,8 +1,7 @@
 local M = {};
+local patterns = require("patterns");
 
-function M.colorified(buildStatus)
-    ws2812.init();
-    local maxBright = 255;
+function M.colorified(buildStatus, pattern, pixels)
     local colorChar = string.char(0, 0, 0);
     local lowerCasedBuildStatus = string.lower(buildStatus);
     if lowerCasedBuildStatus == "successful" then
@@ -12,16 +11,7 @@ function M.colorified(buildStatus)
     elseif lowerCasedBuildStatus == "inprogress" then
         colorChar = string.char(0, 0, maxBright);
     end
-
-    local i, bu = 0, ws2812.newBuffer(15, 3);
-    bu:fill(0, 0, 0);
-    tmr.alarm(0, 50, 1, function()
-        i = i + 1
-        bu:fade(2, ws2812.FADE_OUT)
-        -- g r b / r g b
-        bu:set((i % 15) + 1, colorChar)
-        ws2812.write(bu)
-    end);
+    patterns.apply(pattern, colorChar, pixels)
 end
 
 function M.rainbow()

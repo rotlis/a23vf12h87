@@ -1,5 +1,6 @@
 local strip = require("strip");
 local upgrader = require("upgrader");
+local patterns = require("patterns");
 local udpconnection;
 
 local function init_udp()
@@ -17,7 +18,9 @@ function processUdpMessage(udpconnection, message)
         if command == 'triggerUpgrade' then
             upgrader.upgrade(jsonMsg.upgradeUrl);
         elseif command == 'buildStatus' then
-            strip.colorified(jsonMsg.buildStatus);
+            strip.colorified(jsonMsg.buildStatus, jsonMsg.pattern, 8);
+        elseif command == 'getPatterns' then
+            udpconnection:send(cjson.encode(patterns.getAll()))
         else
             print("Unknown command: " .. command);
         end
