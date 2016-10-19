@@ -1,9 +1,21 @@
 local M = {};
 local patterns = require("patterns");
+colorChar = string.char(0, 0, 0);
+maxBright = 100
+state = 0
+tickCounter = 0
+bu = nil
 
-function M.colorified(buildStatus, pattern, pixels)
-    local maxBright = 255;
-    local colorChar = string.char(0, 0, 0);
+function M.setState(s)
+    state = s
+    if s == 10 then
+        colorChar = string.char(0, 0, 0)
+    else
+
+    end
+end
+
+function M.setBuildStatus(buildStatus)
     local lowerCasedBuildStatus = string.lower(buildStatus);
     if lowerCasedBuildStatus == "successful" then
         colorChar = string.char(maxBright, 0, 0);
@@ -12,34 +24,33 @@ function M.colorified(buildStatus, pattern, pixels)
     elseif lowerCasedBuildStatus == "inprogress" then
         colorChar = string.char(0, 0, maxBright);
     end
-    patterns.apply(pattern, colorChar, pixels)
 end
 
-function M.rainbow()
-    ws2812.init();
-    local bu = ws2812.newBuffer(15, 3);
-    bu:fill(0, 0, 0);
+function M.setPattern(p)
 
-    local Violet = { 0, 148, 211 };
-    local Indigo = { 0, 75, 130 };
-    local Blue = { 0, 0, 255 };
-    local Green = { 255, 0, 0 };
-    local Yellow = { 255, 255, 0 };
-    local Orange = { 127, 255, 0 };
-    local Red = { 0, 255, 0 };
+end
 
-    bu:set(1, Red);
-    bu:set(2, Orange);
-    bu:set(3, Yellow);
-    bu:set(4, Green);
-    bu:set(5, Blue);
-    bu:set(6, Indigo);
-    bu:set(7, Violet);
-
-    tmr.alarm(0, 50, 1, function()
+function M.onTick()
+    tickCounter = tickCounter+1
+    if (state==10) then
+        bu:set(1, colorChar)
         bu:shift(1, ws2812.SHIFT_CIRCULAR)
-        ws2812.write(bu)
-    end);
+    else
+        bu:fill(0, 0, 0)
+        print("state:"..state)
+        bu:set(state+1, string.char(maxBright, maxBright, maxBright))
+    end
+    ws2812.write(bu)
+end
+
+function M.start(pix)
+    pixels = pix
+    bu = ws2812.newBuffer(pixels, 3)
+    ws2812.init()
+    bu:fill(0, 0, 0)
+    ws2812.write(bu)
+
+    tmr.alarm(0, 50, 1, M.onTick);
 end
 
 return M;

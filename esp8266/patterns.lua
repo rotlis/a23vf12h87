@@ -10,6 +10,7 @@ function M.steady(colorChar, pixels)
 end
 
 function M.scroll(colorChar, pixels)
+    tmr.stop(0)
     local i, bu = 0, ws2812.newBuffer(pixels, 3);
 
     tmr.alarm(0, 100, 1, function()
