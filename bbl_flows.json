@@ -702,22 +702,6 @@
         "wires": []
     },
     {
-        "id": "62f0d490.fb294c",
-        "type": "function",
-        "z": "9452f842.635e38",
-        "name": "Prepare build status message",
-        "func": "msg.ip=msg.payload.ip;\nmsg.port=msg.payload.port;\n\nvar tickleMessage = {\n    'ip':msg.payload.ip, \n    'port':msg.payload.port,\n    'payload': JSON.stringify({\n\t\t\"command\": \"buildStatus\",\n\t\t\"pattern\": msg.payload.pattern,\n\t\t\"buildStatus\": msg.payload.buildStatus\n    },null, 0)\n};\nnode.send(tickleMessage);\nreturn null;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 192,
-        "y": 440,
-        "wires": [
-            [
-                "86cc0f64.620d4"
-            ]
-        ]
-    },
-    {
         "id": "6ba8835b.8a866c",
         "type": "http request",
         "z": "9452f842.635e38",
@@ -763,7 +747,7 @@
         "y": 319,
         "wires": [
             [
-                "62f0d490.fb294c"
+                "5c1dcacf.082234"
             ]
         ]
     },
@@ -778,23 +762,7 @@
         "y": 319,
         "wires": [
             [
-                "df8014ce.e9b728"
-            ]
-        ]
-    },
-    {
-        "id": "df8014ce.e9b728",
-        "type": "function",
-        "z": "9452f842.635e38",
-        "name": "Parse build status",
-        "func": "var isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nif (isNull(msg.payload.Projects) || isNull(msg.payload.Projects.Project)) {\n\treturn [];\n}\n\nvar getBuildStatus = function(pipelineToMonitor) {\n\tvar buildStatus=\"\";\n\tfor(var i=0; i<msg.payload.Projects.Project.length; i++) {\n\t\tvar project = msg.payload.Projects.Project[i];\n\t\tvar pipelineName = project.$.name;\n\t\tif (pipelineName.indexOf(pipelineToMonitor) === 0) {\n\t\t    if (project.$.activity === \"Building\") {\n\t\t\t\tbuildStatus = \"inprogress\";\n\t\t\t\tbreak;\n\t\t\t} else if (project.$.activity === \"Sleeping\" && project.$.lastBuildStatus === \"Failure\") {\n\t\t\t\tbuildStatus = \"failed\";\n\t\t\t\tbreak;\n\t\t\t} else {\n\t\t\t\tbuildStatus = \"successful\";\n\t\t\t}\n\t\t}\n\t}\n\treturn buildStatus;\n}\n\nvar payload = [];\nfor(var mac in msg.devices) {\n\tvar device = msg.devices[mac];\n\tvar buildStatus = getBuildStatus(device.pipeline);\n\tpayload.push(\n\t\t\t{\n\t\t\t\t\"ip\": device.ip,\n\t\t\t\t\"port\": device.port,\n\t\t\t\t\"pattern\": device.pattern,\n\t\t\t\t\"buildStatus\": buildStatus\n\t\t\t}\n\t);\n}\n\nmsg.payload = payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 351.5,
-        "y": 319,
-        "wires": [
-            [
-                "12912dd9.ba8fc2"
+                "be9e44c5.a394f8"
             ]
         ]
     },
@@ -941,8 +909,8 @@
         "y": 80,
         "wires": [
             [
-                "3ac97f85.b9bf2",
-                "225d2975.d020b6"
+                "225d2975.d020b6",
+                "88d9992a.6b1038"
             ]
         ]
     },
@@ -972,22 +940,6 @@
         "wires": []
     },
     {
-        "id": "3ac97f85.b9bf2",
-        "type": "function",
-        "z": "5914c4a1.24372c",
-        "name": "Prepare Upgrade Trigger",
-        "func": "msg.ip=msg.payload.deviceIp;\nmsg.port=msg.payload.devicePort;\nmsg.payload = JSON.stringify({\n    'command':'triggerUpgrade',\n    'upgradeUrl': 'http://' + msg.payload.serverHostname + ':' + msg.payload.serverPort + '/firmware'\n}, null, 0);\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 336,
-        "y": 180,
-        "wires": [
-            [
-                "19ec3e77.a01d42"
-            ]
-        ]
-    },
-    {
         "id": "8e62c0c.588364",
         "type": "http in",
         "z": "5914c4a1.24372c",
@@ -999,7 +951,7 @@
         "y": 280,
         "wires": [
             [
-                "9077488c.8d7d78"
+                "dbd207c8.ccac38"
             ]
         ]
     },
@@ -1011,22 +963,6 @@
         "x": 579,
         "y": 280,
         "wires": []
-    },
-    {
-        "id": "9077488c.8d7d78",
-        "type": "function",
-        "z": "5914c4a1.24372c",
-        "name": "Firmware Files",
-        "func": "var fs = context.global.fs;\nvar path = context.global.path;\nvar firmwareDirPath = context.global.firmwareDirPath;\nvar firmwareFileType = context.global.firmwareFileType;\n\nvar filelist = {};\nvar fileEncoding = 'utf8';\nvar getListOfFiles = function(dir) {\n  fs.readdirSync(dir).forEach(function(file) {\n    var fileWithPath = dir + '/' + file;\n    if (fs.statSync(fileWithPath).isDirectory()) {\n      filelist = getListOfFiles(fileWithPath);\n    } else if(path.extname(fileWithPath) === firmwareFileType) {\n        var contents = fs.readFileSync(fileWithPath, fileEncoding, function (err, data) {\n          if (err) {\n            return console.log(err);\n          }\n          return data;\n        });\n        var fileToPush = {name: file, contents: contents};\n        filelist[file] = fileToPush;\n    }\n  });\n  return filelist;\n};\nmsg.payload = getListOfFiles(firmwareDirPath, []);\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 320.5,
-        "y": 280,
-        "wires": [
-            [
-                "8851e2cf.90703"
-            ]
-        ]
     },
     {
         "id": "475fc601.724658",
@@ -1058,7 +994,7 @@
         "y": 441,
         "wires": [
             [
-                "6ad7cd52.0f3b64"
+                "36f8dfc8.8a678"
             ]
         ]
     },
@@ -1075,22 +1011,6 @@
         "y": 579,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "6ad7cd52.0f3b64",
-        "type": "function",
-        "z": "5914c4a1.24372c",
-        "name": "Build request payload",
-        "func": "var payload = [];\nfor(var mac in msg.payload.devices) {\n\tvar device = msg.payload.devices[mac];\n\tpayload.push(\n\t\t{\n\t\t\t\"deviceIp\": device.ip,\n\t\t\t\"devicePort\": device.port,\n\t\t\t\"serverPort\": msg.callbackUrl.serverPort,\n\t\t\t\"serverHostname\": msg.callbackUrl.serverHostname\n\t\t}\n\t);\n}\nmsg.payload = payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 381.5,
-        "y": 519,
-        "wires": [
-            [
-                "9b33cb8e.3a75f8"
-            ]
         ]
     },
     {
@@ -1211,5 +1131,85 @@
         "x": 747,
         "y": 440,
         "wires": []
+    },
+    {
+        "id": "be9e44c5.a394f8",
+        "type": "file function",
+        "z": "9452f842.635e38",
+        "name": "Parse build status",
+        "filename": "node/static/js/buildstatus/parseBuildStatus.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 349.5,
+        "y": 320,
+        "wires": [
+            [
+                "12912dd9.ba8fc2"
+            ]
+        ]
+    },
+    {
+        "id": "5c1dcacf.082234",
+        "type": "file function",
+        "z": "9452f842.635e38",
+        "name": "Prepare build status message",
+        "filename": "node/static/js/buildstatus/prepareAndSendBuildStatusMessage",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 191.5,
+        "y": 440,
+        "wires": [
+            [
+                "86cc0f64.620d4"
+            ]
+        ]
+    },
+    {
+        "id": "88d9992a.6b1038",
+        "type": "file function",
+        "z": "5914c4a1.24372c",
+        "name": "Prepare Upgrade Trigger",
+        "filename": "node/static/js/firmware/prepareUpgradeTriggerMsg.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 336,
+        "y": 180,
+        "wires": [
+            [
+                "19ec3e77.a01d42"
+            ]
+        ]
+    },
+    {
+        "id": "dbd207c8.ccac38",
+        "type": "file function",
+        "z": "5914c4a1.24372c",
+        "name": "Firmware Files",
+        "filename": "node/static/js/firmware/firmwareFiles.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 321,
+        "y": 280,
+        "wires": [
+            [
+                "8851e2cf.90703"
+            ]
+        ]
+    },
+    {
+        "id": "36f8dfc8.8a678",
+        "type": "file function",
+        "z": "5914c4a1.24372c",
+        "name": "Build request payload",
+        "filename": "node/static/js/firmware/buildRequestPayload.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 381,
+        "y": 520,
+        "wires": [
+            [
+                "9b33cb8e.3a75f8"
+            ]
+        ]
     }
 ]
