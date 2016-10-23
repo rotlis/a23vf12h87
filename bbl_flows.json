@@ -5,6 +5,11 @@
         "label": "Device Registry"
     },
     {
+        "id": "20c1368d.5c6a8a",
+        "type": "tab",
+        "label": "Server Registry"
+    },
+    {
         "id": "afcdb9fe.f99d18",
         "type": "tab",
         "label": "Static Web"
@@ -60,6 +65,14 @@
         "key": "./certificates/privatekey.pem",
         "ca": "",
         "verifyservercert": false
+    },
+    {
+        "id": "9fd93117.6077",
+        "type": "json-db-collection",
+        "z": "20c1368d.5c6a8a",
+        "name": "Servers",
+        "collection": "servers",
+        "save": true
     },
     {
         "id": "859778e.645e188",
@@ -1209,6 +1222,194 @@
         "wires": [
             [
                 "9b33cb8e.3a75f8"
+            ]
+        ]
+    },
+    {
+        "id": "b6fd98dc.ad1588",
+        "type": "DataIn",
+        "z": "20c1368d.5c6a8a",
+        "collection": "9fd93117.6077",
+        "name": "save server",
+        "update": false,
+        "path": "/",
+        "x": 690,
+        "y": 159,
+        "wires": []
+    },
+    {
+        "id": "5d0cd2cd.1652cc",
+        "type": "http in",
+        "z": "20c1368d.5c6a8a",
+        "name": "Register server",
+        "url": "/servers",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 101,
+        "y": 159,
+        "wires": [
+            [
+                "90ccc31.9842a4",
+                "a786df46.61544"
+            ]
+        ]
+    },
+    {
+        "id": "90ccc31.9842a4",
+        "type": "http response",
+        "z": "20c1368d.5c6a8a",
+        "name": "Success Response",
+        "x": 429,
+        "y": 87,
+        "wires": []
+    },
+    {
+        "id": "a786df46.61544",
+        "type": "file function",
+        "z": "20c1368d.5c6a8a",
+        "name": "Prepare server info to save",
+        "filename": "node/static/js/serverregistry/serverInfoToInsert.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 400.5,
+        "y": 159,
+        "wires": [
+            [
+                "b6fd98dc.ad1588"
+            ]
+        ]
+    },
+    {
+        "id": "199ada26.7e73c6",
+        "type": "http in",
+        "z": "20c1368d.5c6a8a",
+        "name": "Get all servers",
+        "url": "/servers",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 91,
+        "y": 280,
+        "wires": [
+            [
+                "c0cb9664.8ab738"
+            ]
+        ]
+    },
+    {
+        "id": "c0cb9664.8ab738",
+        "type": "DataOut",
+        "z": "20c1368d.5c6a8a",
+        "collection": "9fd93117.6077",
+        "name": "load servers",
+        "path": "/",
+        "error": false,
+        "x": 310,
+        "y": 280,
+        "wires": [
+            [
+                "46b3ea96.fe7fe4"
+            ]
+        ]
+    },
+    {
+        "id": "16cc21de.db820e",
+        "type": "http response",
+        "z": "20c1368d.5c6a8a",
+        "name": "",
+        "x": 710,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "6b5815a4.e7cfac",
+        "type": "DataIn",
+        "z": "20c1368d.5c6a8a",
+        "collection": "9fd93117.6077",
+        "name": "save DB",
+        "update": false,
+        "path": "/",
+        "x": 699,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "d77ad342.4ad5d",
+        "type": "inject",
+        "z": "20c1368d.5c6a8a",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 105,
+        "y": 400,
+        "wires": [
+            [
+                "97b677ac.26e2a8"
+            ]
+        ]
+    },
+    {
+        "id": "61bb6566.06ed4c",
+        "type": "comment",
+        "z": "20c1368d.5c6a8a",
+        "name": "REST GET all servers",
+        "info": "",
+        "x": 107,
+        "y": 235,
+        "wires": []
+    },
+    {
+        "id": "14a6a6fe.f14049",
+        "type": "comment",
+        "z": "20c1368d.5c6a8a",
+        "name": "Register server",
+        "info": "",
+        "x": 85,
+        "y": 87,
+        "wires": []
+    },
+    {
+        "id": "d7335c41.26bfe",
+        "type": "comment",
+        "z": "20c1368d.5c6a8a",
+        "name": "Clear DB",
+        "info": "",
+        "x": 68,
+        "y": 354,
+        "wires": []
+    },
+    {
+        "id": "97b677ac.26e2a8",
+        "type": "file function",
+        "z": "20c1368d.5c6a8a",
+        "name": "empty payload",
+        "filename": "node/static/js/common/emptyPayload.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 399.5,
+        "y": 400,
+        "wires": [
+            [
+                "6b5815a4.e7cfac"
+            ]
+        ]
+    },
+    {
+        "id": "46b3ea96.fe7fe4",
+        "type": "file function",
+        "z": "20c1368d.5c6a8a",
+        "name": "HTTP headers",
+        "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 520.5,
+        "y": 280,
+        "wires": [
+            [
+                "16cc21de.db820e"
             ]
         ]
     }
