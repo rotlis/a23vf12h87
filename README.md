@@ -13,6 +13,7 @@ node-red modules to install
 
     http://flows.nodered.org/node/node-red-contrib-splitter
     http://flows.nodered.org/node/json-db-node-red
+    https://www.npmjs.com/package/node-red-contrib-file-function
 
 
 #### Generate privatekey.pem and certificate.pem on new server and use them in TLS configuration
