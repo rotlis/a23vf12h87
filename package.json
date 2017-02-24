@@ -1,0 +1,24 @@
+{
+  "name": "betterbuildlights",
+  "version": "1.0.0",
+  "description": "#### Toolset",
+  "main": "settings.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rotlis/a23vf12h87.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rotlis/a23vf12h87/issues"
+  },
+  "homepage": "https://github.com/rotlis/a23vf12h87#readme",
+  "dependencies": {
+    "json-db-node-red": "^0.5.3",
+    "node-red-contrib-file-function": "^1.1.2",
+    "node-red-contrib-splitter": "0.0.16"
+  }
+}
