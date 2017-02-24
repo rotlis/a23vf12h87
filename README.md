@@ -8,6 +8,11 @@
 * node-red
 * bower
 
+Node/Npm/PM2/Node-red installation
+  brew install node
+  brew install npm
+  npm install pm2@latest -g
+  npm install -g --unsafe-perm node-red node-red-admin
 
 node-red modules to install
 
