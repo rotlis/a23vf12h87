@@ -26,14 +26,12 @@ function processUdpMessage(udpconnection, message)
             strip.setBuildStatus(jsonMsg.buildStatus)
             strip.setPattern(jsonMsg.pattern)
             currentStatusLifeExpectancy = defaultStatusLifeExpectancy
-            --            strip.colorified(jsonMsg.buildStatus, jsonMsg.pattern, 8);
         elseif command == 'getPatterns' then
             udpconnection:send(cjson.encode(patterns.getAll()))
         else
             print("Unknown command: " .. command);
         end
     else
---        strip.setState(7)
         print("Unable to convert UDP message to JSON: " .. message);
     end
 end
@@ -54,6 +52,7 @@ tmr.alarm(3, 1000, 1, function()
     currentStatusLifeExpectancy = currentStatusLifeExpectancy - 1
     if currentStatusLifeExpectancy < 0 then
         if state==10 then
+            print("state timeout elapsed")
             strip.setState(6)
         end
     end
