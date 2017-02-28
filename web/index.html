@@ -96,6 +96,7 @@
         function onNodeBeackon(json) {
             if (devices[json.mac]) {
                 console.debug("Update for " + json.mac);
+                devices[json.mac] = json;
             } else {
                 console.debug("Adding " + json.mac);
                 devices[json.mac] = json;
