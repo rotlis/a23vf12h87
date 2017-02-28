@@ -10,5 +10,4 @@ var tickleMessage = {
         "buildStatus": msg.payload.buildStatus
     }, null, 0)
 };
-node.send(tickleMessage);
-return null;
+return tickleMessage;
