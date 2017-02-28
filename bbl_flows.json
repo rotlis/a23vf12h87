@@ -75,6 +75,24 @@
         "save": true
     },
     {
+        "id": "e2692e86.5cfdf",
+        "type": "mqtt-broker",
+        "z": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    },
+    {
         "id": "859778e.645e188",
         "type": "udp in",
         "z": "152d639d.7d86fc",
@@ -1058,7 +1076,8 @@
         "y": 440,
         "wires": [
             [
-                "86cc0f64.620d4"
+                "86cc0f64.620d4",
+                "fdf72570.df7ec8"
             ]
         ]
     },
@@ -1477,5 +1496,34 @@
         "x": 110,
         "y": 299,
         "wires": []
+    },
+    {
+        "id": "fdf72570.df7ec8",
+        "type": "mqtt out",
+        "z": "9452f842.635e38",
+        "name": "Send build status message over mqtt",
+        "topic": "/bbl/statusMessage",
+        "qos": "2",
+        "retain": "",
+        "broker": "e2692e86.5cfdf",
+        "x": 606,
+        "y": 514,
+        "wires": []
+    },
+    {
+        "id": "c0e1f4dc.b9fcb8",
+        "type": "mqtt in",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "topic": "/bbl/deviceInfo",
+        "qos": "2",
+        "broker": "e2692e86.5cfdf",
+        "x": 123,
+        "y": 141,
+        "wires": [
+            [
+                "f1b8c233.7c40f"
+            ]
+        ]
     }
 ]

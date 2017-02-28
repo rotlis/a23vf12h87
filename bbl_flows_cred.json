@@ -14,5 +14,9 @@
     "14280cf9.74e993": {
         "user": "admin",
         "password": "admin"
+    },
+    "e2692e86.5cfdf": {
+        "user": "dev",
+        "password": "dev"
     }
 }

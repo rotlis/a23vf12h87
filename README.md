@@ -20,6 +20,11 @@ node-red modules to install
     http://flows.nodered.org/node/json-db-node-red
     https://www.npmjs.com/package/node-red-contrib-file-function
 
+MQTT broker
+
+    Install mosquitto mqtt broker by following https://mosquitto.org/download/
+    apt-get install mosquitto
+    apt-get install mosquitto_clients
 
 #### Generate privatekey.pem and certificate.pem on new server and use them in TLS configuration
 
