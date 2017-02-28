@@ -643,7 +643,7 @@
         "name": "Request to get build status",
         "method": "GET",
         "ret": "txt",
-        "url": "https://go.nbnco.net.au/go/cctray.xml",
+        "url": "https://go12.nbnco.net.au/go/cctray.xml",
         "tls": "db29c472.907f68",
         "x": 539,
         "y": 199,
