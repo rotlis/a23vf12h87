@@ -78,7 +78,7 @@
         "id": "e2692e86.5cfdf",
         "type": "mqtt-broker",
         "z": "",
-        "broker": "localhost",
+        "broker": "mqtt",
         "port": "1883",
         "clientid": "",
         "usetls": false,
