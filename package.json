@@ -19,6 +19,7 @@
   "dependencies": {
     "json-db-node-red": "^0.5.3",
     "node-red-contrib-file-function": "^1.1.2",
-    "node-red-contrib-splitter": "0.0.16"
+    "node-red-contrib-splitter": "0.0.16",
+    "node-red-node-mysql": "0.0.15"
   }
 }
