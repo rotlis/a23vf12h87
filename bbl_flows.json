@@ -25,6 +25,11 @@
         "label": "Firmware"
     },
     {
+        "id": "94ee4800.b63ff8",
+        "type": "tab",
+        "label": "MySql (WIP)"
+    },
+    {
         "id": "423e0637.550f08",
         "type": "json-db-collection",
         "z": "152d639d.7d86fc",
@@ -91,6 +96,15 @@
         "birthTopic": "",
         "birthQos": "0",
         "birthPayload": ""
+    },
+    {
+        "id": "6ab7cac6.de42f4",
+        "type": "MySQLdatabase",
+        "z": "",
+        "host": "mysql",
+        "port": "3306",
+        "db": "buildlights",
+        "tz": ""
     },
     {
         "id": "859778e.645e188",
@@ -1523,6 +1537,51 @@
         "wires": [
             [
                 "f1b8c233.7c40f"
+            ]
+        ]
+    },
+    {
+        "id": "1ad59861.dd2c98",
+        "type": "debug",
+        "z": "94ee4800.b63ff8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 635,
+        "y": 391,
+        "wires": []
+    },
+    {
+        "id": "206b6a0.a092596",
+        "type": "mysql",
+        "z": "94ee4800.b63ff8",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "",
+        "x": 402,
+        "y": 250,
+        "wires": [
+            [
+                "1ad59861.dd2c98"
+            ]
+        ]
+    },
+    {
+        "id": "2c48a57e.aa218a",
+        "type": "inject",
+        "z": "94ee4800.b63ff8",
+        "name": "",
+        "topic": "Select * from CUSTOMERS;",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 143,
+        "y": 141,
+        "wires": [
+            [
+                "206b6a0.a092596"
             ]
         ]
     }
