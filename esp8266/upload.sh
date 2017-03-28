@@ -3,6 +3,7 @@
 nodemcu-tool fsinfo
 
 nodemcu-tool upload bbl.lua
+nodemcu-tool upload mqtt_client.lua
 nodemcu-tool upload fileUtils.lua
 nodemcu-tool upload init.lua
 nodemcu-tool upload pattern_scroll.lua

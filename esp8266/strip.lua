@@ -37,7 +37,6 @@ function M.onTick()
         bu:shift(1, ws2812.SHIFT_CIRCULAR)
     else
         bu:fill(0, 0, 0)
-        print("state:"..state)
         bu:set(state+1, string.char(maxBright, maxBright, maxBright))
     end
     ws2812.write(bu)

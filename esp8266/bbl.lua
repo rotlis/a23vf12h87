@@ -1,20 +1,19 @@
 local strip = require("strip")
 local upgrader = require("upgrader")
 local patterns = require("patterns")
+local mqttClient = require("mqtt_client")
 local udpconnection
 
 local currentStatusLifeExpectancy = 0
 local defaultStatusLifeExpectancy = 60 -- seconds
 pixels = 8
 
-local function init_udp()
-    udpconnection = net.createConnection(net.UDP)
-    udpconnection:on("receive", processUdpMessage)
-    udpconnection:connect(9001, "255.255.255.255")
-end
+EspId = string.gsub(wifi.sta.getmac(), ':', '');
+print('EspId: ', EspId);
+MqttBrokerIp = "192.168.2.32"
 
-function processUdpMessage(udpconnection, message)
-    print("UDP in: " .. message)
+function processMqttMessage(client, topic, message)
+    print("MQTT topic:" .. topic .. ", message:" .. message)
 
     local isJsonMessage, jsonMsg = pcall(cjson.decode, message)
     if isJsonMessage then
@@ -27,31 +26,20 @@ function processUdpMessage(udpconnection, message)
             strip.setPattern(jsonMsg.pattern)
             currentStatusLifeExpectancy = defaultStatusLifeExpectancy
         elseif command == 'getPatterns' then
-            udpconnection:send(cjson.encode(patterns.getAll()))
+            mqttClient:send(EspId..'/patterns', cjson.encode(patterns.getAll()))
         else
             print("Unknown command: " .. command);
         end
     else
-        print("Unable to convert UDP message to JSON: " .. message);
+        print("Unable to convert MQTT message to JSON: " .. message);
     end
 end
-
-function beaconcycle()
-    local msgText = EspId .. ":{'v':'0.1alpha'}"
-    print(msgText)
-    udpconnection:send(msgText)
-end
-
-EspId = string.gsub(wifi.sta.getmac(), ':', '');
-print('EspId: ', EspId);
-
-strip.start(pixels)
 
 --
 tmr.alarm(3, 1000, 1, function()
     currentStatusLifeExpectancy = currentStatusLifeExpectancy - 1
     if currentStatusLifeExpectancy < 0 then
-        if state==10 then
+        if state == 10 then
             print("state timeout elapsed")
             strip.setState(6)
         end
@@ -71,13 +59,10 @@ wifi.sta.eventMonReg(wifi.STA_CONNECTING, function() print("wifi.STA_CONNECTING"
 wifi.sta.eventMonReg(wifi.STA_WRONGPWD, function() print("wifi.STA_WRONGPWD") strip.setState(3) end)
 wifi.sta.eventMonReg(wifi.STA_APNOTFOUND, function() print("wifi.STA_APNOTFOUND") strip.setState(4) end)
 wifi.sta.eventMonReg(wifi.STA_FAIL, function() print("wifi.STA_FAIL") strip.setState(5) end)
-wifi.sta.eventMonReg(wifi.STA_GOTIP, function()
-    print("wifi.STA_GOTIP")
-    strip.setState(6)
-    init_udp()
-    beaconcycle()
-    tmr.alarm(2, 5000, 1, beaconcycle)
-end)
+wifi.sta.eventMonReg(wifi.STA_GOTIP, function() print("wifi.STA_GOTIP") strip.setState(6) end)
 
 wifi.sta.eventMonStart()
 
+
+mqttClient.init(MqttBrokerIp, processMqttMessage)
+strip.start(pixels)
