@@ -51,6 +51,6 @@ Use https://nodemcu-build.com/ ot build it yourself with Docker image
 
 #### Flash the image to the device
  
-    python esptool.py -p /dev/tty.<YOUR_SERIAL_DEVICE_ID> write_flash  --flash_mode dio -fs 32m \
-    0x00000 _bbl_nodemcu-master-12-modules-2016-08-27-08-59-06-integer.bin \
+    python esptool.py -p /dev/tty.wchusbserial1410 write_flash  --flash_mode dio -fs 32m \
+    0x00000 _bbl_mqtt-2017-03-28-10-32-31-integer.bin \
     0x3fc000 esp_init_data_default.bin
