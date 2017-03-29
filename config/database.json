@@ -1,6 +1,6 @@
 //TODO move user, password and db name somewhere else
 {
-  "prod": {
+  "local": {
     "host": "mysql",
     "driver": "mysql",
     "user": "root",
@@ -9,6 +9,7 @@
     "multipleStatements": true
   },
 
+  "defaultEnv": "local",
   "sql-file" : true,
   "other": "mysql://root:root@mysql:3306/buildlights"
 }
