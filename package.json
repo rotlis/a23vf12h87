@@ -17,10 +17,12 @@
   },
   "homepage": "https://github.com/rotlis/a23vf12h87#readme",
   "dependencies": {
-    "json-db-node-red": "^0.5.3",
     "mqtt": "^2.5.0",
-    "node-red-contrib-file-function": "^1.1.2",
+    "json-db-node-red": "^0.5.3",
+    "db-migrate-mysql": "^1.1.10",
+    "db-migrate": "^0.10.0-beta.20",
+    "node-red-node-mysql": "0.0.15",
     "node-red-contrib-splitter": "0.0.16",
-    "node-red-node-mysql": "0.0.15"
+    "node-red-contrib-file-function": "^1.1.2"
   }
 }
