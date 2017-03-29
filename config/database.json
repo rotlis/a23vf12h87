@@ -1,4 +1,3 @@
-//TODO move user, password and db name somewhere else
 {
   "local": {
     "host": "mysql",
