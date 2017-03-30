@@ -2,7 +2,7 @@ CREATE TABLE CiServerTypes (
   id int(11) NOT NULL AUTO_INCREMENT,
   serverType VARCHAR(20),
   PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE CiServers (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -12,7 +12,7 @@ CREATE TABLE CiServers (
   cctrayUrl VARCHAR(20) NOT NULL,
   PRIMARY KEY (id, cctrayUrl),
   FOREIGN KEY (serverTypeId) REFERENCES CiServerTypes(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE PipeLines (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -21,13 +21,13 @@ CREATE TABLE PipeLines (
   status VARCHAR(20) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (serverId) REFERENCES CiServers(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE Patterns (
   id int(11) NOT NULL AUTO_INCREMENT,
   pattern VARCHAR(20) NOT NULL,
   PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE Devices (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -42,4 +42,4 @@ CREATE TABLE Devices (
   PRIMARY KEY (id),
   FOREIGN KEY (patternId) REFERENCES Patterns(id),
   FOREIGN KEY (pipelineId) REFERENCES PipeLines(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
