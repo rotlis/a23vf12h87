@@ -19,6 +19,7 @@ CREATE TABLE PipeLines (
   serverId int(11) NOT NULL,
   pipeline VARCHAR(20) NOT NULL,
   status VARCHAR(20) NOT NULL,
+  lastUpdateAt DATE NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (serverId) REFERENCES CiServers(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

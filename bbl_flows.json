@@ -1,13 +1,28 @@
 [
     {
+        "id": "94ee4800.b63ff8",
+        "type": "tab",
+        "label": "CI Server Types"
+    },
+    {
+        "id": "4cc0e4ce.67e46c",
+        "type": "tab",
+        "label": "Patterns"
+    },
+    {
+        "id": "7eb46653.6ccb18",
+        "type": "tab",
+        "label": "Sever Registry"
+    },
+    {
+        "id": "ffd18aea.469058",
+        "type": "tab",
+        "label": "Pipeline Registry"
+    },
+    {
         "id": "152d639d.7d86fc",
         "type": "tab",
         "label": "Device Registry"
-    },
-    {
-        "id": "20c1368d.5c6a8a",
-        "type": "tab",
-        "label": "Server Registry"
     },
     {
         "id": "afcdb9fe.f99d18",
@@ -23,11 +38,6 @@
         "id": "5914c4a1.24372c",
         "type": "tab",
         "label": "Firmware"
-    },
-    {
-        "id": "94ee4800.b63ff8",
-        "type": "tab",
-        "label": "MySql (WIP)"
     },
     {
         "id": "423e0637.550f08",
@@ -70,14 +80,6 @@
         "key": "./certificates/privatekey.pem",
         "ca": "",
         "verifyservercert": false
-    },
-    {
-        "id": "9fd93117.6077",
-        "type": "json-db-collection",
-        "z": "20c1368d.5c6a8a",
-        "name": "Servers",
-        "collection": "servers",
-        "save": true
     },
     {
         "id": "e2692e86.5cfdf",
@@ -1144,194 +1146,6 @@
         ]
     },
     {
-        "id": "b6fd98dc.ad1588",
-        "type": "DataIn",
-        "z": "20c1368d.5c6a8a",
-        "collection": "9fd93117.6077",
-        "name": "save server",
-        "update": false,
-        "path": "/",
-        "x": 690,
-        "y": 159,
-        "wires": []
-    },
-    {
-        "id": "5d0cd2cd.1652cc",
-        "type": "http in",
-        "z": "20c1368d.5c6a8a",
-        "name": "Register server",
-        "url": "/servers",
-        "method": "post",
-        "swaggerDoc": "",
-        "x": 101,
-        "y": 159,
-        "wires": [
-            [
-                "90ccc31.9842a4",
-                "a786df46.61544"
-            ]
-        ]
-    },
-    {
-        "id": "90ccc31.9842a4",
-        "type": "http response",
-        "z": "20c1368d.5c6a8a",
-        "name": "Success Response",
-        "x": 429,
-        "y": 87,
-        "wires": []
-    },
-    {
-        "id": "a786df46.61544",
-        "type": "file function",
-        "z": "20c1368d.5c6a8a",
-        "name": "Prepare server info to save",
-        "filename": "node/static/js/serverregistry/serverInfoToInsert.js",
-        "reloadfile": true,
-        "outputs": 1,
-        "x": 400.5,
-        "y": 159,
-        "wires": [
-            [
-                "b6fd98dc.ad1588"
-            ]
-        ]
-    },
-    {
-        "id": "199ada26.7e73c6",
-        "type": "http in",
-        "z": "20c1368d.5c6a8a",
-        "name": "Get all servers",
-        "url": "/servers",
-        "method": "get",
-        "swaggerDoc": "",
-        "x": 91,
-        "y": 280,
-        "wires": [
-            [
-                "c0cb9664.8ab738"
-            ]
-        ]
-    },
-    {
-        "id": "c0cb9664.8ab738",
-        "type": "DataOut",
-        "z": "20c1368d.5c6a8a",
-        "collection": "9fd93117.6077",
-        "name": "load servers",
-        "path": "/",
-        "error": false,
-        "x": 310,
-        "y": 280,
-        "wires": [
-            [
-                "46b3ea96.fe7fe4"
-            ]
-        ]
-    },
-    {
-        "id": "16cc21de.db820e",
-        "type": "http response",
-        "z": "20c1368d.5c6a8a",
-        "name": "",
-        "x": 710,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "6b5815a4.e7cfac",
-        "type": "DataIn",
-        "z": "20c1368d.5c6a8a",
-        "collection": "9fd93117.6077",
-        "name": "save DB",
-        "update": false,
-        "path": "/",
-        "x": 699,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "d77ad342.4ad5d",
-        "type": "inject",
-        "z": "20c1368d.5c6a8a",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "x": 105,
-        "y": 400,
-        "wires": [
-            [
-                "97b677ac.26e2a8"
-            ]
-        ]
-    },
-    {
-        "id": "61bb6566.06ed4c",
-        "type": "comment",
-        "z": "20c1368d.5c6a8a",
-        "name": "REST GET all servers",
-        "info": "",
-        "x": 107,
-        "y": 235,
-        "wires": []
-    },
-    {
-        "id": "14a6a6fe.f14049",
-        "type": "comment",
-        "z": "20c1368d.5c6a8a",
-        "name": "Register server",
-        "info": "",
-        "x": 85,
-        "y": 87,
-        "wires": []
-    },
-    {
-        "id": "d7335c41.26bfe",
-        "type": "comment",
-        "z": "20c1368d.5c6a8a",
-        "name": "Clear DB",
-        "info": "",
-        "x": 68,
-        "y": 354,
-        "wires": []
-    },
-    {
-        "id": "97b677ac.26e2a8",
-        "type": "file function",
-        "z": "20c1368d.5c6a8a",
-        "name": "empty payload",
-        "filename": "node/static/js/common/emptyPayload.js",
-        "reloadfile": true,
-        "outputs": 1,
-        "x": 399.5,
-        "y": 400,
-        "wires": [
-            [
-                "6b5815a4.e7cfac"
-            ]
-        ]
-    },
-    {
-        "id": "46b3ea96.fe7fe4",
-        "type": "file function",
-        "z": "20c1368d.5c6a8a",
-        "name": "HTTP headers",
-        "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
-        "reloadfile": true,
-        "outputs": 1,
-        "x": 520.5,
-        "y": 280,
-        "wires": [
-            [
-                "16cc21de.db820e"
-            ]
-        ]
-    },
-    {
         "id": "cb01cace.512988",
         "type": "file function",
         "z": "152d639d.7d86fc",
@@ -1541,47 +1355,447 @@
         ]
     },
     {
-        "id": "1ad59861.dd2c98",
-        "type": "debug",
+        "id": "310d2b87.4634d4",
+        "type": "http response",
         "z": "94ee4800.b63ff8",
         "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 635,
-        "y": 391,
+        "x": 891,
+        "y": 119,
         "wires": []
     },
     {
-        "id": "206b6a0.a092596",
-        "type": "mysql",
+        "id": "c034739f.ae6db",
+        "type": "file function",
         "z": "94ee4800.b63ff8",
-        "mydb": "6ab7cac6.de42f4",
-        "name": "",
-        "x": 402,
-        "y": 250,
+        "name": "HTTP headers",
+        "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 721,
+        "y": 119,
         "wires": [
             [
-                "1ad59861.dd2c98"
+                "310d2b87.4634d4"
             ]
         ]
     },
     {
-        "id": "2c48a57e.aa218a",
-        "type": "inject",
+        "id": "eae6052.e707cf8",
+        "type": "http in",
         "z": "94ee4800.b63ff8",
-        "name": "",
-        "topic": "Select * from CUSTOMERS;",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "x": 143,
-        "y": 141,
+        "name": "CI Server Types",
+        "url": "/ciServerTypes",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 122,
+        "y": 119,
         "wires": [
             [
-                "206b6a0.a092596"
+                "5f3cfd31.ea4494"
+            ]
+        ]
+    },
+    {
+        "id": "27f23d86.6ee8a2",
+        "type": "comment",
+        "z": "94ee4800.b63ff8",
+        "name": "REST GET CI Server Types",
+        "info": "",
+        "x": 132,
+        "y": 62,
+        "wires": []
+    },
+    {
+        "id": "70f5a9ec.084228",
+        "type": "mysql",
+        "z": "94ee4800.b63ff8",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 551,
+        "y": 119,
+        "wires": [
+            [
+                "c034739f.ae6db"
+            ]
+        ]
+    },
+    {
+        "id": "5f3cfd31.ea4494",
+        "type": "function",
+        "z": "94ee4800.b63ff8",
+        "name": "Retrieve CI Server Types",
+        "func": "msg.topic = \"Select * from CiServerTypes;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 349.5,
+        "y": 119,
+        "wires": [
+            [
+                "70f5a9ec.084228"
+            ]
+        ]
+    },
+    {
+        "id": "454a9b4d.7e6a14",
+        "type": "http in",
+        "z": "7eb46653.6ccb18",
+        "name": "Register server",
+        "url": "/servers",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 117,
+        "y": 139,
+        "wires": [
+            [
+                "e32a2a83.8659f8",
+                "c6a6ba28.dce488"
+            ]
+        ]
+    },
+    {
+        "id": "e32a2a83.8659f8",
+        "type": "http response",
+        "z": "7eb46653.6ccb18",
+        "name": "Success Response",
+        "x": 440,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "c6a6ba28.dce488",
+        "type": "file function",
+        "z": "7eb46653.6ccb18",
+        "name": "Prepare server info to save",
+        "filename": "node/static/js/serverregistry/serverInfoToInsert.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 438.5,
+        "y": 139,
+        "wires": [
+            [
+                "fa5c4ec1.11d5c"
+            ]
+        ]
+    },
+    {
+        "id": "1080a49c.1c6d3b",
+        "type": "http in",
+        "z": "7eb46653.6ccb18",
+        "name": "Get all servers",
+        "url": "/servers",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 107,
+        "y": 260,
+        "wires": [
+            [
+                "a8a610c8.b0b64"
+            ]
+        ]
+    },
+    {
+        "id": "77ad11f8.1738c",
+        "type": "http response",
+        "z": "7eb46653.6ccb18",
+        "name": "",
+        "x": 910,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "7909d3bd.7fda1c",
+        "type": "comment",
+        "z": "7eb46653.6ccb18",
+        "name": "REST GET all servers",
+        "info": "",
+        "x": 123,
+        "y": 215,
+        "wires": []
+    },
+    {
+        "id": "f1c8ec9.1b1511",
+        "type": "comment",
+        "z": "7eb46653.6ccb18",
+        "name": "Register server",
+        "info": "",
+        "x": 101,
+        "y": 67,
+        "wires": []
+    },
+    {
+        "id": "86f5978b.40f208",
+        "type": "file function",
+        "z": "7eb46653.6ccb18",
+        "name": "HTTP headers",
+        "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 719.5,
+        "y": 260,
+        "wires": [
+            [
+                "77ad11f8.1738c"
+            ]
+        ]
+    },
+    {
+        "id": "fa5c4ec1.11d5c",
+        "type": "mysql",
+        "z": "7eb46653.6ccb18",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 729,
+        "y": 139,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a8a610c8.b0b64",
+        "type": "function",
+        "z": "7eb46653.6ccb18",
+        "name": "Retrieve CI servers",
+        "func": "msg.topic = \"Select * from CiServers;\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 331.5,
+        "y": 260,
+        "wires": [
+            [
+                "c6439cdd.8e1ff"
+            ]
+        ]
+    },
+    {
+        "id": "c6439cdd.8e1ff",
+        "type": "mysql",
+        "z": "7eb46653.6ccb18",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 530,
+        "y": 260,
+        "wires": [
+            [
+                "86f5978b.40f208"
+            ]
+        ]
+    },
+    {
+        "id": "f272c64e.60f598",
+        "type": "file function",
+        "z": "ffd18aea.469058",
+        "name": "Prepare pipelines info to save",
+        "filename": "node/static/js/pipelineregistry/pipelinesToInsert.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 490.5,
+        "y": 140,
+        "wires": [
+            [
+                "19b38adb.132715"
+            ]
+        ]
+    },
+    {
+        "id": "ca3e486c.0bf108",
+        "type": "http in",
+        "z": "ffd18aea.469058",
+        "name": "Get all pipelines",
+        "url": "/pipelines",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 281,
+        "wires": [
+            [
+                "ee63e006.b9c7b"
+            ]
+        ]
+    },
+    {
+        "id": "bf278fc1.b992a",
+        "type": "http response",
+        "z": "ffd18aea.469058",
+        "name": "",
+        "x": 910,
+        "y": 281,
+        "wires": []
+    },
+    {
+        "id": "563ec839.1c77e8",
+        "type": "comment",
+        "z": "ffd18aea.469058",
+        "name": "REST GET all pipelines",
+        "info": "",
+        "x": 123,
+        "y": 236,
+        "wires": []
+    },
+    {
+        "id": "c8ed785f.d63668",
+        "type": "comment",
+        "z": "ffd18aea.469058",
+        "name": "Register pipeline",
+        "info": "",
+        "x": 101,
+        "y": 88,
+        "wires": []
+    },
+    {
+        "id": "30c1a379.dba8cc",
+        "type": "file function",
+        "z": "ffd18aea.469058",
+        "name": "HTTP headers",
+        "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 719.5,
+        "y": 281,
+        "wires": [
+            [
+                "bf278fc1.b992a"
+            ]
+        ]
+    },
+    {
+        "id": "19b38adb.132715",
+        "type": "mysql",
+        "z": "ffd18aea.469058",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 729,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ee63e006.b9c7b",
+        "type": "function",
+        "z": "ffd18aea.469058",
+        "name": "Retrieve Pipelines",
+        "func": "msg.topic = \"Select id, pipeline from PipeLines where serverId = '';\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 340.5,
+        "y": 281,
+        "wires": [
+            [
+                "bc7b67d9.6517f8"
+            ]
+        ]
+    },
+    {
+        "id": "bc7b67d9.6517f8",
+        "type": "mysql",
+        "z": "ffd18aea.469058",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 530,
+        "y": 281,
+        "wires": [
+            [
+                "30c1a379.dba8cc"
+            ]
+        ]
+    },
+    {
+        "id": "2c30b83a.b6b4f8",
+        "type": "inject",
+        "z": "ffd18aea.469058",
+        "name": "Trigger pipelines insertion",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "600",
+        "crontab": "",
+        "once": true,
+        "x": 186.5,
+        "y": 140,
+        "wires": [
+            [
+                "f272c64e.60f598"
+            ]
+        ]
+    },
+    {
+        "id": "19ec7383.5756dc",
+        "type": "http response",
+        "z": "4cc0e4ce.67e46c",
+        "name": "",
+        "x": 890,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "4c1e7b02.910214",
+        "type": "file function",
+        "z": "4cc0e4ce.67e46c",
+        "name": "HTTP headers",
+        "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 700,
+        "y": 120,
+        "wires": [
+            [
+                "19ec7383.5756dc"
+            ]
+        ]
+    },
+    {
+        "id": "7274e27c.a2861c",
+        "type": "http in",
+        "z": "4cc0e4ce.67e46c",
+        "name": "Patterns",
+        "url": "/patterns",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 101,
+        "y": 120,
+        "wires": [
+            [
+                "dbfceba5.d79df8"
+            ]
+        ]
+    },
+    {
+        "id": "b5dd32a4.a18ce",
+        "type": "comment",
+        "z": "4cc0e4ce.67e46c",
+        "name": "REST GET Patterns",
+        "info": "",
+        "x": 111,
+        "y": 63,
+        "wires": []
+    },
+    {
+        "id": "e29bcec7.1501a",
+        "type": "mysql",
+        "z": "4cc0e4ce.67e46c",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 510,
+        "y": 120,
+        "wires": [
+            [
+                "4c1e7b02.910214"
+            ]
+        ]
+    },
+    {
+        "id": "dbfceba5.d79df8",
+        "type": "function",
+        "z": "4cc0e4ce.67e46c",
+        "name": "Retrieve Patterns",
+        "func": "msg.topic = \"Select * from Patterns;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 310.5,
+        "y": 120,
+        "wires": [
+            [
+                "e29bcec7.1501a"
             ]
         ]
     }
