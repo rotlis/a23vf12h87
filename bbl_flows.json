@@ -109,25 +109,6 @@
         "tz": ""
     },
     {
-        "id": "859778e.645e188",
-        "type": "udp in",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "iface": "",
-        "port": "9001",
-        "ipv": "udp4",
-        "multicast": "false",
-        "group": "",
-        "datatype": "utf8",
-        "x": 101,
-        "y": 100,
-        "wires": [
-            [
-                "f1b8c233.7c40f"
-            ]
-        ]
-    },
-    {
         "id": "49ca179d.b33b78",
         "type": "function",
         "z": "152d639d.7d86fc",
@@ -395,7 +376,14 @@
                 "t": "set",
                 "p": "macInfo",
                 "pt": "msg",
-                "to": "payload",
+                "to": "payload.mac",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "deviceStatus",
+                "pt": "msg",
+                "to": "payload.status",
                 "tot": "msg"
             },
             {
@@ -411,8 +399,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 421,
-        "y": 100,
+        "x": 447,
+        "y": 49,
         "wires": [
             [
                 "acd1a4eb.a36a28"
@@ -1343,14 +1331,15 @@
         "type": "mqtt in",
         "z": "152d639d.7d86fc",
         "name": "",
-        "topic": "/bbl/deviceInfo",
+        "topic": "+/status",
         "qos": "2",
         "broker": "e2692e86.5cfdf",
-        "x": 123,
-        "y": 141,
+        "x": 113,
+        "y": 97,
         "wires": [
             [
-                "f1b8c233.7c40f"
+                "f1b8c233.7c40f",
+                "4a6d0413.3a8d1c"
             ]
         ]
     },
@@ -1798,5 +1787,62 @@
                 "e29bcec7.1501a"
             ]
         ]
+    },
+    {
+        "id": "4a6d0413.3a8d1c",
+        "type": "debug",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 399,
+        "y": 107,
+        "wires": []
+    },
+    {
+        "id": "e450fcaa.62ada",
+        "type": "inject",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "x": 127,
+        "y": 938,
+        "wires": [
+            [
+                "5f7623fa.3176fc"
+            ]
+        ]
+    },
+    {
+        "id": "3b5a355a.14d44a",
+        "type": "comment",
+        "z": "152d639d.7d86fc",
+        "name": "Publish server info via UDP broadcast",
+        "info": "",
+        "x": 168,
+        "y": 877,
+        "wires": []
+    },
+    {
+        "id": "5f7623fa.3176fc",
+        "type": "udp out",
+        "z": "152d639d.7d86fc",
+        "name": "",
+        "addr": "255.255.255.255",
+        "iface": "",
+        "port": "9001",
+        "ipv": "udp4",
+        "outport": "",
+        "base64": false,
+        "multicast": "broad",
+        "x": 372,
+        "y": 937,
+        "wires": []
     }
 ]

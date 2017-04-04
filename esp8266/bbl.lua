@@ -2,7 +2,6 @@ local strip = require("strip")
 local upgrader = require("upgrader")
 local patterns = require("patterns")
 local mqttClient = require("mqtt_client")
-local udpconnection
 
 local currentStatusLifeExpectancy = 0
 local defaultStatusLifeExpectancy = 60 -- seconds
@@ -10,7 +9,22 @@ pixels = 8
 
 EspId = string.gsub(wifi.sta.getmac(), ':', '');
 print('EspId: ', EspId);
-MqttBrokerIp = "192.168.2.32"
+local MqttBrokerIp
+
+function init_udp()
+    udpconnection = net.createUDPSocket()
+    udpconnection:on("receive", processUdpMessage)
+    udpconnection:listen(9001)
+end
+
+function processUdpMessage(s, data, port, ip)
+    print(string.format("received '%s' from %s:%d", data, ip, port))
+    if MqttBrokerIp~=ip then
+        MqttBrokerIp = ip
+        mqttClient.init(MqttBrokerIp, processMqttMessage)
+    end
+end
+
 
 function processMqttMessage(client, topic, message)
     print("MQTT topic:" .. topic .. ", message:" .. message)
@@ -59,10 +73,10 @@ wifi.sta.eventMonReg(wifi.STA_CONNECTING, function() print("wifi.STA_CONNECTING"
 wifi.sta.eventMonReg(wifi.STA_WRONGPWD, function() print("wifi.STA_WRONGPWD") strip.setState(3) end)
 wifi.sta.eventMonReg(wifi.STA_APNOTFOUND, function() print("wifi.STA_APNOTFOUND") strip.setState(4) end)
 wifi.sta.eventMonReg(wifi.STA_FAIL, function() print("wifi.STA_FAIL") strip.setState(5) end)
-wifi.sta.eventMonReg(wifi.STA_GOTIP, function() print("wifi.STA_GOTIP") strip.setState(6) end)
+wifi.sta.eventMonReg(wifi.STA_GOTIP, function() print("wifi.STA_GOTIP")
+    strip.setState(6)
+    init_udp()
+end)
 
 wifi.sta.eventMonStart()
-
-
-mqttClient.init(MqttBrokerIp, processMqttMessage)
 strip.start(pixels)
