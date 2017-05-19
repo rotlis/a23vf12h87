@@ -1,12 +1,20 @@
-msg.topic="delete from PipeLines where serverId="+msg.payload.serverId+" AND pipeline='"+msg.payload.pipeline+"'; " +
+var payload = msg.payload;
+msg.topic = "delete from PipeLines" +
+    " where serverId=" + payload.serverId +
+    " AND pipeline='" + payload.pipeline + "';" +
     "insert into PipeLines " +
-    "(serverId,pipeline,status,lastBuildStatus,lastUpdateAt) " +
+    "(" +
+    "serverId," +
+    "pipeline," +
+    "status," +
+    "lastBuildStatus," +
+    "lastUpdateAt" +
+    ") " +
     "values " +
-    "("+
-    msg.payload.serverId+"," +
-    "'"+msg.payload.pipeline+"'," +
-    "'"+msg.payload.status+"'," +
-    "'"+msg.payload.lastBuildStatus+"'," +
-    "now()"+
+    "(" +
+    payload.serverId + "," +
+    "'" + payload.pipeline + "'," +
+    "'" + payload.status + "'," +
+    "'" + payload.lastBuildStatus + "'," +
+    "now()" +
     ")";
-

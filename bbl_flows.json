@@ -1270,30 +1270,17 @@
         "id": "2f1d14ba.37eefc",
         "type": "mqtt in",
         "z": "d0a3b329.d2df1",
-        "name": "",
+        "name": "Register device",
         "topic": "+/status",
         "qos": "2",
         "broker": "e2692e86.5cfdf",
-        "x": 110,
-        "y": 76,
+        "x": 121,
+        "y": 100,
         "wires": [
             [
-                "7c747b38.e33174",
                 "718e86c4.c7fa38"
             ]
         ]
-    },
-    {
-        "id": "7c747b38.e33174",
-        "type": "debug",
-        "z": "d0a3b329.d2df1",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 292,
-        "y": 128,
-        "wires": []
     },
     {
         "id": "9cebbbe3.64c348",
@@ -1301,8 +1288,8 @@
         "z": "d0a3b329.d2df1",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 616,
-        "y": 78,
+        "x": 647,
+        "y": 100,
         "wires": [
             [
                 "be3a0f52.fb96d"
@@ -1313,12 +1300,12 @@
         "id": "718e86c4.c7fa38",
         "type": "file function",
         "z": "d0a3b329.d2df1",
-        "name": "Prepare server info to save",
+        "name": "Prepare device info to save",
         "filename": "node/static/js/deviceregistry/deviceInfoToInsert.js",
         "reloadfile": true,
         "outputs": 1,
-        "x": 381,
-        "y": 79,
+        "x": 400,
+        "y": 100,
         "wires": [
             [
                 "9cebbbe3.64c348"
@@ -1332,8 +1319,8 @@
         "name": "/ws/test out",
         "server": "f0504b7f.120998",
         "client": "",
-        "x": 821,
-        "y": 81,
+        "x": 849,
+        "y": 100,
         "wires": []
     },
     {
@@ -1344,8 +1331,8 @@
         "url": "/devices",
         "method": "post",
         "swaggerDoc": "",
-        "x": 135,
-        "y": 268,
+        "x": 131,
+        "y": 300,
         "wires": [
             [
                 "5ad3cd9e.e66b24",
@@ -1357,12 +1344,12 @@
         "id": "5ad3cd9e.e66b24",
         "type": "file function",
         "z": "d0a3b329.d2df1",
-        "name": "Prepare server info to save",
+        "name": "Prepare device info to save",
         "filename": "node/static/js/deviceregistry/deviceInfoToInsert.js",
         "reloadfile": true,
         "outputs": 1,
-        "x": 421,
-        "y": 263,
+        "x": 479,
+        "y": 300,
         "wires": [
             [
                 "449636b6.1f4168"
@@ -1375,8 +1362,8 @@
         "z": "d0a3b329.d2df1",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 642,
-        "y": 261,
+        "x": 751,
+        "y": 300,
         "wires": [
             []
         ]
@@ -1386,8 +1373,8 @@
         "type": "http response",
         "z": "d0a3b329.d2df1",
         "name": "Success Response",
-        "x": 380,
-        "y": 321,
+        "x": 483,
+        "y": 240,
         "wires": []
     },
     {
@@ -1395,7 +1382,7 @@
         "type": "http response",
         "z": "d0a3b329.d2df1",
         "name": "",
-        "x": 890,
+        "x": 889,
         "y": 420,
         "wires": []
     },
@@ -1407,7 +1394,7 @@
         "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
         "reloadfile": true,
         "outputs": 1,
-        "x": 720,
+        "x": 704,
         "y": 420,
         "wires": [
             [
@@ -1437,7 +1424,7 @@
         "z": "d0a3b329.d2df1",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 550,
+        "x": 511,
         "y": 420,
         "wires": [
             [
@@ -1453,7 +1440,7 @@
         "func": "msg.topic = \"Select * from Devices;\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 328.5,
+        "x": 310.5,
         "y": 420,
         "wires": [
             [
@@ -1472,8 +1459,8 @@
         "repeat": "",
         "crontab": "",
         "once": false,
-        "x": 145,
-        "y": 529,
+        "x": 151,
+        "y": 540,
         "wires": [
             [
                 "74cd7628.f259c8"
@@ -1486,10 +1473,40 @@
         "z": "d0a3b329.d2df1",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 373,
-        "y": 527,
+        "x": 511,
+        "y": 540,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "6c154ec8.2f287",
+        "type": "comment",
+        "z": "d0a3b329.d2df1",
+        "name": "REST POST Update Device Info",
+        "info": "",
+        "x": 151,
+        "y": 241,
+        "wires": []
+    },
+    {
+        "id": "874d6408.78db58",
+        "type": "comment",
+        "z": "d0a3b329.d2df1",
+        "name": "REST GET Devices",
+        "info": "",
+        "x": 110,
+        "y": 376,
+        "wires": []
+    },
+    {
+        "id": "c16769df.44a8b8",
+        "type": "comment",
+        "z": "d0a3b329.d2df1",
+        "name": "Register device",
+        "info": "",
+        "x": 101,
+        "y": 39,
+        "wires": []
     }
 ]

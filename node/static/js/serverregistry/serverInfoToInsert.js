@@ -1,12 +1,17 @@
-msg.topic="delete from CiServers where cctrayUrl='"+msg.payload.cctrayUrl+"'; " +
+var payload = msg.payload;
+msg.topic = "delete from CiServers" +
+    " where cctrayUrl='" + payload.cctrayUrl + "';" +
     "insert into CiServers " +
-    "(serverTypeId,username,password,cctrayUrl) " +
+    "(" +
+    "serverTypeId," +
+    "username," +
+    "password," +
+    "cctrayUrl" +
+    ") " +
     "values " +
-    "("+
-    msg.payload.serverTypeId+"," +
-    "'"+msg.payload.username+"'," +
-    "'"+msg.payload.password+"'," +
-    "'"+msg.payload.cctrayUrl+"'"+
+    "(" +
+    payload.serverTypeId + "," +
+    "'" + payload.username + "'," +
+    "'" + payload.password + "'," +
+    "'" + payload.cctrayUrl + "'" +
     ")";
-
-

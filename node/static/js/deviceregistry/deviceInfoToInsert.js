@@ -1,14 +1,25 @@
-msg.topic="delete from Devices where mac='"+msg.payload.mac+"'; " +
+var payload = msg.payload;
+msg.topic = "delete from Devices" +
+    " where mac='" + payload.mac + "';" +
     "insert into Devices " +
-    "(patternId,pipelineId,mac,brightness,firmware,lastMessage,lastSeen,lastUpdateAt) " +
+    "(" +
+    "patternId," +
+    "pipelineId," +
+    "mac," +
+    "brightness," +
+    "firmware," +
+    "lastMessage," +
+    "lastSeen," +
+    "lastUpdateAt" +
+    ") " +
     "values " +
-    "("+
-    msg.payload.patternId+"," +
-    msg.payload.pipelineId+"," +
-    "'"+msg.payload.mac+"'," +
-    "'"+msg.payload.brightness+"'," +
-    "'"+msg.payload.firmware+"'," +
-    "'"+msg.payload.lastMessage+"'," +
+    "(" +
+    payload.patternId + "," +
+    payload.pipelineId + "," +
+    "'" + payload.mac + "'," +
+    "'" + payload.brightness + "'," +
+    "'" + payload.firmware + "'," +
+    "'" + payload.lastMessage + "'," +
     "now()," +
     "now()" //TODO firmware update time
-    +")";
+    + ")";
