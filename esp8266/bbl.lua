@@ -9,7 +9,8 @@ pixels = 8
 
 EspId = string.gsub(wifi.sta.getmac(), ':', '');
 print('EspId: ', EspId);
-local MqttBrokerIp
+-- TODO: make it dynamic
+local MqttBrokerIp = "192.168.2.203"
 
 function init_udp()
     udpconnection = net.createUDPSocket()
@@ -37,10 +38,13 @@ function processMqttMessage(client, topic, message)
         elseif command == 'buildStatus' then
             strip.setState(10)
             strip.setBuildStatus(jsonMsg.buildStatus)
-            strip.setPattern(jsonMsg.pattern)
             currentStatusLifeExpectancy = defaultStatusLifeExpectancy
         elseif command == 'getPatterns' then
             mqttClient:send(EspId..'/patterns', cjson.encode(patterns.getAll()))
+        elseif command == 'configure' then
+            mqttClient:subscribe('pipeline/'..jsonMsg.pipelineId)
+            strip.setPattern(jsonMsg.patternId)
+            strip.setBrightness(jsonMsg.brightness)
         else
             print("Unknown command: " .. command);
         end
@@ -75,7 +79,8 @@ wifi.sta.eventMonReg(wifi.STA_APNOTFOUND, function() print("wifi.STA_APNOTFOUND"
 wifi.sta.eventMonReg(wifi.STA_FAIL, function() print("wifi.STA_FAIL") strip.setState(5) end)
 wifi.sta.eventMonReg(wifi.STA_GOTIP, function() print("wifi.STA_GOTIP")
     strip.setState(6)
-    init_udp()
+--    init_udp() TODO enable this line and remove the next
+    mqttClient.init(MqttBrokerIp, processMqttMessage)
 end)
 
 wifi.sta.eventMonStart()

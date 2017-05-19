@@ -10,6 +10,7 @@ RETAIN = 1
 
 local mqttClientObj
 local brokerIp
+local currentlyMonitoredPipelineTopic
 
 function M.init(mqttBrokerIp, onMessageCallback)
     brokerIp = mqttBrokerIp
@@ -27,6 +28,21 @@ end
 function M.send(topic, message)
     mqttClientObj:publish(topic, message, QOS_2, RETAIN)
 end
+
+function M.subscribe(topic)
+    if currentlyMonitoredPipelineTopic~=nil then
+        local topicToUnsubscribe = currentlyMonitoredPipelineTopic
+        mqttClientObj:unsubscribe(topicToUnsubscribe, function(conn)
+            print("unsubscribe successfuly from "..topicToUnsubscribe)
+        end)
+    end
+
+    mqttClientObj:subscribe(topic, QOS_2, function(client)
+        currentlyMonitoredPipelineTopic =topic
+        print("Mqtt Subscribed to topic "..topic)
+    end)
+end
+
 
 function M.reconnectMqtt()
     print("Waiting for Wifi")

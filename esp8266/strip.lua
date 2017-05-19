@@ -27,7 +27,12 @@ function M.setBuildStatus(buildStatus)
 end
 
 function M.setPattern(p)
+--    TODO
+--    patterns.apply(p, )
+end
 
+function M.setBrightness(b)
+    M.maxBright = b
 end
 
 function M.onTick()
