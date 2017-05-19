@@ -51,8 +51,26 @@
 
         var nodeTemplate, deviceInfoTemplate;
 
-        var projects = [{name: "RNTD"}, {name: "Atlas"}, {name: "GoServerConfigurationPackage"}, {name: "MARCI"},
-            {name: "MobAct-Prod"}, {name: "PhotoUpload"}, {name: "OnlineCustomers"}, {name: "Dev5-Showcase"}];
+        var ciServers = [
+            {id:1, cctrayUrl:"https://go12.nbnco.net.au/go/cctray.xml"},
+            {id:2, cctrayUrl:"https://go13.nbnco.net.au/go/cctray.xml"},
+            {id:3, cctrayUrl:"https://go14.nbnco.net.au/go/cctray.xml"},
+            {id:4, cctrayUrl:"https://go20.nbnco.net.au/go/cctray.xml"}
+        ];
+
+        var projects = [{id:1, name: "RNTD"},
+            {id:2, name: "Atlas"},
+            {id:3, name: "GoServerConfigurationPackage"},
+            {id:4, name: "MARCI"},
+            {id:5, name: "MobAct-Prod"},
+            {id:6, name: "PhotoUpload"},
+            {id:7, name: "OnlineCustomers"},
+            {id:8, name: "Dev5-Showcase"}];
+
+        var patterns =[
+            {id:1, pattern:"Steady"},
+            {id:2, pattern:"Scroll"}
+        ];
 
         function testCcTray() {
             $("#test_cctray").removeClass("btn-success").removeClass("btn-danger");
@@ -85,7 +103,7 @@
             $.each(projects, function () {
                 selections.push({name: this.name, selected: (this.name == deviceInfo.pipeline)});
             });
-            var jsonData = {id: deviceId, node: deviceInfo, projects: selections};
+            var jsonData = {mac: deviceId, node: deviceInfo, ciServers:ciServers, projects: selections, patterns:patterns};
             var output = Mustache.render(nodeTemplate, jsonData);
             $("#devices-container").append(output);
             $("#"+deviceId + " select[name='pattern']").val(deviceInfo.pattern);
@@ -121,12 +139,16 @@
         function attachDeviceHandlers(mac, deviceInfo) {
             $("#" + mac + " input[name=project]").typeahead({source: projects});
             $("#" + mac + " button.device-save").click(function () {
+                var jsonData={
+                    mac: mac,
+                    brightness:$('#' + mac + ' select[name="brightness"] option:selected').val(),
+                    pipelineId:$('#' + mac + ' select[name="project"] option:selected').text(),
+                    patternId:$('#' + mac + ' select[name="pattern"] option:selected').val(),
+                    patternName:$('#' + mac + ' select[name="pattern"] option:selected').text()
+                };
+                console.debug("jsonData", jsonData);
                 $.ajax({
-                    data: {
-                        mac: mac,
-                        pipelineName: $('#' + mac + ' input[name="project"]').val(),
-                        pattern: $('#' + mac + ' select[name="pattern"]').val()
-                    },
+                    data: jsonData,
                     type: "POST",
                     url: "/devices",
                     success: function () {
