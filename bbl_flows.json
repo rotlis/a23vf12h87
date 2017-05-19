@@ -20,9 +20,9 @@
         "label": "Pipeline Registry"
     },
     {
-        "id": "152d639d.7d86fc",
+        "id": "d0a3b329.d2df1",
         "type": "tab",
-        "label": "Device Registry"
+        "label": "SQL Device Registry"
     },
     {
         "id": "afcdb9fe.f99d18",
@@ -38,21 +38,6 @@
         "id": "5914c4a1.24372c",
         "type": "tab",
         "label": "Firmware"
-    },
-    {
-        "id": "423e0637.550f08",
-        "type": "json-db-collection",
-        "z": "152d639d.7d86fc",
-        "name": "bbl",
-        "collection": "devices",
-        "save": true
-    },
-    {
-        "id": "f0504b7f.120998",
-        "type": "websocket-listener",
-        "z": "152d639d.7d86fc",
-        "path": "/ws/test",
-        "wholemsg": "false"
     },
     {
         "id": "4a2392dc.8b20fc",
@@ -107,316 +92,6 @@
         "port": "3306",
         "db": "buildlights",
         "tz": ""
-    },
-    {
-        "id": "49ca179d.b33b78",
-        "type": "function",
-        "z": "152d639d.7d86fc",
-        "name": "prepare entry",
-        "func": "\nvar isNull = function(obj) {\n\treturn (obj === null || obj === undefined || obj === \"\");\n};\n\nvar pattern = '';\nvar pipeline = '';\nvar ciServer = '';\nvar macInfo = msg.macInfo;\nvar mac = macInfo.substring(0, macInfo.indexOf(':'));\n\nvar devices = msg.devices;\nif (!isNull(devices) && !isNull(devices[mac])) {\n    if (!isNull(devices[mac].pattern)) {\n\t    pattern = devices[mac].pattern;\n    }\n    if (!isNull(devices[mac].pipeline)) {\n\t    pipeline = devices[mac].pipeline;\n    }\n    if (!isNull(devices[mac].ciServer)) {\n\t    ciServer = devices[mac].ciServer;\n    }\n}\n\nmsg.payload = {\n    'mac':mac,\n    'ip':msg.ip,\n    'port':msg.port,\n    'pattern':pattern,\n    'pipeline':pipeline,\n    'ciServer':ciServer,\n    'lastMessage':msg.payload.substring(macInfo.indexOf(':')+1),\n    'lastSeen':new Date()\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 411,
-        "y": 200,
-        "wires": [
-            [
-                "7ab9baaa.f85994",
-                "e908606f.be491"
-            ]
-        ]
-    },
-    {
-        "id": "7ab9baaa.f85994",
-        "type": "DataIn",
-        "z": "152d639d.7d86fc",
-        "collection": "423e0637.550f08",
-        "name": "save DB",
-        "update": false,
-        "path": "/",
-        "x": 759,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "37a8de08.50ac62",
-        "type": "http in",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "url": "/devices",
-        "method": "get",
-        "swaggerDoc": "",
-        "x": 111,
-        "y": 561,
-        "wires": [
-            [
-                "ec5e71f.c3a119"
-            ]
-        ]
-    },
-    {
-        "id": "ec5e71f.c3a119",
-        "type": "DataOut",
-        "z": "152d639d.7d86fc",
-        "collection": "423e0637.550f08",
-        "name": "load DB",
-        "path": "/",
-        "error": false,
-        "x": 339,
-        "y": 561,
-        "wires": [
-            [
-                "f4bcba16.d30fa8"
-            ]
-        ]
-    },
-    {
-        "id": "e2bd5972.227298",
-        "type": "http response",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "x": 769,
-        "y": 561,
-        "wires": []
-    },
-    {
-        "id": "41402557.91666c",
-        "type": "comment",
-        "z": "152d639d.7d86fc",
-        "name": "Process UDP beakon from device",
-        "info": "",
-        "x": 161,
-        "y": 44,
-        "wires": []
-    },
-    {
-        "id": "51588c2e.51e2b4",
-        "type": "comment",
-        "z": "152d639d.7d86fc",
-        "name": "REST GET all devices",
-        "info": "",
-        "x": 120,
-        "y": 501,
-        "wires": []
-    },
-    {
-        "id": "ac29613d.4d9c5",
-        "type": "comment",
-        "z": "152d639d.7d86fc",
-        "name": "Clear DB",
-        "info": "",
-        "x": 80,
-        "y": 621,
-        "wires": []
-    },
-    {
-        "id": "84466a5b.e9d998",
-        "type": "inject",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "x": 125,
-        "y": 681,
-        "wires": [
-            [
-                "cb01cace.512988"
-            ]
-        ]
-    },
-    {
-        "id": "a9a29bb0.6ddcc8",
-        "type": "DataIn",
-        "z": "152d639d.7d86fc",
-        "collection": "423e0637.550f08",
-        "name": "save DB",
-        "update": false,
-        "path": "/",
-        "x": 759,
-        "y": 681,
-        "wires": []
-    },
-    {
-        "id": "92522118.3979b",
-        "type": "comment",
-        "z": "152d639d.7d86fc",
-        "name": "Send 'tickle' UDP to all devices",
-        "info": "",
-        "x": 144,
-        "y": 739,
-        "wires": []
-    },
-    {
-        "id": "730f0796.df2b18",
-        "type": "inject",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "x": 126,
-        "y": 800,
-        "wires": [
-            [
-                "daf8e80b.348988"
-            ]
-        ]
-    },
-    {
-        "id": "daf8e80b.348988",
-        "type": "DataOut",
-        "z": "152d639d.7d86fc",
-        "collection": "423e0637.550f08",
-        "name": "load DB",
-        "path": "/devices",
-        "error": false,
-        "x": 299,
-        "y": 800,
-        "wires": [
-            [
-                "6cf16f43.7bb03"
-            ]
-        ]
-    },
-    {
-        "id": "aa60a585.b45918",
-        "type": "udp out",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "addr": "",
-        "iface": "",
-        "port": "",
-        "ipv": "udp4",
-        "outport": "",
-        "base64": false,
-        "multicast": "false",
-        "x": 679,
-        "y": 869,
-        "wires": []
-    },
-    {
-        "id": "6cf16f43.7bb03",
-        "type": "function",
-        "z": "152d639d.7d86fc",
-        "name": "iterate through all device and send them black color",
-        "func": "var messages=[];\nfor(var mac in msg.payload){\n    var dev = msg.payload[mac];\n    var tickleMessage = {\n        'ip':dev.ip, \n        'port':dev.port,\n        'payload':'{\"command\":\"buildStatus\",\"pattern\":\"'+dev.pattern+'\",\"buildStatus\":\"failed\"}'\n    };\n    console.log(tickleMessage);\n    messages.push(tickleMessage);\n}\nreturn messages;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 619,
-        "y": 800,
-        "wires": [
-            [
-                "aa60a585.b45918"
-            ]
-        ]
-    },
-    {
-        "id": "c0fc7445.7244c8",
-        "type": "change",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "devices",
-                "pt": "msg",
-                "to": "payload.devices",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 120.5,
-        "y": 200,
-        "wires": [
-            [
-                "49ca179d.b33b78"
-            ]
-        ]
-    },
-    {
-        "id": "acd1a4eb.a36a28",
-        "type": "DataOut",
-        "z": "152d639d.7d86fc",
-        "collection": "423e0637.550f08",
-        "name": "Get devices",
-        "path": "/",
-        "error": false,
-        "x": 749,
-        "y": 100,
-        "wires": [
-            [
-                "c0fc7445.7244c8"
-            ]
-        ]
-    },
-    {
-        "id": "f1b8c233.7c40f",
-        "type": "change",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "macInfo",
-                "pt": "msg",
-                "to": "payload.mac",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "deviceStatus",
-                "pt": "msg",
-                "to": "payload.status",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 447,
-        "y": 49,
-        "wires": [
-            [
-                "acd1a4eb.a36a28"
-            ]
-        ]
-    },
-    {
-        "id": "e908606f.be491",
-        "type": "websocket out",
-        "z": "152d639d.7d86fc",
-        "name": "/ws/test out",
-        "server": "f0504b7f.120998",
-        "client": "",
-        "x": 749,
-        "y": 160,
-        "wires": []
     },
     {
         "id": "36ed2188.74e47e",
@@ -1134,186 +809,6 @@
         ]
     },
     {
-        "id": "cb01cace.512988",
-        "type": "file function",
-        "z": "152d639d.7d86fc",
-        "name": "empty payload",
-        "filename": "node/static/js/common/emptyPayload.js",
-        "reloadfile": true,
-        "outputs": 1,
-        "x": 447,
-        "y": 681,
-        "wires": [
-            [
-                "a9a29bb0.6ddcc8"
-            ]
-        ]
-    },
-    {
-        "id": "f4bcba16.d30fa8",
-        "type": "file function",
-        "z": "152d639d.7d86fc",
-        "name": "HTTP headers",
-        "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
-        "reloadfile": true,
-        "outputs": 1,
-        "x": 561,
-        "y": 561,
-        "wires": [
-            [
-                "e2bd5972.227298"
-            ]
-        ]
-    },
-    {
-        "id": "3a16ad6a.d24842",
-        "type": "DataIn",
-        "z": "152d639d.7d86fc",
-        "collection": "423e0637.550f08",
-        "name": "save DB",
-        "update": false,
-        "path": "/",
-        "x": 759,
-        "y": 439,
-        "wires": []
-    },
-    {
-        "id": "55e753ce.31e44c",
-        "type": "function",
-        "z": "152d639d.7d86fc",
-        "name": "prepare entry",
-        "func": "var deviceInfoToUpdate = msg.deviceInfoToUpdate;\nvar mac = deviceInfoToUpdate.mac;\nvar device = msg.devices[mac];\nmsg.payload = {\n    'mac': mac,\n    'ip': device.ip,\n    'port': device.port,\n    'pattern': deviceInfoToUpdate.pattern,\n    'pipeline': deviceInfoToUpdate.pipelineName,\n    'ciServer': deviceInfoToUpdate.ciServer,\n    'lastMessage': device.lastMessage,\n    'lastSeen': device.lastSeen\n};\nmsg.datapath = '/devices/' + mac;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 451,
-        "y": 439,
-        "wires": [
-            [
-                "3a16ad6a.d24842"
-            ]
-        ]
-    },
-    {
-        "id": "3c67a0bb.87c92",
-        "type": "change",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "devices",
-                "pt": "msg",
-                "to": "payload.devices",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 121,
-        "y": 439,
-        "wires": [
-            [
-                "55e753ce.31e44c"
-            ]
-        ]
-    },
-    {
-        "id": "30b35c6d.b0eb04",
-        "type": "DataOut",
-        "z": "152d639d.7d86fc",
-        "collection": "423e0637.550f08",
-        "name": "Get devices",
-        "path": "/",
-        "error": false,
-        "x": 749.5,
-        "y": 361,
-        "wires": [
-            [
-                "3c67a0bb.87c92"
-            ]
-        ]
-    },
-    {
-        "id": "3152c1d.0098b3e",
-        "type": "change",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "deviceInfoToUpdate",
-                "pt": "msg",
-                "to": "payload",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 439,
-        "y": 360,
-        "wires": [
-            [
-                "30b35c6d.b0eb04"
-            ]
-        ]
-    },
-    {
-        "id": "3a879929.538146",
-        "type": "http in",
-        "z": "152d639d.7d86fc",
-        "name": "Update device info",
-        "url": "/devices",
-        "method": "post",
-        "swaggerDoc": "",
-        "x": 131,
-        "y": 361,
-        "wires": [
-            [
-                "8dbab261.83253",
-                "3152c1d.0098b3e"
-            ]
-        ]
-    },
-    {
-        "id": "8dbab261.83253",
-        "type": "http response",
-        "z": "152d639d.7d86fc",
-        "name": "Success Response",
-        "x": 451,
-        "y": 279,
-        "wires": []
-    },
-    {
-        "id": "cce346f8.35d068",
-        "type": "comment",
-        "z": "152d639d.7d86fc",
-        "name": "Update device info",
-        "info": "",
-        "x": 110,
-        "y": 299,
-        "wires": []
-    },
-    {
         "id": "fdf72570.df7ec8",
         "type": "mqtt out",
         "z": "9452f842.635e38",
@@ -1325,23 +820,6 @@
         "x": 606,
         "y": 514,
         "wires": []
-    },
-    {
-        "id": "c0e1f4dc.b9fcb8",
-        "type": "mqtt in",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "topic": "+/status",
-        "qos": "2",
-        "broker": "e2692e86.5cfdf",
-        "x": 113,
-        "y": 97,
-        "wires": [
-            [
-                "f1b8c233.7c40f",
-                "4a6d0413.3a8d1c"
-            ]
-        ]
     },
     {
         "id": "310d2b87.4634d4",
@@ -1789,60 +1267,229 @@
         ]
     },
     {
-        "id": "4a6d0413.3a8d1c",
-        "type": "debug",
-        "z": "152d639d.7d86fc",
+        "id": "2f1d14ba.37eefc",
+        "type": "mqtt in",
+        "z": "d0a3b329.d2df1",
         "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 399,
-        "y": 107,
-        "wires": []
-    },
-    {
-        "id": "e450fcaa.62ada",
-        "type": "inject",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "5",
-        "crontab": "",
-        "once": false,
-        "x": 127,
-        "y": 938,
+        "topic": "+/status",
+        "qos": "2",
+        "broker": "e2692e86.5cfdf",
+        "x": 110,
+        "y": 76,
         "wires": [
             [
-                "5f7623fa.3176fc"
+                "7c747b38.e33174",
+                "718e86c4.c7fa38"
             ]
         ]
     },
     {
-        "id": "3b5a355a.14d44a",
-        "type": "comment",
-        "z": "152d639d.7d86fc",
-        "name": "Publish server info via UDP broadcast",
-        "info": "",
-        "x": 168,
-        "y": 877,
+        "id": "7c747b38.e33174",
+        "type": "debug",
+        "z": "d0a3b329.d2df1",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 292,
+        "y": 128,
         "wires": []
     },
     {
-        "id": "5f7623fa.3176fc",
-        "type": "udp out",
-        "z": "152d639d.7d86fc",
-        "name": "",
-        "addr": "255.255.255.255",
-        "iface": "",
-        "port": "9001",
-        "ipv": "udp4",
-        "outport": "",
-        "base64": false,
-        "multicast": "broad",
-        "x": 372,
-        "y": 937,
+        "id": "9cebbbe3.64c348",
+        "type": "mysql",
+        "z": "d0a3b329.d2df1",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 616,
+        "y": 78,
+        "wires": [
+            [
+                "be3a0f52.fb96d"
+            ]
+        ]
+    },
+    {
+        "id": "718e86c4.c7fa38",
+        "type": "file function",
+        "z": "d0a3b329.d2df1",
+        "name": "Prepare server info to save",
+        "filename": "node/static/js/deviceregistry/deviceInfoToInsert.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 381,
+        "y": 79,
+        "wires": [
+            [
+                "9cebbbe3.64c348"
+            ]
+        ]
+    },
+    {
+        "id": "be3a0f52.fb96d",
+        "type": "websocket out",
+        "z": "d0a3b329.d2df1",
+        "name": "/ws/test out",
+        "server": "f0504b7f.120998",
+        "client": "",
+        "x": 821,
+        "y": 81,
         "wires": []
+    },
+    {
+        "id": "d0875438.521c58",
+        "type": "http in",
+        "z": "d0a3b329.d2df1",
+        "name": "Update device info",
+        "url": "/devices",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 135,
+        "y": 268,
+        "wires": [
+            [
+                "5ad3cd9e.e66b24",
+                "23fba88c.eb76f8"
+            ]
+        ]
+    },
+    {
+        "id": "5ad3cd9e.e66b24",
+        "type": "file function",
+        "z": "d0a3b329.d2df1",
+        "name": "Prepare server info to save",
+        "filename": "node/static/js/deviceregistry/deviceInfoToInsert.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 421,
+        "y": 263,
+        "wires": [
+            [
+                "449636b6.1f4168"
+            ]
+        ]
+    },
+    {
+        "id": "449636b6.1f4168",
+        "type": "mysql",
+        "z": "d0a3b329.d2df1",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 642,
+        "y": 261,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "23fba88c.eb76f8",
+        "type": "http response",
+        "z": "d0a3b329.d2df1",
+        "name": "Success Response",
+        "x": 380,
+        "y": 321,
+        "wires": []
+    },
+    {
+        "id": "57af3033.c5bd8",
+        "type": "http response",
+        "z": "d0a3b329.d2df1",
+        "name": "",
+        "x": 890,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "30f11851.adaa28",
+        "type": "file function",
+        "z": "d0a3b329.d2df1",
+        "name": "HTTP headers",
+        "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 720,
+        "y": 420,
+        "wires": [
+            [
+                "57af3033.c5bd8"
+            ]
+        ]
+    },
+    {
+        "id": "7b23523f.accf3c",
+        "type": "http in",
+        "z": "d0a3b329.d2df1",
+        "name": "Devices",
+        "url": "/devices",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 91,
+        "y": 420,
+        "wires": [
+            [
+                "68d0fc75.774fd4"
+            ]
+        ]
+    },
+    {
+        "id": "a5feb541.5d5b08",
+        "type": "mysql",
+        "z": "d0a3b329.d2df1",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 550,
+        "y": 420,
+        "wires": [
+            [
+                "30f11851.adaa28"
+            ]
+        ]
+    },
+    {
+        "id": "68d0fc75.774fd4",
+        "type": "function",
+        "z": "d0a3b329.d2df1",
+        "name": "Retrieve Devices",
+        "func": "msg.topic = \"Select * from Devices;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 328.5,
+        "y": 420,
+        "wires": [
+            [
+                "a5feb541.5d5b08"
+            ]
+        ]
+    },
+    {
+        "id": "f3dd575e.71dee8",
+        "type": "inject",
+        "z": "d0a3b329.d2df1",
+        "name": "Clear Devices table",
+        "topic": "Delete from Devices;",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 145,
+        "y": 529,
+        "wires": [
+            [
+                "74cd7628.f259c8"
+            ]
+        ]
+    },
+    {
+        "id": "74cd7628.f259c8",
+        "type": "mysql",
+        "z": "d0a3b329.d2df1",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 373,
+        "y": 527,
+        "wires": [
+            []
+        ]
     }
 ]
