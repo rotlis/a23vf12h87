@@ -21,6 +21,7 @@ CREATE TABLE PipeLines (
   serverId int(11) NOT NULL,
   pipeline VARCHAR(50) NOT NULL,
   status VARCHAR(20) NOT NULL,
+  lastBuildStatus  VARCHAR(20) NOT NULL,
   lastUpdateAt DATE NOT NULL,
   PRIMARY KEY (id),
   UNIQUE (serverId, pipeline),
@@ -38,7 +39,7 @@ INSERT INTO Patterns (pattern) VALUES('Scroll'), ('Steady');
 CREATE TABLE Devices (
   id int(11) NOT NULL AUTO_INCREMENT,
   patternId int(11),
-  pipelineId int(11) NOT NULL,
+  pipelineId int(11),
   mac VARCHAR(20) NOT NULL UNIQUE,
   brightness VARCHAR(20),
   firmware VARCHAR(20),
