@@ -47,30 +47,7 @@
     <script>
 
         var devices = {};
-        var $xml;
-
-        var nodeTemplate, deviceInfoTemplate;
-
-        var ciServers = [
-            {id:1, cctrayUrl:"https://go12.nbnco.net.au/go/cctray.xml"},
-            {id:2, cctrayUrl:"https://go13.nbnco.net.au/go/cctray.xml"},
-            {id:3, cctrayUrl:"https://go14.nbnco.net.au/go/cctray.xml"},
-            {id:4, cctrayUrl:"https://go20.nbnco.net.au/go/cctray.xml"}
-        ];
-
-        var projects = [{id:1, name: "RNTD"},
-            {id:2, name: "Atlas"},
-            {id:3, name: "GoServerConfigurationPackage"},
-            {id:4, name: "MARCI"},
-            {id:5, name: "MobAct-Prod"},
-            {id:6, name: "PhotoUpload"},
-            {id:7, name: "OnlineCustomers"},
-            {id:8, name: "Dev5-Showcase"}];
-
-        var patterns =[
-            {id:1, pattern:"Steady"},
-            {id:2, pattern:"Scroll"}
-        ];
+        var $xml, nodeTemplate, deviceInfoTemplate, ciServerTypes, ciServers, projects, patterns;
 
         function testCcTray() {
             $("#test_cctray").removeClass("btn-success").removeClass("btn-danger");
@@ -174,7 +151,6 @@
                 initConfigDialog(deviceInfo);
                 cfgDialog.dialog("open");
             });
-
         }
 
         function sendConfigToDevice(deviceInfo) {
@@ -216,7 +192,67 @@
             $("#deviceSettingsDialog").tabs();
         }
 
+        function loadCiServerTypes() {
+            $.ajax({
+                url: "/ciServerTypes",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    ciServerTypes = $(data);
+                },
+                error: function (e) {
+                    console.debug("Error", e);
+                }
+            });
+        }
+        function loadCiServers() {
+            $.ajax({
+                url: "/servers",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    ciServers = $(data);
+                },
+                error: function (e) {
+                    console.debug("Error", e);
+                }
+            });
+        }
+
+        function loadPatterns() {
+            $.ajax({
+                url: "/patterns",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    patterns = $(data);
+                },
+                error: function (e) {
+                    console.debug("Error", e);
+                }
+            });
+        }
+
+        function loadProjects() {
+            $.ajax({
+                url: "/pipelines",
+                type: "GET",
+                dataType: "json",
+                data: {serverId: $("#ciServers").val()},
+                success: function (data) {
+                    projects = $(data);
+                },
+                error: function (e) {
+                    console.debug("Error", e);
+                }
+            });
+        }
+
         $(document).ready(function () {
+            loadPatterns();
+            loadCiServers();
+            loadCiServerTypes();
+            loadProjects();
             loadTemplates();
             attachGlobalHandlers();
         });

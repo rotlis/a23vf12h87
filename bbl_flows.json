@@ -1141,7 +1141,7 @@
         "type": "function",
         "z": "ffd18aea.469058",
         "name": "Retrieve Pipelines",
-        "func": "msg.topic = \"Select id, pipeline from PipeLines where serverId = '';\";\nreturn msg;",
+        "func": "msg.topic = \"Select id, pipeline from PipeLines where serverId = '\" +msg.payload.serverId + \"';\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 340.5,
