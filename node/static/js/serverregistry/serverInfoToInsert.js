@@ -15,3 +15,4 @@ msg.topic = "delete from CiServers" +
     "'" + payload.password + "'," +
     "'" + payload.cctrayUrl + "'" +
     ")";
+return msg;

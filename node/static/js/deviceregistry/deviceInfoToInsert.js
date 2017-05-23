@@ -23,3 +23,4 @@ msg.topic = "delete from Devices" +
     "now()," +
     "now()" //TODO firmware update time
     + ")";
+return msg;

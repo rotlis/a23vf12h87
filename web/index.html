@@ -67,6 +67,21 @@
             });
         }
 
+        function saveServer(){
+            $.ajax({
+                url: "/servers",
+                type: "POST",
+                data: {serverTypeId:$("#serverTypeId").val(),cctrayUrl: $("#cctray_url").val(), username: $("#username").val(), password: $("#pwd").val()},
+                dataType: "json",
+                success: function (data) {
+                   toastr.info("Server info has been saved successfully");
+                },
+                error: function (e) {
+                    toastr.error("Server info could not be saved");
+                }
+            });
+        }
+
         function loadTemplates() {
             $("#templates").load("templates/templates.html#template1", function () {
                 nodeTemplate = document.getElementById('template1').innerHTML;
@@ -80,7 +95,7 @@
             $.each(projects, function () {
                 selections.push({name: this.name, selected: (this.name == deviceInfo.pipeline)});
             });
-            var jsonData = {mac: deviceId, node: deviceInfo, ciServers:ciServers, projects: selections, patterns:patterns};
+            var jsonData = {mac: deviceId, node:deviceInfo, ciServers:ciServers, projects:selections, patterns:patterns};
             var output = Mustache.render(nodeTemplate, jsonData);
             $("#devices-container").append(output);
             $("#"+deviceId + " select[name='pattern']").val(deviceInfo.pattern);
@@ -108,20 +123,28 @@
 
         function attachGlobalHandlers() {
             $("#test_cctray").click(testCcTray);
+            $("#save_server").click(saveServer);
+
             $("#cctray_url, #username, #pwd").on('input', function () {
                 $("#test_cctray").addClass("btn-default").removeClass("btn-danger").removeClass("btn-success");
             });
         }
 
         function attachDeviceHandlers(mac, deviceInfo) {
-            $("#" + mac + " input[name=project]").typeahead({source: projects});
+            $("#" + mac + " select[name=ciServer]").change(function(){
+                console.log("Select==");
+                loadProjects()
+            });
+
             $("#" + mac + " button.device-save").click(function () {
                 var jsonData={
                     mac: mac,
                     brightness:$('#' + mac + ' select[name="brightness"] option:selected').val(),
-                    pipelineId:$('#' + mac + ' select[name="project"] option:selected').text(),
+//                    pipelineId:$('#' + mac + ' select[name="project"] option:selected').text(),
+                    pipelineId:1,
                     patternId:$('#' + mac + ' select[name="pattern"] option:selected').val(),
-                    patternName:$('#' + mac + ' select[name="pattern"] option:selected').text()
+                    firmware:"todo",
+                    lastMessage:"todo"
                 };
                 console.debug("jsonData", jsonData);
                 $.ajax({
@@ -130,6 +153,9 @@
                     url: "/devices",
                     success: function () {
                         toastr.info("Pipeline has been assigned successfully")
+                    },
+                    error:function(){
+                        toastr.error("Pipeline could not be assigned")
                     },
                     dataType: "json"
                 });
@@ -193,12 +219,15 @@
         }
 
         function loadCiServerTypes() {
+            //TODO:add into ciServerTypes dropdown
+            $("#serverTypeId").append("<option value='1'>GO</option>");
+
             $.ajax({
                 url: "/ciServerTypes",
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
-                    ciServerTypes = $(data);
+                    ciServerTypes = data;
                 },
                 error: function (e) {
                     console.debug("Error", e);
@@ -211,7 +240,7 @@
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
-                    ciServers = $(data);
+                    ciServers = data;
                 },
                 error: function (e) {
                     console.debug("Error", e);
@@ -225,7 +254,7 @@
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
-                    patterns = $(data);
+                    patterns = data;
                 },
                 error: function (e) {
                     console.debug("Error", e);
@@ -252,7 +281,6 @@
             loadPatterns();
             loadCiServers();
             loadCiServerTypes();
-            loadProjects();
             loadTemplates();
             attachGlobalHandlers();
         });
@@ -292,9 +320,15 @@
     <div class="panel panel-primary">
         <div class="panel-heading">GO server settings</div>
         <div class="panel-body">
-            <div class="form-group">
+
+
+            <div class="form-group form-inline">
+                <label for="serverTypeId">Server Type:</label>
+                <select class="form-control" id="serverTypeId">
+                </select>
+
                 <label for="cctray_url">CCTRAY URL:</label>
-                <input type="url" class="form-control" id="cctray_url" value="https://go12.nbnco.net.au/go/cctray.xml">
+                <input type="url" class="form-control" style="width: 400px" id="cctray_url" value="https://go12.nbnco.net.au/go/cctray.xml">
             </div>
             <div class="form-group form-inline">
                 <label for="username">Username:</label>
@@ -305,9 +339,10 @@
             </div>
 
             <button id="test_cctray" class="btn btn-default">Test</button>
-            <button type="submit" class="btn btn-default">Save</button>
+            <button id="save_server" class="btn btn-default">Save</button>
         </div>
     </div>
+
 
     <div id="devices-container" class="row"></div>
 

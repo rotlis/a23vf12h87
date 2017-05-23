@@ -18,3 +18,4 @@ msg.topic = "delete from PipeLines" +
     "'" + payload.lastBuildStatus + "'," +
     "now()" +
     ")";
+return msg;

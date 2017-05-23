@@ -1,35 +1,3 @@
-<div id="template0">
-
-    <div class="col-sm-4" id="{{id}}" style="display:none">
-        <div id="{{id}}-panel" class="panel panel-primary">
-            <div class="panel-heading">{{node.ip}}</div>
-            <div class="panel-body">
-                    <div class="form-group">
-                        <label for="location">Location:</label>
-                        <input type="text" class="form-control" id="{{id}}-location" value="{{node.location}}" placeholder="Level, Building, etc">
-                    </div>
-                    <div class="form-group">
-                        <label for="{{id}}-project">Project:</label>
-                        <select class="form-control" id="{{id}}-project">
-                            <option>Select</option>
-                            {{#projects}}
-                                {{#selected}}
-                                    <option selected>{{name}}</option>
-                                {{/selected}}
-                                {{^selected}}
-                                    <option>{{name}}</option>
-                                {{/selected}}
-                            {{/projects}}
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-success" id="{{id}}-save">Save</button>
-                    <button type="submit" class="btn btn-default" id="{{id}}-identify">Identify</button>
-                    <button type="submit" class="btn btn-warning" id="{{id}}-xmas">XMAS</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div id="template1">
 
