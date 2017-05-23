@@ -154,7 +154,10 @@ module.exports = {
         fs: require("fs"),
         path: require("path"),
         firmwareFileType: '.lua',
-        firmwareDirPath: "esp8266"
+        firmwareDirPath: "esp8266",
+        crypto: require('crypto'),
+        encryptionAlgorithm: 'aes-256-ctr',
+        key: 'afdfg43456ghvbn6677bnmfgdffd566567gghbvnbkhj'
         //recursiveReaddir: require('recursive-readdir')
         // os:require('os'),
         // octalbonescript:require('octalbonescript'),
