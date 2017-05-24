@@ -1,7 +1,8 @@
-var payload = msg.payload;
+var pipeline = msg.payload.pipeline;
+var payload = msg.serverInfo;
 msg.topic = "delete from PipeLines" +
     " where serverId=" + payload.serverId +
-    " AND pipeline='" + payload.pipeline + "';" +
+    " AND pipeline='" + pipeline + "';" +
     "insert into PipeLines " +
     "(" +
     "serverId," +
@@ -13,7 +14,7 @@ msg.topic = "delete from PipeLines" +
     "values " +
     "(" +
     payload.serverId + "," +
-    "'" + payload.pipeline + "'," +
+    "'" + pipeline + "'," +
     "'" + payload.status + "'," +
     "'" + payload.lastBuildStatus + "'," +
     "now()" +
