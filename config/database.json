@@ -1,6 +1,6 @@
 {
   "local": {
-    "host": "localhost",
+    "host": "mysql",
     "driver": "mysql",
     "user": "root",
     "password": "root",
