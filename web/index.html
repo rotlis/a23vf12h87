@@ -91,6 +91,8 @@
 
         function addNode(deviceInfo) {
             var deviceId = deviceInfo.mac;
+
+            //TODO: load device info form rest
             var selections = [];
             $.each(projects, function () {
                 selections.push({name: this.name, selected: (this.name == deviceInfo.pipeline)});
@@ -132,8 +134,7 @@
 
         function attachDeviceHandlers(mac, deviceInfo) {
             $("#" + mac + " select[name=ciServer]").change(function(){
-                console.log("Select==");
-                loadProjects()
+                loadProjects(mac);
             });
 
             $("#" + mac + " button.device-save").click(function () {
@@ -262,14 +263,17 @@
             });
         }
 
-        function loadProjects() {
+        function loadProjects(mac) {
             $.ajax({
                 url: "/pipelines",
                 type: "GET",
                 dataType: "json",
-                data: {serverId: $("#ciServers").val()},
+                data: {serverId:$("#"+mac+" select[name=ciServer] option:selected").val()},
                 success: function (data) {
-                    projects = $(data);
+                    projects = data;
+                    $.each(projects, function () {
+                        $("#"+mac+" select[name=project]").append("<option value='"+this.id+"'>"+this.pipeline+"</option>");
+                    });
                 },
                 error: function (e) {
                     console.debug("Error", e);
