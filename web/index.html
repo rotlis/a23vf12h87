@@ -141,8 +141,7 @@
                 var jsonData={
                     mac: mac,
                     brightness:$('#' + mac + ' select[name="brightness"] option:selected').val(),
-//                    pipelineId:$('#' + mac + ' select[name="project"] option:selected').text(),
-                    pipelineId:1,
+                    pipelineId:$('#' + mac + ' select[name="project"] option:selected').val(),
                     patternId:$('#' + mac + ' select[name="pattern"] option:selected').val(),
                     firmware:"todo",
                     lastMessage:"todo"
