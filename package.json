@@ -19,7 +19,6 @@
   "dependencies": {
     "mqtt": "^2.5.0",
     "bower": "^1.8.0",
-    "json-db-node-red": "^0.5.3",
     "db-migrate-mysql": "^1.1.10",
     "db-migrate": "^0.10.0-beta.20",
     "node-red-node-mysql": "0.0.15",
