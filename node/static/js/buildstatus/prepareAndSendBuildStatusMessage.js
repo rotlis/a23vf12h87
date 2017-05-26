@@ -1,13 +1,9 @@
-msg.ip = msg.payload.ip;
-msg.port = msg.payload.port;
-
-var tickleMessage = {
-    'ip': msg.payload.ip,
-    'port': msg.payload.port,
-    'payload': JSON.stringify({
+msg.payload=JSON.stringify({
         "command": "buildStatus",
         "pattern": msg.payload.pattern,
-        "buildStatus": msg.payload.buildStatus
-    }, null, 0)
-};
-return tickleMessage;
+        "brightness": msg.payload.brightness,
+        "buildStatus": msg.payload.status
+    }, null, 0);
+
+msg.topic="bbl/"+msg.payload.mac;
+return msg;

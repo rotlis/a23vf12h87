@@ -57,16 +57,6 @@
         "verifyservercert": false
     },
     {
-        "id": "db29c472.907f68",
-        "type": "tls-config",
-        "z": "9452f842.635e38",
-        "name": "",
-        "cert": "./certificates/certificate.pem",
-        "key": "./certificates/privatekey.pem",
-        "ca": "",
-        "verifyservercert": false
-    },
-    {
         "id": "e2692e86.5cfdf",
         "type": "mqtt-broker",
         "z": "",
@@ -335,39 +325,6 @@
         ]
     },
     {
-        "id": "86cc0f64.620d4",
-        "type": "udp out",
-        "z": "9452f842.635e38",
-        "name": "Send build status message",
-        "addr": "",
-        "iface": "",
-        "port": "",
-        "ipv": "udp4",
-        "outport": "",
-        "base64": false,
-        "multicast": "false",
-        "x": 818,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "6ba8835b.8a866c",
-        "type": "http request",
-        "z": "9452f842.635e38",
-        "name": "Fetch cctray feed",
-        "method": "GET",
-        "ret": "txt",
-        "url": "",
-        "tls": "db29c472.907f68",
-        "x": 849,
-        "y": 199,
-        "wires": [
-            [
-                "9ceab431.54a628"
-            ]
-        ]
-    },
-    {
         "id": "89a806fc.b44ad8",
         "type": "inject",
         "z": "9452f842.635e38",
@@ -392,60 +349,11 @@
         "z": "9452f842.635e38",
         "name": "",
         "splt": "\\n",
-        "x": 888.5,
-        "y": 319,
+        "x": 1052.5,
+        "y": 82,
         "wires": [
             [
                 "5c1dcacf.082234"
-            ]
-        ]
-    },
-    {
-        "id": "9ceab431.54a628",
-        "type": "xml",
-        "z": "9452f842.635e38",
-        "name": "",
-        "attr": "",
-        "chr": "",
-        "x": 111,
-        "y": 319,
-        "wires": [
-            [
-                "eafac030.0e3a4"
-            ]
-        ]
-    },
-    {
-        "id": "93a6488b.5b9628",
-        "type": "change",
-        "z": "9452f842.635e38",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "devices",
-                "pt": "msg",
-                "to": "payload.devices",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 141.5,
-        "y": 199,
-        "wires": [
-            [
-                "c6a3f531.286808"
             ]
         ]
     },
@@ -562,8 +470,8 @@
         "outport": "",
         "base64": false,
         "multicast": "false",
-        "x": 599,
-        "y": 180,
+        "x": 631,
+        "y": 144,
         "wires": []
     },
     {
@@ -723,22 +631,6 @@
         ]
     },
     {
-        "id": "be9e44c5.a394f8",
-        "type": "file function",
-        "z": "9452f842.635e38",
-        "name": "Parse build status",
-        "filename": "node/static/js/buildstatus/parseBuildStatus.js",
-        "reloadfile": true,
-        "outputs": 1,
-        "x": 628.5,
-        "y": 320,
-        "wires": [
-            [
-                "12912dd9.ba8fc2"
-            ]
-        ]
-    },
-    {
         "id": "5c1dcacf.082234",
         "type": "file function",
         "z": "9452f842.635e38",
@@ -746,11 +638,10 @@
         "filename": "node/static/js/buildstatus/prepareAndSendBuildStatusMessage.js",
         "reloadfile": true,
         "outputs": 1,
-        "x": 191.5,
-        "y": 440,
+        "x": 229.5,
+        "y": 250,
         "wires": [
             [
-                "86cc0f64.620d4",
                 "fdf72570.df7ec8"
             ]
         ]
@@ -808,12 +699,12 @@
         "type": "mqtt out",
         "z": "9452f842.635e38",
         "name": "Send build status message over mqtt",
-        "topic": "/bbl/statusMessage",
+        "topic": "",
         "qos": "2",
-        "retain": "",
+        "retain": "true",
         "broker": "e2692e86.5cfdf",
-        "x": 789,
-        "y": 521,
+        "x": 622,
+        "y": 251,
         "wires": []
     },
     {
@@ -1153,7 +1044,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "repeat": "600",
+        "repeat": "60",
         "crontab": "",
         "once": true,
         "x": 186.5,
@@ -1314,8 +1205,7 @@
         "y": 300,
         "wires": [
             [
-                "5ad3cd9e.e66b24",
-                "4ba0c225.8c35fc"
+                "5ad3cd9e.e66b24"
             ]
         ]
     },
@@ -1327,12 +1217,11 @@
         "filename": "node/static/js/deviceregistry/deviceInfoToInsert.js",
         "reloadfile": true,
         "outputs": 1,
-        "x": 519,
-        "y": 300,
+        "x": 428,
+        "y": 298,
         "wires": [
             [
-                "449636b6.1f4168",
-                "8098b444.8a3248"
+                "449636b6.1f4168"
             ]
         ]
     },
@@ -1342,8 +1231,8 @@
         "z": "d0a3b329.d2df1",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 888,
-        "y": 300,
+        "x": 665,
+        "y": 296,
         "wires": [
             [
                 "23fba88c.eb76f8"
@@ -1355,8 +1244,8 @@
         "type": "http response",
         "z": "d0a3b329.d2df1",
         "name": "Success Response",
-        "x": 848,
-        "y": 220,
+        "x": 867,
+        "y": 297,
         "wires": []
     },
     {
@@ -1455,8 +1344,8 @@
         "z": "d0a3b329.d2df1",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 511,
-        "y": 540,
+        "x": 370,
+        "y": 539,
         "wires": [
             []
         ]
@@ -1489,30 +1378,6 @@
         "info": "",
         "x": 101,
         "y": 39,
-        "wires": []
-    },
-    {
-        "id": "4ba0c225.8c35fc",
-        "type": "debug",
-        "z": "d0a3b329.d2df1",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 313,
-        "y": 352,
-        "wires": []
-    },
-    {
-        "id": "8098b444.8a3248",
-        "type": "debug",
-        "z": "d0a3b329.d2df1",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 844,
-        "y": 368,
         "wires": []
     },
     {
@@ -1629,47 +1494,15 @@
         "id": "b1bf1f98.4b6c3",
         "type": "function",
         "z": "9452f842.635e38",
-        "name": "Retrieve Devices with pipeline and server info",
-        "func": "msg.topic = \"\" +\n\" SELECT Devices.mac, PipeLines.pipeline, CiServerTypes.serverType, CiServers.username, CiServers.password, CiServers.cctrayUrl\" +\n\" FROM Devices\" +\n\"   INNER JOIN PipeLines\" +\n\"     ON Devices.pipelineId = PipeLines.id\" +\n\"   INNER JOIN CiServers\" +\n\"     ON PipeLines.serverId = CiServers.id\" +\n\"   INNER JOIN CiServerTypes\" +\n\"     ON CiServers.serverTypeId = CiServerTypes.id;\";\nreturn msg;",
+        "name": "Retrieve Devices with pipeline status",
+        "func": "msg.topic = \"\" +\n\" SELECT Devices.mac, Patterns.pattern,  Devices.brightness, PipeLines.status \" +\n\" FROM Devices\" +\n\"   INNER JOIN PipeLines\" +\n\"     ON Devices.pipelineId = PipeLines.id\" +\n\"   INNER JOIN Patterns\" +\n\"     ON Devices.patternId = Patterns.id;\"\n;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 585.214298248291,
+        "x": 555.214298248291,
         "y": 80.42857074737549,
         "wires": [
             [
                 "463175.a398ae8c"
-            ]
-        ]
-    },
-    {
-        "id": "c6a3f531.286808",
-        "type": "file function",
-        "z": "9452f842.635e38",
-        "name": "Build server url",
-        "filename": "node/static/js/common/urlWithUserNameAndPassword.js",
-        "reloadfile": true,
-        "outputs": 1,
-        "x": 481.85713958740234,
-        "y": 199.28570556640625,
-        "wires": [
-            [
-                "6ba8835b.8a866c"
-            ]
-        ]
-    },
-    {
-        "id": "eafac030.0e3a4",
-        "type": "function",
-        "z": "9452f842.635e38",
-        "name": "Build filename",
-        "func": "msg.filename = \"node/static/js/buildstatus/\" + msg.serverInfo.serverType.toLowerCase() + \"/parseBuildStatus.js\";\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 357.42859649658203,
-        "y": 319.2857036590576,
-        "wires": [
-            [
-                "be9e44c5.a394f8"
             ]
         ]
     },
@@ -1699,7 +1532,7 @@
         "y": 81.71429443359375,
         "wires": [
             [
-                "93a6488b.5b9628"
+                "12912dd9.ba8fc2"
             ]
         ]
     },
@@ -1780,5 +1613,15 @@
                 "19b38adb.132715"
             ]
         ]
+    },
+    {
+        "id": "62a22e12.7cc75",
+        "type": "comment",
+        "z": "5914c4a1.24372c",
+        "name": "TODO USE MQTT to trigger device into upgrade",
+        "info": "",
+        "x": 686,
+        "y": 196,
+        "wires": []
     }
 ]
