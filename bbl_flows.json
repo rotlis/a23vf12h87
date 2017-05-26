@@ -711,8 +711,8 @@
         "id": "310d2b87.4634d4",
         "type": "http response",
         "z": "94ee4800.b63ff8",
-        "name": "",
-        "x": 891,
+        "name": "Response",
+        "x": 901,
         "y": 119,
         "wires": []
     },
@@ -800,7 +800,6 @@
         "y": 139,
         "wires": [
             [
-                "e32a2a83.8659f8",
                 "c6a6ba28.dce488"
             ]
         ]
@@ -809,9 +808,9 @@
         "id": "e32a2a83.8659f8",
         "type": "http response",
         "z": "7eb46653.6ccb18",
-        "name": "Success Response",
-        "x": 440,
-        "y": 80,
+        "name": "Response",
+        "x": 1072,
+        "y": 136,
         "wires": []
     },
     {
@@ -850,8 +849,8 @@
         "id": "77ad11f8.1738c",
         "type": "http response",
         "z": "7eb46653.6ccb18",
-        "name": "",
-        "x": 910,
+        "name": "Response",
+        "x": 920,
         "y": 260,
         "wires": []
     },
@@ -900,7 +899,9 @@
         "x": 729,
         "y": 139,
         "wires": [
-            []
+            [
+                "e32a2a83.8659f8"
+            ]
         ]
     },
     {
@@ -950,15 +951,6 @@
         ]
     },
     {
-        "id": "bf278fc1.b992a",
-        "type": "http response",
-        "z": "ffd18aea.469058",
-        "name": "",
-        "x": 911,
-        "y": 121,
-        "wires": []
-    },
-    {
         "id": "563ec839.1c77e8",
         "type": "comment",
         "z": "ffd18aea.469058",
@@ -990,7 +982,7 @@
         "y": 121,
         "wires": [
             [
-                "bf278fc1.b992a"
+                "1dca4fbf.b828"
             ]
         ]
     },
@@ -1056,15 +1048,6 @@
         ]
     },
     {
-        "id": "19ec7383.5756dc",
-        "type": "http response",
-        "z": "4cc0e4ce.67e46c",
-        "name": "",
-        "x": 890,
-        "y": 120,
-        "wires": []
-    },
-    {
         "id": "4c1e7b02.910214",
         "type": "file function",
         "z": "4cc0e4ce.67e46c",
@@ -1076,7 +1059,7 @@
         "y": 120,
         "wires": [
             [
-                "19ec7383.5756dc"
+                "f65d5ee.c3317a"
             ]
         ]
     },
@@ -1202,7 +1185,7 @@
         "method": "post",
         "swaggerDoc": "",
         "x": 131,
-        "y": 300,
+        "y": 298,
         "wires": [
             [
                 "5ad3cd9e.e66b24"
@@ -1232,30 +1215,12 @@
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
         "x": 665,
-        "y": 296,
+        "y": 298,
         "wires": [
             [
-                "23fba88c.eb76f8"
+                "904ff746.7ce9a8"
             ]
         ]
-    },
-    {
-        "id": "23fba88c.eb76f8",
-        "type": "http response",
-        "z": "d0a3b329.d2df1",
-        "name": "Success Response",
-        "x": 867,
-        "y": 297,
-        "wires": []
-    },
-    {
-        "id": "57af3033.c5bd8",
-        "type": "http response",
-        "z": "d0a3b329.d2df1",
-        "name": "",
-        "x": 889,
-        "y": 460,
-        "wires": []
     },
     {
         "id": "30f11851.adaa28",
@@ -1269,7 +1234,7 @@
         "y": 460,
         "wires": [
             [
-                "57af3033.c5bd8"
+                "5ec65edd.cf6c6"
             ]
         ]
     },
@@ -1330,8 +1295,8 @@
         "repeat": "",
         "crontab": "",
         "once": false,
-        "x": 151,
-        "y": 540,
+        "x": 170,
+        "y": 605,
         "wires": [
             [
                 "74cd7628.f259c8"
@@ -1344,8 +1309,8 @@
         "z": "d0a3b329.d2df1",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 370,
-        "y": 539,
+        "x": 385,
+        "y": 606,
         "wires": [
             []
         ]
@@ -1623,5 +1588,268 @@
         "x": 686,
         "y": 196,
         "wires": []
+    },
+    {
+        "id": "324e1228.93381e",
+        "type": "catch",
+        "z": "7eb46653.6ccb18",
+        "name": "Catch server save errors",
+        "scope": [
+            "fa5c4ec1.11d5c"
+        ],
+        "x": 621,
+        "y": 191,
+        "wires": [
+            [
+                "4425dd41.b69e64"
+            ]
+        ]
+    },
+    {
+        "id": "4425dd41.b69e64",
+        "type": "function",
+        "z": "7eb46653.6ccb18",
+        "name": "Error response",
+        "func": "msg.statusCode=500;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 866.5,
+        "y": 190,
+        "wires": [
+            [
+                "e32a2a83.8659f8"
+            ]
+        ]
+    },
+    {
+        "id": "65581bee.c05c94",
+        "type": "catch",
+        "z": "7eb46653.6ccb18",
+        "name": "Catch retrieve CI server errors",
+        "scope": [
+            "c6439cdd.8e1ff"
+        ],
+        "x": 485,
+        "y": 317,
+        "wires": [
+            [
+                "56956a17.805f74"
+            ]
+        ]
+    },
+    {
+        "id": "56956a17.805f74",
+        "type": "function",
+        "z": "7eb46653.6ccb18",
+        "name": "Error response",
+        "func": "msg.statusCode=500;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 720.5,
+        "y": 316,
+        "wires": [
+            [
+                "77ad11f8.1738c"
+            ]
+        ]
+    },
+    {
+        "id": "d4adc445.0ca448",
+        "type": "catch",
+        "z": "94ee4800.b63ff8",
+        "name": "Catch retrieve CI Server Types errors",
+        "scope": [
+            "70f5a9ec.084228"
+        ],
+        "x": 515,
+        "y": 182,
+        "wires": [
+            [
+                "ec0e2734.099708"
+            ]
+        ]
+    },
+    {
+        "id": "ec0e2734.099708",
+        "type": "function",
+        "z": "94ee4800.b63ff8",
+        "name": "Error response",
+        "func": "msg.statusCode=500;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 783.5,
+        "y": 181,
+        "wires": [
+            [
+                "310d2b87.4634d4"
+            ]
+        ]
+    },
+    {
+        "id": "f65d5ee.c3317a",
+        "type": "http response",
+        "z": "4cc0e4ce.67e46c",
+        "name": "Response",
+        "x": 899,
+        "y": 122,
+        "wires": []
+    },
+    {
+        "id": "4991a02e.e198b",
+        "type": "function",
+        "z": "4cc0e4ce.67e46c",
+        "name": "Error response",
+        "func": "msg.statusCode=500;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 712.5,
+        "y": 176,
+        "wires": [
+            [
+                "f65d5ee.c3317a"
+            ]
+        ]
+    },
+    {
+        "id": "c87c74ed.a4b448",
+        "type": "catch",
+        "z": "4cc0e4ce.67e46c",
+        "name": "Catch retrieve patterns errors",
+        "scope": [
+            "e29bcec7.1501a"
+        ],
+        "x": 465,
+        "y": 175,
+        "wires": [
+            [
+                "4991a02e.e198b"
+            ]
+        ]
+    },
+    {
+        "id": "1dca4fbf.b828",
+        "type": "http response",
+        "z": "ffd18aea.469058",
+        "name": "Response",
+        "x": 935,
+        "y": 121,
+        "wires": []
+    },
+    {
+        "id": "998a4f8c.57b86",
+        "type": "function",
+        "z": "ffd18aea.469058",
+        "name": "Error response",
+        "func": "msg.statusCode=500;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 697.5,
+        "y": 177,
+        "wires": [
+            [
+                "1dca4fbf.b828"
+            ]
+        ]
+    },
+    {
+        "id": "c54cbd8d.f5258",
+        "type": "catch",
+        "z": "ffd18aea.469058",
+        "name": "Catch retrieve pipelines errors",
+        "scope": [
+            "bc7b67d9.6517f8",
+            "ee63e006.b9c7b"
+        ],
+        "x": 376,
+        "y": 175,
+        "wires": [
+            [
+                "998a4f8c.57b86"
+            ]
+        ]
+    },
+    {
+        "id": "904ff746.7ce9a8",
+        "type": "http response",
+        "z": "d0a3b329.d2df1",
+        "name": "Response",
+        "x": 910,
+        "y": 297,
+        "wires": []
+    },
+    {
+        "id": "3df0c4e3.1bd57c",
+        "type": "function",
+        "z": "d0a3b329.d2df1",
+        "name": "Error response",
+        "func": "msg.statusCode=500;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 672.5,
+        "y": 353,
+        "wires": [
+            [
+                "904ff746.7ce9a8"
+            ]
+        ]
+    },
+    {
+        "id": "67dbb70.1f8ec48",
+        "type": "catch",
+        "z": "d0a3b329.d2df1",
+        "name": "Catch device save errors",
+        "scope": [
+            "449636b6.1f4168",
+            "5ad3cd9e.e66b24"
+        ],
+        "x": 401,
+        "y": 352,
+        "wires": [
+            [
+                "3df0c4e3.1bd57c"
+            ]
+        ]
+    },
+    {
+        "id": "5ec65edd.cf6c6",
+        "type": "http response",
+        "z": "d0a3b329.d2df1",
+        "name": "Response",
+        "x": 919,
+        "y": 461,
+        "wires": []
+    },
+    {
+        "id": "d58e30e6.1b37d",
+        "type": "function",
+        "z": "d0a3b329.d2df1",
+        "name": "Error response",
+        "func": "msg.statusCode=500;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 674.5,
+        "y": 515,
+        "wires": [
+            [
+                "5ec65edd.cf6c6"
+            ]
+        ]
+    },
+    {
+        "id": "95896b0f.57f628",
+        "type": "catch",
+        "z": "d0a3b329.d2df1",
+        "name": "Catch retrieve devices errors",
+        "scope": [
+            "a5feb541.5d5b08",
+            "68d0fc75.774fd4"
+        ],
+        "x": 360,
+        "y": 515,
+        "wires": [
+            [
+                "d58e30e6.1b37d"
+            ]
+        ]
     }
 ]
