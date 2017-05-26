@@ -4,7 +4,6 @@ local username = "admin";
 local password = "password";
 
 function Upgrader.upgrade(url)
-    url = "http://192.168.2.200:1880/firmware";
     local ip, port, path = string.gmatch(url, 'http://([0-9.]+):?([0-9]*)(/.*)')()
     local connection = net.createConnection(net.TCP, false)
     connection:connect(port, ip)

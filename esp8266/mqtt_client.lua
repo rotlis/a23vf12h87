@@ -15,7 +15,7 @@ local currentlyMonitoredPipelineTopic
 function M.init(mqttBrokerIp, onMessageCallback)
     brokerIp = mqttBrokerIp
     mqttClientObj = mqtt.Client(EspId, 120)
-    mqttClientObj:lwt(EspId.."/status", "{'mac'"..EspId..", 'status':'offline'}", QOS_2, RETAIN)
+    mqttClientObj:lwt(EspId.."/status", "{\"mac\":\""..EspId.."\", \"status\":\"offline\"}", QOS_2, RETAIN)
     mqttClientObj:on("connect", function(client) print ("connected to MQTT Broker") end)
     mqttClientObj:on("offline", function(client)
         print("MQTT Went offline. Reconnecting...")
@@ -52,7 +52,7 @@ function M.reconnectMqtt()
             print("MQTT Connected to " .. brokerIp)
             mqttClientObj:subscribe(EspId.."/cmd", QOS_2, function(client)
                 print("Mqtt Subscribed")
-                mqttClientObj:publish(EspId.."/status", "{'mac'"..EspId..", 'status':'online'}", QOS_2, RETAIN)
+                mqttClientObj:publish(EspId.."/status", "{\"mac\":\""..EspId.."\", \"status\":\"online\"}", QOS_2, RETAIN)
             end)
         end,
             function(client, reason)

@@ -1,3 +1,14 @@
+Ubuntu with Docker installed image for RPi
+Fix upgrade functionality
+Load devices on page load with proper values (Question:what should happen when server dropdown is changed?)
+Lua fixes (firmware version, brightness pattern)
+List of servers on top of page
+LAF from Amy
+refactor index.html
+higher tranclucent cap
+jenkins integration
+
+
 
  1- Package the devices/lights
  2- Put some proper logging in bbl_flows.json

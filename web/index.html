@@ -182,8 +182,7 @@
         function sendConfigToDevice(deviceInfo) {
             return function () {
                 var dataToPost = {
-                    deviceIp: deviceInfo.ip,
-                    devicePort: deviceInfo.port,
+                    mac: deviceInfo.mac,
                     serverPort: window.location.port,
                     serverHostname: window.location.hostname
                 };

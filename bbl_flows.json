@@ -22,7 +22,7 @@
     {
         "id": "d0a3b329.d2df1",
         "type": "tab",
-        "label": "SQL Device Registry"
+        "label": "Device Registry"
     },
     {
         "id": "afcdb9fe.f99d18",
@@ -459,22 +459,6 @@
         "wires": []
     },
     {
-        "id": "19ec3e77.a01d42",
-        "type": "udp out",
-        "z": "5914c4a1.24372c",
-        "name": "Send upgrade request",
-        "addr": "",
-        "iface": "",
-        "port": "",
-        "ipv": "udp4",
-        "outport": "",
-        "base64": false,
-        "multicast": "false",
-        "x": 631,
-        "y": 144,
-        "wires": []
-    },
-    {
         "id": "8e62c0c.588364",
         "type": "http in",
         "z": "5914c4a1.24372c",
@@ -486,7 +470,8 @@
         "y": 280,
         "wires": [
             [
-                "dbd207c8.ccac38"
+                "dbd207c8.ccac38",
+                "5ada8df8.48d9c4"
             ]
         ]
     },
@@ -658,7 +643,7 @@
         "y": 180,
         "wires": [
             [
-                "19ec3e77.a01d42"
+                "34762a77.d33066"
             ]
         ]
     },
@@ -1127,11 +1112,11 @@
         "topic": "+/status",
         "qos": "2",
         "broker": "e2692e86.5cfdf",
-        "x": 121,
+        "x": 100,
         "y": 100,
         "wires": [
             [
-                "718e86c4.c7fa38"
+                "4ff2507f.911f6"
             ]
         ]
     },
@@ -1141,8 +1126,8 @@
         "z": "d0a3b329.d2df1",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 667,
-        "y": 100,
+        "x": 802,
+        "y": 101,
         "wires": [
             [
                 "be3a0f52.fb96d"
@@ -1153,12 +1138,12 @@
         "id": "718e86c4.c7fa38",
         "type": "file function",
         "z": "d0a3b329.d2df1",
-        "name": "Prepare device info to save",
+        "name": "Prepare device info to insert",
         "filename": "node/static/js/deviceregistry/deviceInfoToInsert.js",
         "reloadfile": true,
         "outputs": 1,
-        "x": 400,
-        "y": 100,
+        "x": 551,
+        "y": 99,
         "wires": [
             [
                 "9cebbbe3.64c348"
@@ -1172,8 +1157,8 @@
         "name": "/ws/test out",
         "server": "890e0d98.2b116",
         "client": "",
-        "x": 868,
-        "y": 100,
+        "x": 973,
+        "y": 99,
         "wires": []
     },
     {
@@ -1196,11 +1181,11 @@
         "id": "5ad3cd9e.e66b24",
         "type": "file function",
         "z": "d0a3b329.d2df1",
-        "name": "Prepare device info to save",
-        "filename": "node/static/js/deviceregistry/deviceInfoToInsert.js",
+        "name": "Prepare device info to update",
+        "filename": "node/static/js/deviceregistry/deviceInfoToUpdate.js",
         "reloadfile": true,
         "outputs": 1,
-        "x": 428,
+        "x": 438,
         "y": 298,
         "wires": [
             [
@@ -1580,16 +1565,6 @@
         ]
     },
     {
-        "id": "62a22e12.7cc75",
-        "type": "comment",
-        "z": "5914c4a1.24372c",
-        "name": "TODO USE MQTT to trigger device into upgrade",
-        "info": "",
-        "x": 686,
-        "y": 196,
-        "wires": []
-    },
-    {
         "id": "324e1228.93381e",
         "type": "catch",
         "z": "7eb46653.6ccb18",
@@ -1851,5 +1826,43 @@
                 "d58e30e6.1b37d"
             ]
         ]
+    },
+    {
+        "id": "4ff2507f.911f6",
+        "type": "json",
+        "z": "d0a3b329.d2df1",
+        "name": "",
+        "x": 307.5,
+        "y": 98,
+        "wires": [
+            [
+                "718e86c4.c7fa38"
+            ]
+        ]
+    },
+    {
+        "id": "34762a77.d33066",
+        "type": "mqtt out",
+        "z": "5914c4a1.24372c",
+        "name": "Send build status message over mqtt",
+        "topic": "",
+        "qos": "2",
+        "retain": "false",
+        "broker": "e2692e86.5cfdf",
+        "x": 665,
+        "y": 172,
+        "wires": []
+    },
+    {
+        "id": "5ada8df8.48d9c4",
+        "type": "debug",
+        "z": "5914c4a1.24372c",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 251,
+        "y": 330,
+        "wires": []
     }
 ]

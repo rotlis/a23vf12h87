@@ -10,7 +10,7 @@ pixels = 8
 EspId = string.gsub(wifi.sta.getmac(), ':', '');
 print('EspId: ', EspId);
 -- TODO: make it dynamic
-local MqttBrokerIp = "192.168.2.203"
+local MqttBrokerIp = "192.168.2.201"
 
 function init_udp()
     udpconnection = net.createUDPSocket()
@@ -37,14 +37,12 @@ function processMqttMessage(client, topic, message)
             upgrader.upgrade(jsonMsg.upgradeUrl);
         elseif command == 'buildStatus' then
             strip.setState(10)
+            strip.setPattern(jsonMsg.patternId)
+            strip.setBrightness(jsonMsg.brightness)
             strip.setBuildStatus(jsonMsg.buildStatus)
             currentStatusLifeExpectancy = defaultStatusLifeExpectancy
         elseif command == 'getPatterns' then
             mqttClient:send(EspId..'/patterns', cjson.encode(patterns.getAll()))
-        elseif command == 'configure' then
-            mqttClient:subscribe('pipeline/'..jsonMsg.pipelineId)
-            strip.setPattern(jsonMsg.patternId)
-            strip.setBrightness(jsonMsg.brightness)
         else
             print("Unknown command: " .. command);
         end

@@ -1,26 +1,33 @@
+var nullOrValue = function (obj) {
+    return (obj === null || obj === undefined) ? null : obj;
+};
+var nullOrValueWithQuotes = function (obj) {
+    return (obj === null || obj === undefined) ? null : "'" + obj + "'";
+};
+
 var payload = msg.payload;
-msg.topic = "delete from Devices" +
-    " where mac='" + payload.mac + "';" +
-    "insert into Devices " +
+msg.topic = "insert into Devices " +
     "(" +
     "patternId," +
     "pipelineId," +
     "mac," +
     "brightness," +
     "firmware," +
-    "lastMessage," +
+    "lastMessage," + // TODO where do I belong?
     "lastSeen," +
-    "lastUpdateAt" +
+    "lastUpdateAt" + // TODO where do I belong?
     ") " +
     "values " +
     "(" +
-    payload.patternId + "," +
-    payload.pipelineId + "," +
+    nullOrValue(payload.patternId) + "," +
+    nullOrValue(payload.pipelineId) + "," +
     "'" + payload.mac + "'," +
-    "'" + payload.brightness + "'," +
-    "'" + payload.firmware + "'," +
-    "'" + payload.lastMessage + "'," +
+    nullOrValueWithQuotes(payload.brightness) + "," +
+    nullOrValueWithQuotes(payload.firmware) + "," +
+    nullOrValueWithQuotes(payload.lastMessage) + "," +
     "now()," +
     "now()" //TODO firmware update time
-    + ")";
+    + ")" +
+    "ON DUPLICATE KEY UPDATE lastSeen=now(), " +
+    "firmware=" + nullOrValueWithQuotes(payload.firmware) + ";";
 return msg;
