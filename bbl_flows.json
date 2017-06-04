@@ -923,11 +923,11 @@
         "id": "ca3e486c.0bf108",
         "type": "http in",
         "z": "ffd18aea.469058",
-        "name": "Get all pipelines",
+        "name": "Get pipelines for one server",
         "url": "/pipelines",
         "method": "get",
         "swaggerDoc": "",
-        "x": 121,
+        "x": 161,
         "y": 121,
         "wires": [
             [
@@ -963,7 +963,7 @@
         "filename": "node/static/js/common/contentTypeJsonHttpHeaders.js",
         "reloadfile": true,
         "outputs": 1,
-        "x": 720.5,
+        "x": 748.5,
         "y": 121,
         "wires": [
             [
@@ -991,7 +991,7 @@
         "func": "msg.topic = \"Select id, pipeline from PipeLines where serverId = '\" +msg.payload.serverId + \"';\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 341.5,
+        "x": 427.5,
         "y": 121,
         "wires": [
             [
@@ -1005,7 +1005,7 @@
         "z": "ffd18aea.469058",
         "mydb": "6ab7cac6.de42f4",
         "name": "DB",
-        "x": 531,
+        "x": 599,
         "y": 121,
         "wires": [
             [
@@ -1718,8 +1718,8 @@
         "func": "msg.statusCode=500;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 697.5,
-        "y": 177,
+        "x": 685.5,
+        "y": 204,
         "wires": [
             [
                 "1dca4fbf.b828"
@@ -1735,8 +1735,8 @@
             "bc7b67d9.6517f8",
             "ee63e006.b9c7b"
         ],
-        "x": 376,
-        "y": 175,
+        "x": 370,
+        "y": 204,
         "wires": [
             [
                 "998a4f8c.57b86"
@@ -1864,5 +1864,37 @@
         "x": 251,
         "y": 330,
         "wires": []
+    },
+    {
+        "id": "7850a4a2.64e2fc",
+        "type": "function",
+        "z": "ffd18aea.469058",
+        "name": "Retrieve all Pipelines",
+        "func": "msg.topic = \"Select id, serverId, pipeline, status from PipeLines;\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 418.5,
+        "y": 164,
+        "wires": [
+            [
+                "bc7b67d9.6517f8"
+            ]
+        ]
+    },
+    {
+        "id": "8d37e208.3e919",
+        "type": "http in",
+        "z": "ffd18aea.469058",
+        "name": "Get all pipelines",
+        "url": "/allPipelines",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 123,
+        "y": 165,
+        "wires": [
+            [
+                "7850a4a2.64e2fc"
+            ]
+        ]
     }
 ]

@@ -47,7 +47,8 @@
     <script>
 
         var devices = {};
-        var $xml, nodeTemplate, deviceInfoTemplate, ciServerTypes, ciServers, projects, patterns;
+        var $xml, nodeTemplate, deviceInfoTemplate;
+        var ciServerTypes, ciServers, projects, patterns, devices;
 
         function testCcTray() {
             $("#test_cctray").removeClass("btn-success").removeClass("btn-danger");
@@ -67,14 +68,19 @@
             });
         }
 
-        function saveServer(){
+        function saveServer() {
             $.ajax({
                 url: "/servers",
                 type: "POST",
-                data: {serverTypeId:$("#serverTypeId").val(),cctrayUrl: $("#cctray_url").val(), username: $("#username").val(), password: $("#pwd").val()},
+                data: {
+                    serverTypeId: $("#serverTypeId").val(),
+                    cctrayUrl: $("#cctray_url").val(),
+                    username: $("#username").val(),
+                    password: $("#pwd").val()
+                },
                 dataType: "json",
                 success: function (data) {
-                   toastr.info("Server info has been saved successfully");
+                    toastr.info("Server info has been saved successfully");
                 },
                 error: function (e) {
                     toastr.error("Server info could not be saved");
@@ -95,12 +101,18 @@
             //TODO: load device info form rest
             var selections = [];
             $.each(projects, function () {
-                selections.push({name: this.name, selected: (this.name == deviceInfo.pipeline)});
+                selections.push({name: this.name, selected: (this.name == deviceInfo.pipelineId)});
             });
-            var jsonData = {mac: deviceId, node:deviceInfo, ciServers:ciServers, projects:selections, patterns:patterns};
+            var jsonData = {
+                mac: deviceId,
+                node: deviceInfo,
+                ciServers: ciServers,
+                projects: selections,
+                patterns: patterns
+            };
             var output = Mustache.render(nodeTemplate, jsonData);
             $("#devices-container").append(output);
-            $("#"+deviceId + " select[name='pattern']").val(deviceInfo.pattern);
+            $("#" + deviceId + " select[name='pattern']").val(deviceInfo.pattern);
             attachDeviceHandlers(deviceId, deviceInfo);
             $("#" + deviceId).fadeIn();
         }
@@ -133,18 +145,18 @@
         }
 
         function attachDeviceHandlers(mac, deviceInfo) {
-            $("#" + mac + " select[name=ciServer]").change(function(){
+            $("#" + mac + " select[name=ciServer]").change(function () {
                 loadProjects(mac);
             });
 
             $("#" + mac + " button.device-save").click(function () {
-                var jsonData={
+                var jsonData = {
                     mac: mac,
-                    brightness:$('#' + mac + ' select[name="brightness"] option:selected').val(),
-                    pipelineId:$('#' + mac + ' select[name="project"] option:selected').val(),
-                    patternId:$('#' + mac + ' select[name="pattern"] option:selected').val(),
-                    firmware:"todo",
-                    lastMessage:"todo"
+                    brightness: $('#' + mac + ' select[name="brightness"] option:selected').val(),
+                    pipelineId: $('#' + mac + ' select[name="project"] option:selected').val(),
+                    patternId: $('#' + mac + ' select[name="pattern"] option:selected').val(),
+                    firmware: "todo",
+                    lastMessage: "todo"
                 };
                 console.debug("jsonData", jsonData);
                 $.ajax({
@@ -154,7 +166,7 @@
                     success: function () {
                         toastr.info("Pipeline has been assigned successfully")
                     },
-                    error:function(){
+                    error: function () {
                         toastr.error("Pipeline could not be assigned")
                     },
                     dataType: "json"
@@ -267,11 +279,42 @@
                 url: "/pipelines",
                 type: "GET",
                 dataType: "json",
-                data: {serverId:$("#"+mac+" select[name=ciServer] option:selected").val()},
+                data: {serverId: $("#" + mac + " select[name=ciServer] option:selected").val()},
                 success: function (data) {
                     projects = data;
                     $.each(projects, function () {
-                        $("#"+mac+" select[name=project]").append("<option value='"+this.id+"'>"+this.pipeline+"</option>");
+                        $("#" + mac + " select[name=project]").append("<option value='" + this.id + "'>" + this.pipeline + "</option>");
+                    });
+                },
+                error: function (e) {
+                    console.debug("Error", e);
+                }
+            });
+        }
+
+        function loadAllProjects(){
+            $.ajax({
+                url: "/allPipelines",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    projects = data;
+                },
+                error: function (e) {
+                    console.debug("Error", e);
+                }
+            });
+        }
+
+        function loadDevices() {
+            $.ajax({
+                url: "/devices",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    devices = data;
+                    $.each(devices, function () {
+                        addNode(this);
                     });
                 },
                 error: function (e) {
@@ -286,6 +329,7 @@
             loadCiServerTypes();
             loadTemplates();
             attachGlobalHandlers();
+            loadDevices();
         });
 
     </script>
@@ -331,14 +375,16 @@
                 </select>
 
                 <label for="cctray_url">CCTRAY URL:</label>
-                <input type="url" class="form-control" style="width: 400px" id="cctray_url" value="https://go12.nbnco.net.au/go/cctray.xml">
+                <input type="url" class="form-control" style="width: 400px" id="cctray_url"
+                       value="https://go12.nbnco.net.au/go/cctray.xml">
             </div>
             <div class="form-group form-inline">
                 <label for="username">Username:</label>
                 <input type="username" class="form-control" id="username" placeholder="Enter username" value="dev_dpp">
 
                 <label for="pwd">Password:</label>
-                <input type="password" class="form-control" id="pwd" placeholder="Enter password" value="Ry8rshs9oHGGPBch">
+                <input type="password" class="form-control" id="pwd" placeholder="Enter password"
+                       value="Ry8rshs9oHGGPBch">
             </div>
 
             <button id="test_cctray" class="btn btn-default">Test</button>
