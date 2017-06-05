@@ -98,16 +98,16 @@
         function addNode(deviceInfo) {
             var deviceId = deviceInfo.mac;
 
-            //TODO: load device info form rest
-            var selections = [];
-            $.each(projects, function () {
-                selections.push({name: this.name, selected: (this.name == deviceInfo.pipelineId)});
+            var ciServersSelections = [];
+            $.each(ciServers, function () {
+                ciServersSelections.push({id:this.id, cctrayUrl: this.cctrayUrl, selected: (this.id == deviceInfo.serverId)});
             });
+
             var jsonData = {
                 mac: deviceId,
                 node: deviceInfo,
-                ciServers: ciServers,
-                projects: selections,
+                ciServers: ciServersSelections,
+                projects: [],
                 patterns: patterns
             };
             var output = Mustache.render(nodeTemplate, jsonData);
@@ -115,6 +115,8 @@
             $("#" + deviceId + " select[name='pattern']").val(deviceInfo.pattern);
             attachDeviceHandlers(deviceId, deviceInfo);
             $("#" + deviceId).fadeIn();
+
+            loadProjects(deviceId, deviceInfo.pipelineId);
         }
 
         function onNodeBeackon(json) {
@@ -274,7 +276,7 @@
             });
         }
 
-        function loadProjects(mac) {
+        function loadProjects(mac, optionalPipelineId) {
             $.ajax({
                 url: "/pipelines",
                 type: "GET",
@@ -282,8 +284,15 @@
                 data: {serverId: $("#" + mac + " select[name=ciServer] option:selected").val()},
                 success: function (data) {
                     projects = data;
+                    $("#" + mac + " select[name=project]").html("<option>Select</option>");
                     $.each(projects, function () {
-                        $("#" + mac + " select[name=project]").append("<option value='" + this.id + "'>" + this.pipeline + "</option>");
+                        var option;
+                        if (optionalPipelineId===this.id){
+                            option = "<option value='" + this.id + "' selected='true'>" + this.pipeline + "</option>";
+                        }else{
+                            option = "<option value='" + this.id + "'>" + this.pipeline + "</option>";
+                        }
+                        $("#" + mac + " select[name=project]").append(option);
                     });
                 },
                 error: function (e) {

@@ -1258,7 +1258,7 @@
         "type": "function",
         "z": "d0a3b329.d2df1",
         "name": "Retrieve Devices",
-        "func": "msg.topic = \"Select * from Devices;\"\nreturn msg;",
+        "func": "msg.topic = \"select dev.*, pl.serverId from Devices dev \"+\n    \"inner join PipeLines pl \"+\n    \"on pl.id = dev.pipelineId;\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 310.5,
