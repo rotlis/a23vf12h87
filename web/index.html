@@ -148,7 +148,7 @@
 
         function attachDeviceHandlers(mac, deviceInfo) {
             $("#" + mac + " select[name=ciServer]").change(function () {
-                loadProjects(mac);
+                loadProjects(mac, deviceInfo.pipelineId);
             });
 
             $("#" + mac + " button.device-save").click(function () {
