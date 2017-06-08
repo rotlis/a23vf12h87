@@ -1258,7 +1258,7 @@
         "type": "function",
         "z": "d0a3b329.d2df1",
         "name": "Retrieve Devices",
-        "func": "msg.topic = \"select dev.*, pl.serverId from Devices dev \"+\n    \"inner join PipeLines pl \"+\n    \"on pl.id = dev.pipelineId;\";\nreturn msg;",
+        "func": "msg.topic = \"select dev.*, pl.serverId from Devices dev \"+\n    \"left outer join PipeLines pl \"+\n    \"on pl.id = dev.pipelineId;\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 310.5,
@@ -1894,6 +1894,103 @@
         "wires": [
             [
                 "7850a4a2.64e2fc"
+            ]
+        ]
+    },
+    {
+        "id": "af8da7b6.098b48",
+        "type": "http in",
+        "z": "7eb46653.6ccb18",
+        "name": "Delete server",
+        "url": "/servers",
+        "method": "delete",
+        "swaggerDoc": "",
+        "x": 134.2857208251953,
+        "y": 541.4285888671875,
+        "wires": [
+            [
+                "ece6bdf5.5031"
+            ]
+        ]
+    },
+    {
+        "id": "9352ec6d.b1267",
+        "type": "http response",
+        "z": "7eb46653.6ccb18",
+        "name": "Response",
+        "x": 1099.2857208251953,
+        "y": 538.4285888671875,
+        "wires": []
+    },
+    {
+        "id": "ece6bdf5.5031",
+        "type": "file function",
+        "z": "7eb46653.6ccb18",
+        "name": "Prepare server info to delete",
+        "filename": "node/static/js/serverregistry/serverInfoToDelete.js",
+        "reloadfile": true,
+        "outputs": 1,
+        "x": 465.7857208251953,
+        "y": 541.4285888671875,
+        "wires": [
+            [
+                "23f11d03.108772"
+            ]
+        ]
+    },
+    {
+        "id": "ce3aeb55.8a9648",
+        "type": "comment",
+        "z": "7eb46653.6ccb18",
+        "name": "Delete server",
+        "info": "",
+        "x": 118.28572082519531,
+        "y": 469.4285888671875,
+        "wires": []
+    },
+    {
+        "id": "23f11d03.108772",
+        "type": "mysql",
+        "z": "7eb46653.6ccb18",
+        "mydb": "6ab7cac6.de42f4",
+        "name": "DB",
+        "x": 756.2857208251953,
+        "y": 541.4285888671875,
+        "wires": [
+            [
+                "9352ec6d.b1267"
+            ]
+        ]
+    },
+    {
+        "id": "3dfe8f64.35a91",
+        "type": "catch",
+        "z": "7eb46653.6ccb18",
+        "name": "Catch server delete errors",
+        "scope": [
+            "23f11d03.108772"
+        ],
+        "x": 648.2857208251953,
+        "y": 593.4285888671875,
+        "wires": [
+            [
+                "6c258b65.13a314"
+            ]
+        ]
+    },
+    {
+        "id": "6c258b65.13a314",
+        "type": "function",
+        "z": "7eb46653.6ccb18",
+        "name": "Error response",
+        "func": "msg.statusCode=500;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 893.7857208251953,
+        "y": 592.4285888671875,
+        "wires": [
+            [
+                "9352ec6d.b1267"
             ]
         ]
     }

@@ -249,9 +249,33 @@
             });
         }
         function populateCiServersTable() {
+//            $("#servers-info-table").html();
             var output = Mustache.render(serversTbodyTemplate, {ciServers:ciServers});
-            $("#servers-info-table").append(output);
+            $("#servers-info-table").html(output);
             //todo: attach button handlers
+            $("#servers-info-table button").click(function(){
+                var action =  $(this).attr("action");
+                var serverId =  $(this).attr("serverId");
+
+                if ("delete"===action){
+                    $.ajax({
+                        url: "/servers",
+                        type: "DELETE",
+                        dataType: "json",
+                        data:{id:serverId},
+                        success: function (data) {
+                            loadCiServers();
+                            loadDevices();
+                        },
+                        error: function (e) {
+                            console.debug("Error", e);
+                        }
+                    });
+                }
+
+                console.debug($(this).attr("serverId"), $(this).attr("action") );
+            });
+
         }
 
         function loadCiServers() {
@@ -324,6 +348,7 @@
         }
 
         function loadDevices() {
+            $("#devices-container").html();
             $.ajax({
                 url: "/devices",
                 type: "GET",

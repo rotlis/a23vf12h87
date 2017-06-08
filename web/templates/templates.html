@@ -1,5 +1,5 @@
 <div id="server-info-tbody-template">
-    <table  class="table table-bordered table-striped table-hover">
+    <table class="table table-bordered table-striped table-hover">
         <thead>
         <tr>
             <th>Server Type</th>
@@ -11,17 +11,20 @@
         </thead>
         <tbody>
         <!--{{#ciServers}}-->
-        <tr>
+        <tr >
             <td>{{serverType}}</td>
             <td>{{cctrayUrl}}</td>
             <td>{{username}}</td>
             <td>****</td>
-            <td><button class="btn btn-default">Edit</button><button class="btn btn-default">Delete</button></td>
+            <td>
+                <button serverId="{{id}}" action="edit" class="btn btn-default">Edit</button>
+                <button serverId="{{id}}" action="delete" class="btn btn-default">Delete</button>
+            </td>
         </tr>
         <!--{{/ciServers}}-->
         </tbody>
     </table>
-    <button class="btn btn-default">Add new</button>
+    <button id="add-new-server" class="btn btn-default">Add new</button>
 
 </div>
 
