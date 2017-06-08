@@ -1,6 +1,7 @@
 Ubuntu with Docker installed image for RPi
 Fix upgrade functionality
-Load devices on page load with proper values (Question:what should happen when server dropdown is changed?)
+Prepopulate brightness and pattern on page load
+Fix identify button
 Lua fixes (firmware version, brightness pattern)
 List of servers on top of page
 LAF from Amy

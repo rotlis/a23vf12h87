@@ -894,7 +894,7 @@
         "type": "function",
         "z": "7eb46653.6ccb18",
         "name": "Retrieve CI servers",
-        "func": "msg.topic = \"Select * from CiServers;\";\nreturn msg;",
+        "func": "msg.topic = \"select ser.*, st.serverType from CiServers ser \"+\n    \"inner join CiServerTypes st \"+\n    \"on st.id = ser.serverTypeId;\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 331.5,

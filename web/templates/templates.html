@@ -1,3 +1,29 @@
+<div id="server-info-tbody-template">
+    <table  class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Server Type</th>
+            <th>CCTRAY Url</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--{{#ciServers}}-->
+        <tr>
+            <td>{{serverType}}</td>
+            <td>{{cctrayUrl}}</td>
+            <td>{{username}}</td>
+            <td>****</td>
+            <td><button class="btn btn-default">Edit</button><button class="btn btn-default">Delete</button></td>
+        </tr>
+        <!--{{/ciServers}}-->
+        </tbody>
+    </table>
+    <button class="btn btn-default">Add new</button>
+
+</div>
 
 <div id="template1">
 

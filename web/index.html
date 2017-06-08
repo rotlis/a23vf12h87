@@ -47,7 +47,7 @@
     <script>
 
         var devices = {};
-        var $xml, nodeTemplate, deviceInfoTemplate;
+        var $xml, serversTbodyTemplate, nodeTemplate, deviceInfoTemplate;
         var ciServerTypes, ciServers, projects, patterns, devices;
 
         function testCcTray() {
@@ -90,6 +90,7 @@
 
         function loadTemplates() {
             $("#templates").load("templates/templates.html#template1", function () {
+                serversTbodyTemplate = document.getElementById('server-info-tbody-template').innerHTML;
                 nodeTemplate = document.getElementById('template1').innerHTML;
                 deviceInfoTemplate = document.getElementById('deviceInfoTemplate').innerHTML;
             });
@@ -247,6 +248,12 @@
                 }
             });
         }
+        function populateCiServersTable() {
+            var output = Mustache.render(serversTbodyTemplate, {ciServers:ciServers});
+            $("#servers-info-table").append(output);
+            //todo: attach button handlers
+        }
+
         function loadCiServers() {
             $.ajax({
                 url: "/servers",
@@ -254,6 +261,7 @@
                 dataType: "json",
                 success: function (data) {
                     ciServers = data;
+                    populateCiServersTable();
                 },
                 error: function (e) {
 //                    TODO toast with err message
@@ -333,10 +341,10 @@
         }
 
         $(document).ready(function () {
+            loadTemplates();
             loadPatterns();
             loadCiServers();
             loadCiServerTypes();
-            loadTemplates();
             attachGlobalHandlers();
             loadDevices();
         });
@@ -398,6 +406,12 @@
 
             <button id="test_cctray" class="btn btn-default">Test</button>
             <button id="save_server" class="btn btn-default">Save</button>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">GO servers</div>
+        <div id="servers-info-table" class="table-responsive">
         </div>
     </div>
 
