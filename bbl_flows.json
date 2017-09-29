@@ -2017,8 +2017,8 @@
         "func": "var buildCode='0';\nif (msg.payload.status=='successful') buildCode='1';\nif (msg.payload.status=='failed') buildCode='2';\nif (msg.payload.status=='inprogress') buildCode='3';\n\nmsg.url = \"http://203.219.46.28/db_api/attr/\"\n    +msg.payload.mac + \"/build/\"+buildCode;\n\nmsg.topic='';\nmsg.payload='';\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 403,
-        "y": 360,
+        "x": 396,
+        "y": 340,
         "wires": [
             [
                 "5a265baf.9d6e94"
@@ -2034,8 +2034,8 @@
         "ret": "txt",
         "url": "",
         "tls": "",
-        "x": 615,
-        "y": 358,
+        "x": 599,
+        "y": 340,
         "wires": [
             []
         ]
@@ -2048,8 +2048,8 @@
         "active": true,
         "console": "false",
         "complete": "payload",
-        "x": 777,
-        "y": 574,
+        "x": 817,
+        "y": 553,
         "wires": []
     },
     {
@@ -2071,7 +2071,7 @@
         "wires": [
             [
                 "647fa205.a3c094",
-                "37c80e8f.c435f2"
+                "d24f82e9.4b17c"
             ]
         ]
     },
@@ -2081,8 +2081,8 @@
         "z": "9452f842.635e38",
         "name": "",
         "method": "resolve",
-        "x": 607.5,
-        "y": 572,
+        "x": 642.5,
+        "y": 553,
         "wires": [
             [
                 "f396b19d.c9207"
@@ -2106,46 +2106,6 @@
         ]
     },
     {
-        "id": "4be7c9a1.4a00e8",
-        "type": "inject",
-        "z": "9452f842.635e38",
-        "name": "build1 ",
-        "topic": "",
-        "payload": "5ccf7fc25763.build.1.set.iotdns.ddns.net|",
-        "payloadType": "str",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "x": 336.5,
-        "y": 487,
-        "wires": [
-            [
-                "c27abb33.19a3e",
-                "521e307c.30f9f8"
-            ]
-        ]
-    },
-    {
-        "id": "eee3a27f.e487d",
-        "type": "inject",
-        "z": "9452f842.635e38",
-        "name": "build 2",
-        "topic": "",
-        "payload": "5ccf7fc25763.build.2.set.iotdns.ddns.net|",
-        "payloadType": "str",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "x": 341.5,
-        "y": 544,
-        "wires": [
-            [
-                "c27abb33.19a3e",
-                "521e307c.30f9f8"
-            ]
-        ]
-    },
-    {
         "id": "521e307c.30f9f8",
         "type": "serial out",
         "z": "9452f842.635e38",
@@ -2161,8 +2121,8 @@
         "z": "9452f842.635e38",
         "name": "",
         "serial": "69ada1d4.71be28",
-        "x": 613.5,
-        "y": 502,
+        "x": 851.5,
+        "y": 430,
         "wires": [
             [
                 "8ca98ec7.0e2428"
@@ -2177,8 +2137,8 @@
         "active": true,
         "console": "false",
         "complete": "false",
-        "x": 779.5,
-        "y": 500,
+        "x": 872.5,
+        "y": 488,
         "wires": []
     },
     {
@@ -2213,6 +2173,22 @@
         "wires": [
             [
                 "14b177ea.c71c98"
+            ]
+        ]
+    },
+    {
+        "id": "d24f82e9.4b17c",
+        "type": "function",
+        "z": "9452f842.635e38",
+        "name": "prepare dns request to nbn.ioti.co",
+        "func": "var buildCode='0';\nif (msg.payload.status=='successful') buildCode='1';\nif (msg.payload.status=='failed') buildCode='2';\nif (msg.payload.status=='inprogress') buildCode='3';\n\nmsg.topic='';\nmsg.payload=msg.payload.mac + \".build.\"+buildCode+\".s.nbn.ioti.co\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 414,
+        "y": 552,
+        "wires": [
+            [
+                "c27abb33.19a3e"
             ]
         ]
     }
