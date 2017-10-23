@@ -2181,7 +2181,7 @@
         "type": "function",
         "z": "9452f842.635e38",
         "name": "prepare dns request to nbn.ioti.co",
-        "func": "var buildCode='0';\nif (msg.payload.status=='successful') buildCode='1';\nif (msg.payload.status=='failed') buildCode='2';\nif (msg.payload.status=='inprogress') buildCode='3';\n\nmsg.topic='';\nmsg.payload=msg.payload.mac + \".build.\"+buildCode+\".s.nbn.ioti.co\";\nreturn msg;",
+        "func": "var buildCode='0';\nif (msg.payload.status=='successful') buildCode='1';\nif (msg.payload.status=='failed') buildCode='2';\nif (msg.payload.status=='inprogress') buildCode='3';\n\nmsg.topic='';\nmsg.payload=msg.payload.mac + \".build.\"+buildCode+\".\"+Date.now()+\".s.nbn.ioti.co\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 414,
